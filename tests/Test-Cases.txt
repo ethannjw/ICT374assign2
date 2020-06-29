@@ -1,0 +1,57 @@
+
+ls
+ps
+
+prompt myshell
+cd /tmp
+cd
+cd ..
+exit
+
+ls -l  -t   a b c
+./show a  bb  ccc  dddd 1  22  333  4444  555555
+./show  a b c d e f g h I j k l m n o p q r s t u v w x y z 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 20 abc123xyz
+
+ls  -l  /tmp/*.c
+ls  -l  /tmp/a*c
+ls  -l  /tmp/abc.?
+ls  -l  /tmp/abc*.?
+ls  -l  /dev/*
+
+sleep 10  ;  echo hello
+sleep 10  ;  ls -l
+sleep 10  ;  echo hello1  ;   sleep 10 ;  echo hello2
+
+echo hello  &   echo  world
+sleep 10  &  echo hello
+ps  &   ls
+echo ps-command &  ps   &   echo ls-command  &  ls -l
+sleep 10  &
+
+cat  <  /tmp/foo
+grep  line  <  /tmp/foo
+
+ls  -l  >  /tmp/junk
+cat  /tmp/foo >  /tmp/junk2
+
+cat /tmp/foo |  cat
+cat  /tmp/foo |  grep  line 
+cat  /tmp/foo  |  sort
+cat  /tmp/foo  |  sort  -r
+
+cat /tmp/foo |  sort  |  sort -r  |  grep  line 
+cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat 
+cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat > junk
+cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | grep line
+
+ls -l   > junk  ;  cat < /tmp/foo ;  /bin/ls  -lt  /dev/tty*  |  grep tty  |  sort  |  head  > junk2  &  sleep 10  ;  cat  < junk2
+ls -lt | cat ;  ps | sort  &  echo ps-output ; sleep 10 & echo wait-for-10seconds ; cat /tmp/foo | cat | grep line | sort -r
+
+CTRL-C
+CTRL-\
+CTRL-Z
+
+claim of zombies
+
+slow system calls
+
