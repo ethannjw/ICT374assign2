@@ -25,6 +25,11 @@
 #include  "stream.h"     /* MAX_BLOCK_SIZE, readn(), writen() */
 
 
+#include  <stdlib.h>
+#include  <unistd.h>
+#include  <sys/stat.h>
+#include  <stdio.h>
+
 
 #define   SERV_TCP_PORT   40005   /* default server listening port */
 
