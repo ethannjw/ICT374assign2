@@ -77,6 +77,33 @@ void serve_a_client(int sd)
 
         /* process data */
         buf[nr] = '\0';
+
+        printf("SERVE\n");
+
+        if (!strcmp(buf, "put"))
+        {
+            printf("PUT\n");
+
+            char buffer[BUF_SIZE];
+
+            FILE *f; // file pointer
+
+            int ch = 0;
+            f = fopen("newfile.txt", "a");
+            int words;
+
+            read(sd, &words, sizeof(int));
+
+            while (ch != words)
+            {
+                // traverse the words
+                read(sd, buffer, BUF_SIZE);
+                fprintf(f, "%s ", buffer);
+                ch++;
+            }
+            printf("File created\n");
+            fclose(f);
+        }
         
         if (!strcmp(buf, "dir"))
         {
@@ -168,9 +195,26 @@ int main(int argc, char *argv[])
             continue; /* parent to wait for next client */
         }
 
+        char buffer[BUF_SIZE];
+        FILE *f; // file pointer
+        int ch;
+        f = fopen("newfile.txt", "w");
+
+        while (1)
+        {
+            ch = recv(nsd, buffer, BUF_SIZE, 0);
+            printf("CH = %d\n", ch);
+            if (ch <= 0){
+                break;
+            }
+            fprintf(f, "%s", buffer);
+            bzero(buffer, BUF_SIZE);
+        }
+        printf("File created\n");
+
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
-        serve_a_client(nsd);
+        //serve_a_client(nsd);
         exit(0);
     }
 }
