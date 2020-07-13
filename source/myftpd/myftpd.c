@@ -16,9 +16,11 @@
 #include  <unistd.h>     /* read(), write() */
 #include  <string.h>     /* strlen(), strcmp() etc */
 #include  <errno.h>      /* extern int errno, EINTR, perror() */
+#include <sys/stat.h>    /* fstat(), lstat(), stat() */
 
 
 #define  SERV_TCP_PORT  12345 /* default server listening port */
+#define  BUF_SIZE       256
 
 void claim_children()
 {
@@ -31,7 +33,7 @@ void claim_children()
     } 
 }
 
-void daemon_init(void)
+void daemon_init(char *dir)
 {       
     pid_t pid;
     struct sigaction act;
@@ -47,9 +49,12 @@ void daemon_init(void)
         exit(0);                  /* parent goes bye-bye */
     }
 
+    //char dir[BUF_SIZE];
+    //getcwd(dir, sizeof(dir));
+
     /* child continues */
     setsid();                      /* become session leader */
-    chdir("/");                    /* change working directory */
+    chdir(dir);                    /* change working directory */
     umask(0);                      /* clear file mode creation mask */
 
     /* catch SIGCHLD to remove zombies from system */
@@ -61,6 +66,35 @@ void daemon_init(void)
        signal(SIGCHLD, claim_children); */
 }
 
+void serve_a_client(int sd)
+{   int nr, nw, i;
+    char buf[BUF_SIZE];
+
+    while (1){
+        /* read data from client */
+        if ((nr = read(sd, buf, sizeof(buf))) <= 0) 
+            return;   /* connection broken down */
+
+        /* process data */
+        buf[nr] = '\0';
+        
+        if (!strcmp(buf, "dir"))
+        {
+            system("ls");
+            /*system("pwd>temp.txt");
+            i = 0;
+            FILE *f = fopen("temp.txt", "r");
+            while (!feof(f))
+                buf[i++] = fgetc(f);
+            buf[i-1] = '\0';
+            fclose(f);*/
+        }
+              
+        /* send results to client */
+        nw = write(sd, buf, nr);
+    } 
+}
+
 int main(int argc, char *argv[])
 {
     int sd, nsd, n;
@@ -68,27 +102,18 @@ int main(int argc, char *argv[])
     unsigned short port;
     socklen_t cli_addrlen;
     struct sockaddr_in ser_addr, cli_addr;
+    char mydir[BUF_SIZE];
 
-    /* get the port number */
+    port = SERV_TCP_PORT;
+
+    /* get the directory */
     if (argc == 1)
-        port = SERV_TCP_PORT;
+        getcwd(mydir, sizeof(mydir));
     else if (argc == 2)
-    {
-        int n = atoi(argv[1]);
-
-        /* only accept port between 1024 and 65535 */ 
-        if (n >= 1024 && 65536) 
-            port = n;
-        else
-        {
-            printf("Error: port number must be between 1024 and 65535\n");
-            exit(1);
-        }
-        
-    }
+        strncpy(mydir, argv[1], sizeof(mydir));
 
     /* turn the program into a daemon */
-    daemon_init();
+    daemon_init(mydir);
 
     /* set up listening socket sd */
     if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
@@ -105,6 +130,13 @@ int main(int argc, char *argv[])
     /* note: accept client request sent to any one of the
        network interface(s) on this host. */
     
+    /* bind server address to socket sd */
+    if (bind(sd, (struct sockaddr *)&ser_addr, sizeof(ser_addr)) <0 )
+    {
+        perror("server bind");
+        exit(1);
+    }
+    
     /* become a listening socket */
     listen(sd, 5);
 
@@ -112,7 +144,7 @@ int main(int argc, char *argv[])
     {
         /* wait to accept a client request for connection */
         cli_addrlen = sizeof(cli_addr);
-        nsd = accept(sd, (struct sockadd *)&cli_addr, &cli_addrlen);
+        nsd = accept(sd, (struct sockaddr *)&cli_addr, &cli_addrlen);
 
         if (nsd < 0)
         {
@@ -138,7 +170,7 @@ int main(int argc, char *argv[])
 
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
-        //serve_a_client(nsd);
+        serve_a_client(nsd);
         exit(0);
     }
 }
