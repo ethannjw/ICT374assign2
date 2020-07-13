@@ -1,24 +1,36 @@
-/* cli6.c - 	(Topic 11, HX 22/5/1995)
- *		An improved version of "cli5.c". Since TCP does not preserve the message 
- *              boundaries, each message is preceeded by a two byte value which is the
- *              length of the message. 
- * Revised;	06/11/2007
- */
+// File: 		myftp.c
+// Authors: 		Neo Kim Heok (XXXXXXXX) and Ng Jing Wei (33804877)
+// Date:		25th July 2020
+// Purpose:		This is the client driver code for running the simple FTP
+//			Usage: myftp [ hostname | IP_address ] [ port_number ]
+//			The hostname or IP address and the port number is the name 
+//			of the remote host that provides the myftp service.
+//			If the hostname is omitted, the localhost is assumed.
+//			If the port number is omitted, the default port 12345 is assumed.
+//	 		The program contains the following commands:
+//			- pwd - to display the current directory of the server that is serving the client
+//			- lpwd - to display the current directory of the client
+//			- dir - to display the file names under the current directory of the server that is serving the client
+//			- ldir - to display the file names under the current directory of the client
+//			- cd [directory_pathname] - to change the current directory of the server that is serving the client
+//			- lcd directory_pathname - to change the current directory of the client
+//			- get [filename] - to download the named file from the current directory of the remote server and save it in the current directory of the client
+//			- put [filename] - to upload the named file from the current directory of the client to the current directory of the remove server
+//			- quit - to terminate the myftp session
 
-#include  <stdlib.h>
-#include  <stdio.h>
-#include  <sys/types.h>        
-#include  <sys/socket.h>
-#include  <netinet/in.h>       /* struct sockaddr_in, htons, htonl */
-#include  <netdb.h>            /* struct hostent, gethostbyname() */ 
-#include  <string.h>
-#include  "stream.h"           /* MAX_BLOCK_SIZE, readn(), writen() */
-
-#include  <stdio.h>
-#include  <stdlib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>        
+#include <sys/socket.h>
+#include <netinet/in.h>		// struct sockaddr_in, htons, htonl 
+#include <netdb.h>		// struct hostent, gethostbyname()  
+#include <string.h>		
+#include  <stdio.h>		// stdin(), stdout()
+#include  <stdlib.h>		// exit()
 #include  <unistd.h>
+#include "stream.h"		// MAX_BLOCK_SIZE, readn(), writen() 
 
-#define   SERV_TCP_PORT  40005 /* default server listening port */
+#define   SERV_TCP_PORT  12345	// default server listening port 
 
 int main(int argc, char *argv[])
 {
