@@ -194,23 +194,6 @@ int main(int argc, char *argv[])
             continue; /* parent to wait for next client */
         }
 
-        char buffer[BUF_SIZE];
-        FILE *f; // file pointer
-        int ch;
-        f = fopen("newfile.txt", "w");
-
-        while (1)
-        {
-            ch = recv(nsd, buffer, BUF_SIZE, 0);
-            printf("CH = %d\n", ch);
-            if (ch <= 0){
-                break;
-            }
-            fprintf(f, "%s", buffer);
-            bzero(buffer, BUF_SIZE);
-        }
-        printf("File created\n");
-
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
         //serve_a_client(nsd);
