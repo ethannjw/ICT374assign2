@@ -1,8 +1,7 @@
-/*
- * file:    myftpd.c
- * author:  Kim & Ethan
- * aim:     implements ftp server
- * date:    2020.07.13
+/** File: 		    myftpd.c
+*   Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+*   Date:		    25th July 2020
+*   Purpose:		This is the server driver code for running the simple FTP
 */
 
 #include  <stdlib.h>     /* strlen(), strcmp() etc */
