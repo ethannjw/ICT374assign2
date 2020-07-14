@@ -1,22 +1,8 @@
-/** File: 		myftpd.c
-* Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
-* Date:		25th July 2020
-* Purpose:		This is the server driver code for running the simple FTP
-*			Usage: myftp [ hostname | IP_address ] [ port_number ]
-*			The hostname or IP address and the port number is the name
-*			of the remote host that provides the myftp service.
-*			If the hostname is omitted, the localhost is assumed.
-*			If the port number is omitted, the default port 12345 is assumed.
-*	 		The program contains the following commands:
-*			- pwd - to display the current directory of the server that is serving the client
-*			- lpwd - to display the current directory of the client
-*			- dir - to display the file names under the current directory of the server that is serving the client
-*			- ldir - to display the file names under the current directory of the client
-*			- cd [directory_pathname] - to change the current directory of the server that is serving the client
-*			- lcd directory_pathname - to change the current directory of the client
-*			- get [filename] - to download the named file from the current directory of the remote server and save it in the current directory of the client
-*			- put [filename] - to upload the named file from the current directory of the client to the current directory of the remove server
-*			- quit - to terminate the myftp session
+/*
+ * file:    myftpd.c
+ * author:  Kim & Ethan
+ * aim:     implements ftp server
+ * date:    2020.07.13
 */
 
 #include  <stdlib.h>     /* strlen(), strcmp() etc */
