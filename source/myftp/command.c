@@ -1,11 +1,8 @@
-// File:		command.c for assignment 2
-// Author:		Ng Jing Wei 33804877
-// Purpose:		to separate a list of tokens into a sequence of commands.
-// Assumptions:	any two successive commands in the list of tokens are separated
-//			    by one of the following command separators:
-//				"|"  - pipe to the next command
-//				"&"  - shell does not wait for the proceeding command to terminate
-//				";"  - shell waits for the proceeding command to terminate
+/*  File:		    command.c for assignment 2 myftp (client side)
+ *  Author:		    Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Purpose:		Contains functions that 
+ *  Assumptions:
+*/
 
 #include <unistd.h>
 #include <string.h>
@@ -73,6 +70,10 @@ void do_prompt(Command &commandArray[])
 			{
 				fprintf(stdout, "Usage: Command [optional: file/dir path]\n");
 				continue;
+			}
+			else
+			{
+				// insert all the commands here
 			}
 
 		}
