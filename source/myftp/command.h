@@ -1,12 +1,8 @@
-// File:		command.h for assignment 2
-// Author:		Ng Jing Wei
-// Purpose:		to separate a list of tokens into a sequence of commands.
-// 			any two successive commands in the list of tokens are separated
-//			by one of the following command separators:
-//				"|"  - pipe to the next command
-//				"&"  - shell does not wait for the proceeding command to terminate
-//				";"  - shell waits for the proceeding command to terminate
-//			to look for the redirection symbol and set the stdin or stdout file
+/*  File:		command.h for assignment 2 myftp (client side)
+ *  Author:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Purpose:		Contains the core functions for the client operation. 
+ *  Assumptions:	
+*/
 
 #include <stdio.h>
 #include <unistd.h>
@@ -16,22 +12,23 @@
 #define MAX_NUM_COMMANDS    1000
 #define MAX_NUM_CHAR        1000
 
-// define the required commands
-#define PUT_CMD     "put"
-#define GET_CMD     "get"
-#define PWD_CMD     "pwd"
-#define LPWD_CMD    "lpwd"
-#define DIR_CMD     "dir"
-#define LDIR_CMD    "ldir"
-#define CD_CMD      "cd"
-#define LCD_CMD     "lcd"
-#define QUIT_CMD    "quit"
-#define HELP_CMD    "help"
+// define the opcodes for server comms
+#define OP_PUT	'P'
+#define OP_GET	'G'
+#define OP_PWD	'W'
+#define OP_FDR	'F'
+#define OP_CD	'C'
+#define OP_DATA	'D'
+
+// acknowledgement codes from the server
+#define SUCCESS_CODE	'0'
+#define ERROR_CODE	'1'
+
 
 struct CommandStruct {
-    int first;      	// index to the first token in the array "token" of the command
-    int last;   	// index to the last token in the array "token" of the command
-    char **argv;        // an array of tokens that forms a command
+	int first;      	// index to the first token in the array "token" of the command
+	int last;   	// index to the last token in the array "token" of the command
+	char **argv;        // an array of tokens that forms a command
 	int argc;	// an int indicating the number of arguments in the array
 
 };
@@ -73,4 +70,9 @@ int separateCommands(char *token[], Command command[]);
 // assume:
 //		the array "command" must have at least MAX_NUM_COMMANDS number of elements
 
-Command do_prompt(Command commandArray[])
+/** Purpose:	To obtain the command from the user and store it into the command structure for further
+ *  		processing
+ *  Return:	void
+ *  
+*/
+void cmd_prompt(Command &commandArray[])

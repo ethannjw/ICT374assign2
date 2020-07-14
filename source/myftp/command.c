@@ -1,7 +1,7 @@
-/*  File:		    command.c for assignment 2 myftp (client side)
- *  Author:		    Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
- *  Purpose:		Contains functions that 
- *  Assumptions:
+/*  File:		command.c for assignment 2 myftp (client side)
+ *  Author:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Purpose:		Contains the core functions for the client operation. 
+ *  Assumptions:	
 */
 
 #include <unistd.h>
@@ -9,17 +9,6 @@
 #include <stdlib.h>
 #include "command.h"
 
-// define the required commands
-#define PUT_CMD  "put"
-#define GET_CMD  "get"
-#define PWD_CMD  "pwd"
-#define LPWD_CMD "lpwd"
-#define DIR_CMD  "dir"
-#define LDIR_CMD "ldir"
-#define CD_CMD   "cd"
-#define LCD_CMD  "lcd"
-#define QUIT_CMD "quit"
-#define HELP_CMD "help"
 
 void rmReturnChar(char *line)
 {
@@ -31,7 +20,7 @@ void rmReturnChar(char *line)
 	}
 }
 
-void do_prompt(Command &commandArray[])
+void cmd_prompt(Command &commandArray[])
 {
 	// declare token on 100 char
 	char input[MAX_NUM_CHAR];
@@ -63,7 +52,7 @@ void do_prompt(Command &commandArray[])
 		}
 		else
 		{
-		    bzero(tokenArray, sizeof(tokenArray));
+		    	bzero(tokenArray, sizeof(tokenArray));
 			numTok = tokenise(input, tokenArray);
 			numCommand = separateCommands(tokenArray, commandArray);
 			if (numCommand < 0)
@@ -80,12 +69,11 @@ void do_prompt(Command &commandArray[])
 	}
 }
 
-
 // fill one command structure with the details
 void fillCommandStruct(Command *cp, int first, int last)
 {
-	cp->first = 	first;
-	cp->last = 		last - 1;
+	cp->first = first;
+	cp->last = last - 1;
 }
 
 // build command line argument array in command array
@@ -166,3 +154,42 @@ int separateCommands(char *token[], Command command[])
 
      return nCommands;
 }
+
+void send_pwd(int socket_desc, char *token)
+{
+	char op_code;
+	int file_size;
+	char working_dir_path;
+
+	if(write_opcode(socket_desc,PWD_OP) == -1){
+		perror("Failed to send pwd\n");
+		return;
+	}
+
+	if(read_opcode(socket_desc,&op_code) == -1){
+		perror("Unable to read opcode\n");
+		return;
+	}
+
+	if(op_code != PWD_OP){
+		perror("Invalid opcode from pwd: %c\n", op_code);
+		return;
+	}
+
+	if(read_length(socket_desc, &file_size) == -1){
+		perror("Failed to read filesize\n");
+		return;
+	}
+
+	malloc(working_dir_path, sizeof((char) * (file_size+1)));
+
+	if(read_nbytes(socket_desc, directory, file_size) == -1){
+		perror("Failed to read directory\n");
+		return;
+	}
+
+	working_dir_path[file_size] = '\0';
+	fprintf(stdout, "%s\n", working_dir_path);
+	free(working_dir_path);
+}
+
