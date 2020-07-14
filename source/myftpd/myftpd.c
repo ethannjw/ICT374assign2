@@ -17,9 +17,10 @@
 #include  <errno.h>         /* extern int errno, EINTR, perror() */
 #include  <sys/stat.h>      /* fstat(), lstat(), stat() */
 
+#include  "stream.h"
+#include  "commandd.h"
 
 #define  SERV_TCP_PORT  12345   /* default server listening port */
-#define  BUF_SIZE       256
 
 void claim_children()
 {
@@ -63,62 +64,6 @@ void daemon_init(char *dir)
     sigaction(SIGCHLD,(struct sigaction *)&act,(struct sigaction *)0);
     /* note: a less than perfect method is to use 
        signal(SIGCHLD, claim_children); */
-}
-
-void serve_a_client(int sd)
-{   int nr, nw, i;
-    char buf[BUF_SIZE];
-
-    while (1){
-        /* read data from client */
-        if ((nr = read(sd, buf, sizeof(buf))) <= 0) 
-            return;   /* connection broken down */
-
-        /* process data */
-        buf[nr] = '\0';
-
-        printf("SERVE\n");
-
-        if (!strcmp(buf, "put"))
-        {
-            printf("PUT\n");
-
-            char buffer[BUF_SIZE];
-
-            FILE *f; // file pointer
-
-            int ch = 0;
-            f = fopen("newfile.txt", "a");
-            int words;
-
-            read(sd, &words, sizeof(int));
-
-            while (ch != words)
-            {
-                // traverse the words
-                read(sd, buffer, BUF_SIZE);
-                fprintf(f, "%s ", buffer);
-                ch++;
-            }
-            printf("File created\n");
-            fclose(f);
-        }
-        
-        if (!strcmp(buf, "dir"))
-        {
-            system("ls");
-            /*system("pwd>temp.txt");
-            i = 0;
-            FILE *f = fopen("temp.txt", "r");
-            while (!feof(f))
-                buf[i++] = fgetc(f);
-            buf[i-1] = '\0';
-            fclose(f);*/
-        }
-              
-        /* send results to client */
-        nw = write(sd, buf, nr);
-    } 
 }
 
 int main(int argc, char *argv[])
@@ -196,7 +141,7 @@ int main(int argc, char *argv[])
 
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
-        //serve_a_client(nsd);
+        serve_a_client(nsd);
         exit(0);
     }
 }
