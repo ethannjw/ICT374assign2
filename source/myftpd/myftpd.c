@@ -4,21 +4,21 @@
 *   Purpose:		This is the server driver code for running the simple FTP
 */
 
-#include  <stdlib.h>     /* strlen(), strcmp() etc */
-#include  <stdio.h>      /* printf()  */
-#include  <sys/types.h>  /* pid_t, u_long, u_short */
-#include  <sys/socket.h> /* struct sockaddr, socket(), etc */
-#include  <netinet/in.h> /* struct sockaddr_in, htons(), htonl(), */
-                         /* and INADDR_ANY */
-#include  <sys/wait.h>   /* waitpid(), WNOHAND */
-#include  <signal.h>     /* SIGCHLD, sigaction() */
-#include  <unistd.h>     /* read(), write() */
-#include  <string.h>     /* strlen(), strcmp() etc */
-#include  <errno.h>      /* extern int errno, EINTR, perror() */
-#include <sys/stat.h>    /* fstat(), lstat(), stat() */
+#include  <stdlib.h>        /* strlen(), strcmp() etc */
+#include  <stdio.h>         /* printf()  */
+#include  <sys/types.h>     /* pid_t, u_long, u_short */
+#include  <sys/socket.h>    /* struct sockaddr, socket(), etc */
+#include  <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
+                            /* and INADDR_ANY */
+#include  <sys/wait.h>      /* waitpid(), WNOHAND */
+#include  <signal.h>        /* SIGCHLD, sigaction() */
+#include  <unistd.h>        /* read(), write() */
+#include  <string.h>        /* strlen(), strcmp() etc */
+#include  <errno.h>         /* extern int errno, EINTR, perror() */
+#include  <sys/stat.h>      /* fstat(), lstat(), stat() */
 
 
-#define  SERV_TCP_PORT  12345 /* default server listening port */
+#define  SERV_TCP_PORT  12345   /* default server listening port */
 #define  BUF_SIZE       256
 
 void claim_children()
