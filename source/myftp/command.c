@@ -1,4 +1,4 @@
-// File:		command.c for Lab 9
+// File:		command.c for assignment 2
 // Author:		Ng Jing Wei 33804877
 // Purpose:		to separate a list of tokens into a sequence of commands.
 // Assumptions:	any two successive commands in the list of tokens are separated
@@ -12,6 +12,18 @@
 #include <stdlib.h>
 #include "command.h"
 
+// define the required commands
+#define PUT_CMD  "put"
+#define GET_CMD  "get"
+#define PWD_CMD  "pwd"
+#define LPWD_CMD "lpwd"
+#define DIR_CMD  "dir"
+#define LDIR_CMD "ldir"
+#define CD_CMD   "cd"
+#define LCD_CMD  "lcd"
+#define QUIT_CMD "quit"
+#define HELP_CMD "help"
+
 void rmReturnChar(char *line)
 {
 	// Removes last char if it is a return char
@@ -22,7 +34,7 @@ void rmReturnChar(char *line)
 	}
 }
 
-Command do_prompt(Command commandArray[])
+void do_prompt(Command &commandArray[])
 {
 	// declare token on 100 char
 	char input[MAX_NUM_CHAR];
@@ -59,83 +71,43 @@ Command do_prompt(Command commandArray[])
 			numCommand = separateCommands(tokenArray, commandArray);
 			if (numCommand < 0)
 			{
-				fprintf(stdout, "Usage: Command is only separated by individual '|', '&', ';'\n");
+				fprintf(stdout, "Usage: Command [optional: file/dir path]\n");
 				continue;
 			}
-            return commandArray;
+
 		}
 	}
 }
 
 
-int separator(char *token)
-// return 1 if the token is a command separator
-// return 0 otherwise
-{
-    int i = 0;
-    char *commandSeparators[] = {pipeSep, conSep, seqSep, NULL};
-
-    while (commandSeparators[i] != NULL)
-    {
-        if (strcmp(commandSeparators[i], token) == 0)
-        {
-            return 1;
-        }
-        i++;
-    }
-
-    return 0;
-}
-
 // fill one command structure with the details
-void fillCommandStruct(Command *cp, int first, int last, char *sep)
+void fillCommandStruct(Command *cp, int first, int last)
 {
-	cp->first = 		first;
+	cp->first = 	first;
 	cp->last = 		last - 1;
-	cp->sep = 		sep;
 }
 
-// process standard in/out redirections in a command
-void searchRedirection(char *token[], Command *cp)
-{
-     int i;
-     for (i=cp->first; i<=cp->last; ++i) {
-         if (strcmp(token[i], "<") == 0) {   // standard input redirection
-              cp->stdin_file = token[i+1];
-              ++i;
-         } else if (strcmp(token[i], ">") == 0) { // standard output redirection
-              cp->stdout_file = token[i+1];
-              ++i;
-         }
-     }
-}
-
-// build command line argument vector for execvp function
+// build command line argument array in command array
 void buildCommandArgumentArray(char *token[], Command *cp)
 {
-     int n = (cp->last - cp->first + 1)    // the numner of tokens in the command
-          + 1;                             // the last element in argv must be a NULL
+     int n = (cp->last - cp->first + 1) + 1;    // the numner of tokens in the command
+                                                // the last element in argv must be a NULL
 
-     // re-allocate memory for argument vector
-     cp->argv = (char **) realloc(cp->argv, sizeof(char *) * n);
-     if (cp->argv == NULL) {
-         perror("realloc");
-         exit(1);
-     }
+    // re-allocate memory for argument vector
+    cp->argv = (char **) realloc(cp->argv, sizeof(char *) * n);
+    if (cp->argv == NULL) {
+        perror("realloc");
+        return;
+    }
 
-     // build the argument vector
-     int i;
-     int k = 0;
-     for (i=cp->first; i<= cp->last; ++i ) {
-         if (strcmp(token[i], ">") == 0 || strcmp(token[i], "<") == 0)
-             ++i;    // skip off the std in/out redirection
-         else {
-             cp->argv[k] = token[i];
-             ++k;
-         }
-     }
-     cp->argv[k] = NULL;
-	cp->argc = k;
+    // build the argument vector
+    int k = 0;
+    for (int i = cp->first; i <= cp->last; ++i ) {
+        cp->argv[k] = token[i];
+        k++;
+    }
+    cp->argv[k] = NULL;
+	cp->argc = k + 1;   // number of arguments
 }
 
 int separateCommands(char *token[], Command command[])
@@ -162,9 +134,8 @@ int separateCommands(char *token[], Command command[])
           ++nTokens;
      }
 
-     int first=0;   // points to the first tokens of a command
+     int first = 0; // points to the first tokens of a command
      int last;      // points to the last  tokens of a command
-     char *sep;     // command separator at the end of a command
      int c = 0;     // command index
      for (i=0; i<nTokens; ++i) {
          last = i;
@@ -172,8 +143,8 @@ int separateCommands(char *token[], Command command[])
              sep = token[i];
              if (first==last)  // two consecutive separators
                  return -2;
-             fillCommandStruct(&(command[c]), first, last, sep);
-             ++c;
+             fillCommandStruct(&(command[c]), first, last);
+             c++;
              first = i+1;
          }
      }

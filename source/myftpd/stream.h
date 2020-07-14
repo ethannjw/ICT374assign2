@@ -1,6 +1,6 @@
 /*
- *  stream.h  - Topic 11, HX 22/5/1995)
- *	 	head file for stream read and stream write. 
+ *  file:	stream.h
+ *  Purpose: 	head file for stream read and stream write. 
  */
 
 
@@ -31,3 +31,61 @@ int readn(int fd, char *buf, int bufsize);
  */           
 int writen(int fd, char *buf, int nbytes);
 
+
+/*
+ * Writes a stream of bytes on socket sd from buf
+ * returns:
+ * >0 : number of bytes written
+ * otherwise : write error
+ */
+int write_nbytes(int sd, char *buf, int nbytes);
+
+/*
+ * Reads a stream of bytes on socket sd to buf
+ * returns:
+ * >0 : number of bytes read
+ * otherwise : read error
+ */
+int read_nbytes(int sd, char *buf, int nbytes);
+
+/*
+ * Writes a one byte char from opcode to socket sd.
+ * return: -1 : write failed
+ *					1 : write success
+ */
+int write_code(int sd, char code);
+
+/*
+ * Reads a one byte char from socket sd to opcode.
+ * return: -1 : read failed
+ *					1 : read success
+ */
+int read_code(int sd,char *code);
+
+/*
+ * Writes a two byte integer from length to socket sd.
+ * return: -1 : write failed
+ *					1 : write success
+ */
+int write_twobytelength(int sd, int length);
+
+/*
+ * Reads a two byte integer from socket sd to length.
+ * return: -1 : read failed
+ *					1 : read success
+ */
+int read_twobytelength(int sd, int *length);
+
+/*
+ * Writes a four byte integer from length to socket sd.
+ * return: -1 : write failed
+ *					1 : write success
+ */
+int write_fourbytelength(int sd, int length);
+
+/*
+ * Reads a four byte integer from socket sd to length.
+ * return: -1 : read failed
+ *					1 : read success
+ */
+int read_fourbytelength(int sd, int *length);

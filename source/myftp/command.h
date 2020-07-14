@@ -1,4 +1,4 @@
-// File:		command.h for lab 9
+// File:		command.h for assignment 2
 // Author:		Ng Jing Wei
 // Purpose:		to separate a list of tokens into a sequence of commands.
 // 			any two successive commands in the list of tokens are separated
@@ -16,19 +16,24 @@
 #define MAX_NUM_COMMANDS    1000
 #define MAX_NUM_CHAR        1000
 
-// command separators
-#define pipeSep  "|"                            // pipe separator "|"
-#define conSep   "&"                            // concurrent execution separator "&"
-#define seqSep   ";"                            // sequential execution separator ";"
+// define the required commands
+#define PUT_CMD     "put"
+#define GET_CMD     "get"
+#define PWD_CMD     "pwd"
+#define LPWD_CMD    "lpwd"
+#define DIR_CMD     "dir"
+#define LDIR_CMD    "ldir"
+#define CD_CMD      "cd"
+#define LCD_CMD     "lcd"
+#define QUIT_CMD    "quit"
+#define HELP_CMD    "help"
 
 struct CommandStruct {
     int first;      	// index to the first token in the array "token" of the command
     int last;   	// index to the last token in the array "token" of the command
-    char *sep;		// the command separator that follows the command,  must be one of "|", "&", and ";"
     char **argv;        // an array of tokens that forms a command
 	int argc;	// an int indicating the number of arguments in the array
-    char *stdin_file;   // if not NULL, points to the file name for stdin redirection
-    char *stdout_file;  // if not NULL, points to the file name for stdout redirection
+
 };
 
 // command type
@@ -68,14 +73,4 @@ int separateCommands(char *token[], Command command[]);
 // assume:
 //		the array "command" must have at least MAX_NUM_COMMANDS number of elements
 
-void searchRedirection(char *token[], Command *cp);
-
-// purpose:
-//      displays the command prompt and processes the input from the user. The input is then processed
-//      and stored into the CommandStruct that is passed in as the parameter.
-//
-// return:	Command
-//
-// assume:
-//		the array "command" must have at least MAX_NUM_COMMANDS number of elements
 Command do_prompt(Command commandArray[])
