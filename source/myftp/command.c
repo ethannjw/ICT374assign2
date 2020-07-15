@@ -20,8 +20,9 @@ void rmReturnChar(char *line)
 	}
 }
 
-void cmd_prompt(Command &commandArray[])
+void cmd_prompt(socket socket_desc)
 {
+	Command commandStruct;
 	// declare token on 100 char
 	char input[MAX_NUM_CHAR];
 
@@ -54,136 +55,69 @@ void cmd_prompt(Command &commandArray[])
 		{
 		    	bzero(tokenArray, sizeof(tokenArray));
 			numTok = tokenise(input, tokenArray);
-			numCommand = separateCommands(tokenArray, commandArray);
-			if (numCommand < 0)
+
+			if (numTok < 0)
 			{
 				fprintf(stdout, "Usage: Command [optional: file/dir path]\n");
 				continue;
 			}
 			else
 			{
-				// insert all the commands here
+				commandStruct.cmd = tokenArray[0];
+				commandStruct.arg = tokenArray[1];
 			}
-
+			
+			if(strcmp(commandStruct.cmd, CMD_PWD) == 0){
+				cli_pwd(socket_desc);
+			}
+			else
+			{
+				fprintf(stdout, "No valid command available, try again. 
+					See documentation for help\n")
+			}
 		}
 	}
 }
 
-// fill one command structure with the details
-void fillCommandStruct(Command *cp, int first, int last)
-{
-	cp->first = first;
-	cp->last = last - 1;
-}
-
-// build command line argument array in command array
-void buildCommandArgumentArray(char *token[], Command *cp)
-{
-     int n = (cp->last - cp->first + 1) + 1;    // the numner of tokens in the command
-                                                // the last element in argv must be a NULL
-
-    // re-allocate memory for argument vector
-    cp->argv = (char **) realloc(cp->argv, sizeof(char *) * n);
-    if (cp->argv == NULL) {
-        perror("realloc");
-        return;
-    }
-
-    // build the argument vector
-    int k = 0;
-    for (int i = cp->first; i <= cp->last; ++i ) {
-        cp->argv[k] = token[i];
-        k++;
-    }
-    cp->argv[k] = NULL;
-	cp->argc = k + 1;   // number of arguments
-}
-
-int separateCommands(char *token[], Command command[])
-{
-     int i;
-     int nTokens;
-
-     // find out the number of tokens
-     i = 0;
-     while (token[i] != NULL) ++i;
-     nTokens = i;
-
-     // if empty command line
-     if (nTokens == 0)
-          return 0;
-
-     // check the first token
-     if (separator(token[0]))
-          return -3;
-
-     // check last token, add ";" if necessary
-     if (!separator(token[nTokens-1])) {
-          token[nTokens] = seqSep;
-          ++nTokens;
-     }
-
-     int first = 0; // points to the first tokens of a command
-     int last;      // points to the last  tokens of a command
-     int c = 0;     // command index
-     for (i=0; i<nTokens; ++i) {
-         last = i;
-         if (separator(token[i])) {
-             sep = token[i];
-             if (first==last)  // two consecutive separators
-                 return -2;
-             fillCommandStruct(&(command[c]), first, last);
-             c++;
-             first = i+1;
-         }
-     }
-
-     // check the last token of the last command
-     if (strcmp(token[last], pipeSep) == 0) { // last token is pipe separator
-          return -4;
-     }
-
-     // calculate the number of commands
-     int nCommands = c;
-
-     // handle standard in/out redirection and build command line argument vector
-     for (i=0; i<nCommands; ++i) {
-         searchRedirection(token, &(command[i]));
-         buildCommandArgumentArray(token, &(command[i]));
-     }
-
-     return nCommands;
-}
-
-void send_pwd(int socket_desc, char *token)
+void cli_pwd(int socket_desc)
 {
 	char op_code;
 	int file_size;
 	char working_dir_path;
-
-	if(write_opcode(socket_desc,PWD_OP) == -1){
-		perror("Failed to send pwd\n");
+	
+	// Send one opcode which is ASCII char 'W'
+	if(write_opcode(socket_desc, OP_PWD) == -1)
+	{
+		perror("Failed to send pwd command\n");
 		return;
 	}
-
-	if(read_opcode(socket_desc,&op_code) == -1){
+	
+	// Read the opcode from the server, supposed to be 'W'
+	if(read_opcode(socket_desc, &op_code) == -1)
+	{
 		perror("Unable to read opcode\n");
 		return;
 	}
-
-	if(op_code != PWD_OP){
+	
+	// Return if wrong opcode
+	if(op_code != PWD_OP)
+	{
 		perror("Invalid opcode from pwd: %c\n", op_code);
 		return;
 	}
-
-	if(read_length(socket_desc, &file_size) == -1){
-		perror("Failed to read filesize\n");
+	
+	// Read the size of the path from socket
+	if(read_length(socket_desc, &file_size) == -1)
+	{
+		perror("Failed to read path size\n");
 		return;
 	}
-
+	
+	// Allocate memory for the path
 	malloc(working_dir_path, sizeof((char) * (file_size+1)));
-
-	if(read_nbytes(socket_desc, directory, file_size) == -1){
+	
+	// Read the directory path
+	if(readn(socket_desc, directory, file_size) == -1){
 		perror("Failed to read directory\n");
 		return;
 	}

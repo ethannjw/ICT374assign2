@@ -1,6 +1,6 @@
 /*
- *  stream.h  - Topic 11, HX 22/5/1995)
- *	 	head file for stream read and stream write. 
+ *  file:	stream.h
+ *  Purpose: 	head file for stream read and stream write. 
  */
 
 
@@ -31,3 +31,31 @@ int readn(int fd, char *buf, int bufsize);
  */           
 int writen(int fd, char *buf, int nbytes);
 
+
+/*
+ * Writes a one byte char from opcode to socket sd.
+ * return: -1 : write failed
+ * 1 : write success
+ */
+int write_opcode(int socket_desc, char code);
+
+/*
+ * Reads a one byte char from socket sd to opcode.
+ * return: -1 : read failed
+ *					1 : read success
+ */
+int read_opcode(int socket_desc, char* code);
+
+/*
+ * Writes a four byte integer from length to socket sd.
+ * return: -1 : write failed
+ *					1 : write success
+ */
+int write_length(int socket_desc, int len);
+
+/*
+ * Reads a four byte integer from socket sd to length.
+ * return: -1 : read failed
+ *					1 : read success
+ */
+int read_length(int socket_desc, int *len);

@@ -1,6 +1,7 @@
 /*
- *  stream.c  -	(Topic 11, HX 22/5/1995)
- *	 	routines for stream read and write. 
+ *  File: 	stream.c for assign2 
+ *  Authors:	Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Purpose: 	Contains the read/write n, read/write opcode, read/write length
  */
 
 #include  <sys/types.h>
@@ -49,4 +50,61 @@ int writen(int fd, char *buf, int nbytes)
              return (nw);    /* write error */
     } 
     return (n);
+}
+
+
+// Writes one byte char on the socket.
+int write_opcode(int socket_desc, char code)
+{
+	// write the 1 byte code to socket
+	if (write(socket_desc, (char*)&code, 1) != 1) 
+	{
+		return (-1);
+	}
+	return 1;
+}
+
+// Reads a one byte char off the socket.
+int read_opcode(int socket_desc, char* code)
+{
+	char data;
+
+	// read 1 byte code from socket
+	if(read(socket_desc,(char *) &data,1) != 1) 
+	{
+		return -1;
+	}
+	*code = data;
+
+	return 1;
+}
+
+// Writes the four byte int on the socket.
+int write_length(int socket_desc, int len)
+{
+	// convert to host to network long
+	int data = htonl(len); 
+
+	if (write(socket_desc,&data, 4) != 4) 
+	{
+		return (-1);
+	}
+	
+	return 1;
+}
+
+
+// Reads a four byte int off the socket.
+int read_length(int socket_desc, int *len)
+{
+	int data;
+
+	if (read(socket_desc, &data, 4) != 4)
+	{
+		return (-1);
+	}
+	// to network byte order
+	*len = ntohl(data);
+
+	return 1;
 }

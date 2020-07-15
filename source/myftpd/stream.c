@@ -1,7 +1,7 @@
 /*
- *  file: 	stream.c
- *  Authors:
- *  purpose:	stream read and write. 
+ *  File: 	stream.c for assign2 
+ *  Authors:	Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Purpose: 	Contains the read/write n, read/write opcode, read/write length
  */
 
 #include  <sys/types.h>
@@ -52,115 +52,59 @@ int writen(int fd, char *buf, int nbytes)
     return (n);
 }
 
-// Code from Daniel code
 
-/*
- * Loops over a write to socket until entire nbytes is written from buf.
- */
-int write_nbytes(int sd, char *buf, int nbytes)
+// Writes one byte char on the socket.
+int write_opcode(int socket_desc, char code)
 {
-	int nw = 0;
-	int n = 0;
-	for (n=0; n < nbytes; n += nw) {
-		if ((nw = write(sd, buf+n, nbytes-n)) <= 0)
-			return (nw); /* write error */
+	// write the 1 byte code to socket
+	if (write(socket_desc, (char*)&code, 1) != 1) 
+	{
+		return (-1);
 	}
-  return n;
-}
-
-/*
- * Loops over a read from socket until entire nbytes read into buf.
- */
-int read_nbytes(int sd, char *buf, int nbytes)
-{
-	int nr = 1;
-	int n = 0;
-	for (n=0; (n < nbytes) && (nr > 0); n += nr) {
-		if ((nr = read(sd, buf+n, nbytes-n)) < 0){
-			return (nr); /* read error */
-		}
-	}
-	return (n);
-}
-
-/*
- * Writes a one byte char on the socket.
- */
-int write_code(int sd, char code)
-{
-	/* write 1 byte code to socket */
-	if (write(sd, (char*)&code, 1) != 1) return (-1);
-
 	return 1;
 }
 
-/*
- * Reads a one byte char off the socket.
- */
-int read_code(int sd, char* code)
+// Reads a one byte char off the socket.
+int read_opcode(int socket_desc, char* code)
 {
 	char data;
 
-	/* read 1 byte code from socket */
-	if(read(sd,(char *) &data,1) != 1) return -1;
-
+	// read 1 byte code from socket
+	if(read(socket_desc,(char *) &data,1) != 1) 
+	{
+		return -1;
+	}
 	*code = data;
 
 	return 1;
 }
 
-/*
- * Writes a two byte integer on the socket.
- */
-int write_twobytelength(int sd, int length)
+// Writes the four byte int on the socket.
+int write_length(int socket_desc, int len)
 {
-	short data = length;
-	data = htons(data);  /* convert to network byte order */
+	// convert to host to network long
+	int data = htonl(len); 
 
-	if (write(sd,&data, 2) != 2) return (-1);
-
+	if (write(socket_desc,&data, 4) != 4) 
+	{
+		return (-1);
+	}
+	
 	return 1;
 }
 
-/*
- * Reads a two byte integer off the socket.
- */
-int read_twobytelength(int sd, int *length)
+
+// Reads a four byte int off the socket.
+int read_length(int socket_desc, int *len)
 {
-	short data = 0;
+	int data;
 
-  if (read(sd, &data, 2) != 2) return (-1);
-
-  short conv = ntohs(data); /* convert to host byte order */
-  int t = (int)conv;
-  *length = t;
-
-	return 1;
-}
-
-/*
- * Writes a four byte integer on the socket.
- */
-int write_fourbytelength(int sd, int length)
-{
-	int data = htonl(length); /* convert to network byte order */
-
-	if (write(sd,&data, 4) != 4) return (-1);
-
-	return 1;
-}
-
-/*
- * Reads a four byte integer off the socket.
- */
-int read_fourbytelength(int sd, int *length)
-{
-	int data = 0;
-
-  if (read(sd, &data, 4) != 4) return (-1);
-
-  int conv = ntohl(data); /* convert to host byte order */
-  *length = conv;
+	if (read(socket_desc, &data, 4) != 4)
+	{
+		return (-1);
+	}
+	// to network byte order
+	*len = ntohl(data);
 
 	return 1;
 }

@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
           perror("client connect"); exit(1);
      }
 
-     while (++i) {
+     while (++i) { // for testing purpose.
           printf("Client Input[%d]: ", i);
           fgets(buf, sizeof(buf), stdin); nr = strlen(buf);
           if (buf[nr-1] == '\n') { buf[nr-1] = '\0'; --nr; }

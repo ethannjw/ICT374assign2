@@ -4,20 +4,21 @@
 *   Purpose:		This is the command driver code for running the commands for FTP
 */
 
-#include  <stdlib.h>        /* strlen(), strcmp() etc */
-#include  <stdio.h>         /* printf()  */
-#include  <sys/types.h>     /* pid_t, u_long, u_short */
-#include  <sys/socket.h>    /* struct sockaddr, socket(), etc */
-#include  <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
+#include <stdlib.h>        /* strlen(), strcmp() etc */
+#include <stdio.h>         /* printf()  */
+#include <sys/types.h>     /* pid_t, u_long, u_short */
+#include <sys/socket.h>    /* struct sockaddr, socket(), etc */
+#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
                             /* and INADDR_ANY */
-#include  <sys/wait.h>      /* waitpid(), WNOHAND */
-#include  <signal.h>        /* SIGCHLD, sigaction() */
-#include  <unistd.h>        /* read(), write() */
-#include  <string.h>        /* strlen(), strcmp() etc */
-#include  <errno.h>         /* extern int errno, EINTR, perror() */
-#include  <sys/stat.h>      /* fstat(), lstat(), stat() */
+#include <sys/wait.h>      /* waitpid(), WNOHAND */
+#include <signal.h>        /* SIGCHLD, sigaction() */
+#include <unistd.h>        /* read(), write() */
+#include <string.h>        /* strlen(), strcmp() etc */
+#include <errno.h>         /* extern int errno, EINTR, perror() */
+#include <sys/stat.h>      /* fstat(), lstat(), stat() */
 
-#include  "commandd.h"
+#include "commandd.h"
+#include "stream.h"
 
 void serve_a_client(int sd)
 {   int nr, nw, i;
@@ -36,4 +37,33 @@ void serve_a_client(int sd)
         /* send results to client */
         nw = write(sd, buf, nr);
     } 
+}
+
+
+// PWD from client to display cwd of server.
+void ser_pwd(cli_desc *des)
+{
+
+	char buf[1000];
+
+	getcwd(buf, sizeof(buf));
+	
+	// write the opcode to socket
+	if(write_opcode(des->sd, OP_PWD) == -1){
+		fprintf(stderr, "Failed to write opcode");
+		return;
+	}
+
+	// send the length of working dir
+	if(write_length(des->sd, strlen(buf)) == -1){
+		fprintf(stderr, "Failed to send length");
+		return;
+	}
+	// send the dir info
+	if(writen(des->sd, buf, strlen(buf)) == -1){
+		fprintf(stderr, "Failed to send directory info");
+		return;
+	}
+
+	fprintf(stdout, "Send PWD success");
 }

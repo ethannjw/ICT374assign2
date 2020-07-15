@@ -18,4 +18,18 @@
 
 #define  BUF_SIZE       256
 
+// desc type containing socket descriptor, client id
+struct client_struct{
+	int sd; 
+	int cid;
+};
+typedef struct client_struct cli_desc;
+
 void serve_a_client(int sd);
+
+/** Purpose:	To send the current working directory of the server 
+ *  Param:	client_struct
+ *  Return:	void
+ *  
+*/
+void ser_pwd(cli_desc *des);
