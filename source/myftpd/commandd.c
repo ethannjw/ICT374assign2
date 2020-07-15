@@ -44,6 +44,7 @@ void serve_a_client(int sd)
 
 	while (read_opcode(sd, &opcode) > 0)
 	{
+		printf("OPCODE: %c\n", opcode);
 		switch(opcode)
 		{
 			case OP_PUT:
@@ -52,6 +53,7 @@ void serve_a_client(int sd)
 				break;
 			case OP_PWD:
 				ser_pwd(sd);
+				printf("PWD comment executed\n");
 				break;
 			case OP_FDR:
 				break;
