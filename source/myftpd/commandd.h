@@ -35,7 +35,7 @@
 /* ACK codes for PUT */
 #define FILE_EXIST '1'
 
-#define  BUF_SIZE       1000
+#define  BUF_SIZE       256
 
 // desc type containing socket descriptor, client id
 struct client_struct{

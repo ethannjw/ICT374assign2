@@ -90,7 +90,7 @@ void ser_put(int sd)
 	if (read_length(sd, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to send length\n");
-		exit(1);
+		return;
 	}
 	else
     {
@@ -98,19 +98,20 @@ void ser_put(int sd)
 	}
 
 	// read the file name
-	char file_name[file_len];
+	char file_name[file_len + 1];
 	if (readn(sd, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to send filename\n");
-		exit(1);
+		return;
 	}
 	else
     {
+		file_name[file_len] = '\0';
         fprintf(stdout, "Successful read filename of %s\n", file_name);
 	}
 
 	// set last character to null
-	file_name[strcspn(file_name, "\n")] = '\0';
+	//file_name[strcspn(file_name, "\n")] = '\0';
 
 	// check for file exist or error creating file
 	ack_code = SUCCESS_CODE;
@@ -119,7 +120,7 @@ void ser_put(int sd)
 		ack_code = FILE_EXIST;
 		fprintf(stderr, "Filename exist\n");
 	}
-	else if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) != -1)
+	else if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) == -1)
 	{
 		ack_code = ERROR_CODE;
 		fprintf(stderr, "Failed to create file\n");
@@ -129,7 +130,7 @@ void ser_put(int sd)
 	if (write_opcode(sd, OP_PUT) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
-		exit(1);
+		return;
 	}
     else
     {
@@ -140,7 +141,7 @@ void ser_put(int sd)
 	if (write_opcode(sd, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
-		exit(1);
+		return;
 	}
     else
     {
@@ -151,7 +152,7 @@ void ser_put(int sd)
 	if (ack_code != SUCCESS_CODE)
 	{
 		fprintf(stderr, "PUT request failed\n");
-		exit(1);
+		return;
 	}
 
 	// reading the respond from client
@@ -167,8 +168,8 @@ void ser_put(int sd)
 	// read the file size
 	if (read_length(sd, &file_size) == -1)
 	{
-		fprintf(stderr, "Failed to send size\n");
-		exit(1);
+		fprintf(stderr, "Failed to read size\n");
+		return;
 	}
 	else
     {
@@ -184,15 +185,18 @@ void ser_put(int sd)
 		
 		if ((nr = readn(sd, buf, block_size)) == -1)
 		{
+			fprintf(stdout, "Failed to read\n");
 			return; // connection broken down
 		}
 
-		if ((nw = writen(fd, buf, nr)) < 0)
+		if ((nw = writen(fd, buf, nr)) < nr)
 		{
+			fprintf(stdout, "Failed to write\n");
 			return;
 		}
 		file_size -= nw;
 	}
 
 	close(fd);
+	fprintf(stdout, "File received\n");
 }
