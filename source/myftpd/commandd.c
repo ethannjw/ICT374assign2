@@ -21,13 +21,13 @@
 #include "stream.h"
 
 void serve_a_client(int sd)
-{   
+{
 	/*int nr, nw, i;
     char buf[BUF_SIZE];
 
     while (1){
         // read data from client
-        if ((nr = read(sd, buf, sizeof(buf))) <= 0) 
+        if ((nr = read(sd, buf, sizeof(buf))) <= 0)
             return;   // connection broken down
 
         // process data
@@ -35,7 +35,7 @@ void serve_a_client(int sd)
 
         printf("TEST\n");
 		//ser_pwd(sd);
-              
+
         // send results to client
         nw = write(sd, buf, nr);
     }*/
@@ -73,26 +73,39 @@ void ser_pwd(int sd)
 
 	getcwd(buf, sizeof(buf));
 	printf("BUF: %s\n", buf);
-	
+
 	// write the opcode to socket
 	//if(write_opcode(des->sd, OP_PWD) == -1){
 	if(write_opcode(sd, OP_PWD) == -1){
-		fprintf(stderr, "Failed to write opcode");
+		fprintf(stderr, "Failed to write opcode\n");
 		return;
 	}
+    else
+    {
+        fprintf(stdout, "Successful written opcode\n");
+	}
 
+    int buflen = strlen(buf);
 	// send the length of working dir
 	//if(write_length(des->sd, strlen(buf)) == -1){
-	if(write_length(sd, strlen(buf)) == -1){
-		fprintf(stderr, "Failed to send length");
+	if(write_length(sd, buflen) == -1){
+		fprintf(stderr, "Failed to send length\n");
 		return;
+	}
+    else
+    {
+        fprintf(stdout, "Successful written length of %d\n", buflen);
 	}
 	// send the dir info
 	//if(writen(des->sd, buf, strlen(buf)) == -1){
-	if(writen(sd, buf, strlen(buf)) == -1){
-		fprintf(stderr, "Failed to send directory info");
+	if(writen(sd, buf, buflen) == -1){
+		fprintf(stderr, "Failed to send directory info\n");
 		return;
 	}
+    else
+    {
+        fprintf(stdout, "Successful send directory info\n");
+	}
 
-	fprintf(stdout, "Send PWD success");
+	fprintf(stdout, "Send PWD success\n");
 }

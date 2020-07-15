@@ -36,6 +36,10 @@ void rmReturnChar(char *line)
 	{
 		line[n-1]='\0';
 	}
+	else if (line[n-1]!='\0')
+    {
+		line[n]='\0';
+	}
 }
 
 void cmd_prompt(int socket_desc)
@@ -79,7 +83,7 @@ void cmd_prompt(int socket_desc)
 				fprintf(stdout, "Usage: Command [optional: file/dir path]\n");
 				continue;
 			}
-			else if (numTok == 1)
+			/*else if (numTok == 1)
             {
                 strcpy(commandStruct.cmd, tokenArray[0]);
             }
@@ -91,9 +95,9 @@ void cmd_prompt(int socket_desc)
             else
 			{
 				fprintf(stdout, "Usage: [<command> <optional dir>]\n");
-            }
+            }*/
 
-			if(strcmp(commandStruct.cmd, CMD_PWD) == 0){
+			if(strcmp(tokenArray[0], CMD_PWD) == 0){
 				cli_pwd(socket_desc);
 			}
 			else
@@ -107,7 +111,7 @@ void cmd_prompt(int socket_desc)
 void cli_pwd(int socket_desc)
 {
 	char op_code;
-	int file_size;
+	int file_size, read_size;
 	char * working_dir_path;
 
 	// Send one opcode which is ASCII char 'W'
@@ -130,6 +134,10 @@ void cli_pwd(int socket_desc)
 		fprintf(stderr, "Invalid opcode from pwd: %c\n", op_code);
 		return;
 	}
+    else
+    {
+        fprintf(stdout, "Successful get opcode '%c'\n", op_code);
+	}
 
 	// Read the size of the path from socket
 	if(read_length(socket_desc, &file_size) == -1)
@@ -137,18 +145,30 @@ void cli_pwd(int socket_desc)
 		perror("Failed to read path size\n");
 		return;
 	}
+    else
+    {
+        fprintf(stdout, "Successful get length %d\n", file_size);
+	}
 
-	// Allocate memory for the path
+    // Allocate memory for the path
 	working_dir_path = malloc(sizeof(char) * (file_size+1));
+    //char working_dir_path[(read_size+1)];
+    //char working_dir_path[1000];
 
 	// Read the directory path
-	if(readn(socket_desc, working_dir_path, file_size) == -1){
+	if((read_size = readn(socket_desc, working_dir_path, (sizeof(char)*file_size))) == -1)
+     {
 		perror("Failed to read directory\n");
 		return;
 	}
+    else
+    {
+        fprintf(stdout, "Successful read data %d\n", read_size);
+    }
 
-	working_dir_path[file_size] = '\0';
-	fprintf(stdout, "%s\n", working_dir_path);
+	rmReturnChar(working_dir_path);
+
+	printf("%s\n", working_dir_path);
 	free(working_dir_path);
 }
 
