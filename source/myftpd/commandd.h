@@ -32,4 +32,5 @@ void serve_a_client(int sd);
  *  Return:	void
  *  
 */
-void ser_pwd(cli_desc *des);
+//void ser_pwd(cli_desc *des);
+void ser_pwd(int sd);
