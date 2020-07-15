@@ -16,6 +16,7 @@
 #include <string.h>        /* strlen(), strcmp() etc */
 #include <errno.h>         /* extern int errno, EINTR, perror() */
 #include <sys/stat.h>      /* fstat(), lstat(), stat() */
+#include <fcntl.h>
 
 #include "../stream.h"
 
@@ -29,9 +30,12 @@
 
 /* ACK codes for each network specification */
 #define SUCCESS_CODE '0'
-#define ERROR_CODE   '-1'
+#define ERROR_CODE   -1
 
-#define  BUF_SIZE       256
+/* ACK codes for PUT */
+#define FILE_EXIST '1'
+
+#define  BUF_SIZE       1000
 
 // desc type containing socket descriptor, client id
 struct client_struct{
@@ -43,9 +47,16 @@ typedef struct client_struct cli_desc;
 void serve_a_client(int sd);
 
 /** Purpose:	To send the current working directory of the server 
- *  Param:	client_struct
+ *  Param:	int
  *  Return:	void
  *  
 */
 //void ser_pwd(cli_desc *des);
 void ser_pwd(int sd);
+
+/** Purpose:	To upload files to the server 
+ *  Param:	int
+ *  Return:	void
+ *  
+*/
+void ser_put(int sd);
