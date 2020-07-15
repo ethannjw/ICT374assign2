@@ -4,10 +4,8 @@
  *  Purpose: 	Contains the read/write n, read/write opcode, read/write length
  */
 
-#include  <sys/types.h>
-#include  <netinet/in.h> /* struct sockaddr_in, htons(), htonl(), */
-#include  "stream.h"
-#include <unistd.h>
+#include "stream.h"
+
 /*
 int readn(int fd, char *buf, int bufsize)
 {

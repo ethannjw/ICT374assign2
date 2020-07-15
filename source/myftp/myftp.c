@@ -29,7 +29,7 @@
 #include <stdio.h>		    // stdin(), stdout()
 #include <stdlib.h>		    // exit()
 #include <unistd.h>
-#include "stream.h"		    // MAX_BLOCK_SIZE, readn(), writen()
+//#include "stream.h"		    // MAX_BLOCK_SIZE, readn(), writen()
 #include "command.h"        // all the main commands
 
 #define SERV_TCP_PORT 12345	// default server listening port

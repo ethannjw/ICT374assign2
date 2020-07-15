@@ -17,7 +17,6 @@
 #include  <errno.h>         /* extern int errno, EINTR, perror() */
 #include  <sys/stat.h>      /* fstat(), lstat(), stat() */
 
-#include  "stream.h"
 #include  "commandd.h"
 
 #define  SERV_TCP_PORT  12345   /* default server listening port */

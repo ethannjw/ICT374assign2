@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include "stream.h"
+#include "../stream.h"
 
 #define MAX_NUM_COMMANDS    1000
 #define MAX_NUM_CHAR        1000

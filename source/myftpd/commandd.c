@@ -4,21 +4,8 @@
 *   Purpose:		This is the command driver code for running the commands for FTP
 */
 
-#include <stdlib.h>        /* strlen(), strcmp() etc */
-#include <stdio.h>         /* printf()  */
-#include <sys/types.h>     /* pid_t, u_long, u_short */
-#include <sys/socket.h>    /* struct sockaddr, socket(), etc */
-#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
-                            /* and INADDR_ANY */
-#include <sys/wait.h>      /* waitpid(), WNOHAND */
-#include <signal.h>        /* SIGCHLD, sigaction() */
-#include <unistd.h>        /* read(), write() */
-#include <string.h>        /* strlen(), strcmp() etc */
-#include <errno.h>         /* extern int errno, EINTR, perror() */
-#include <sys/stat.h>      /* fstat(), lstat(), stat() */
-
 #include "commandd.h"
-#include "stream.h"
+
 
 void serve_a_client(int sd)
 {

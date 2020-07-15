@@ -3,6 +3,9 @@
  *  Purpose: 	head file for stream read and stream write. 
  */
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <netinet/in.h> /* struct sockaddr_in, htons(), htonl(), */
 
 #define MAX_BLOCK_SIZE (1024*5)    /* maximum size of any piece of */
                                    /* data that can be sent by client */
