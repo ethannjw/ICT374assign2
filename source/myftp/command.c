@@ -1,14 +1,32 @@
 /*  File:		command.c for assignment 2 myftp (client side)
  *  Author:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
- *  Purpose:		Contains the core functions for the client operation. 
- *  Assumptions:	
+ *  Purpose:		Contains the core functions for the client operation.
+ *  Assumptions:
 */
 
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
 #include "command.h"
 
+int tokenise (char line[], char *token[])
+{
+      char *tk;
+      int i=0;
+
+      tk = strtok(line, tokenSep);
+      token[i] = tk;
+
+      while (tk != NULL) {
+
+          ++i;
+          if (i>=MAX_TOKEN) {
+              i = -1;
+              break;
+          }
+
+          tk = strtok(NULL, tokenSep);
+          token[i] = tk;
+      }
+      return i;
+}
 
 void rmReturnChar(char *line)
 {
@@ -20,7 +38,7 @@ void rmReturnChar(char *line)
 	}
 }
 
-void cmd_prompt(socket socket_desc)
+void cmd_prompt(int socket_desc)
 {
 	Command commandStruct;
 	// declare token on 100 char
@@ -49,11 +67,11 @@ void cmd_prompt(socket socket_desc)
 
 		if (strcmp(input, "quit") == 0)
 		{
-			return 0;
+			return;
 		}
 		else
 		{
-		    	bzero(tokenArray, sizeof(tokenArray));
+	    	//bzero(tokenArray, sizeof(tokenArray));
 			numTok = tokenise(input, tokenArray);
 
 			if (numTok < 0)
@@ -61,19 +79,26 @@ void cmd_prompt(socket socket_desc)
 				fprintf(stdout, "Usage: Command [optional: file/dir path]\n");
 				continue;
 			}
-			else
+			else if (numTok == 1)
+            {
+                strcpy(commandStruct.cmd, tokenArray[0]);
+            }
+			else if (numTok == 2)
 			{
-				commandStruct.cmd = tokenArray[0];
-				commandStruct.arg = tokenArray[1];
+				strcpy(commandStruct.cmd, tokenArray[0]);
+				strcpy(commandStruct.arg, tokenArray[1]);
 			}
-			
+            else
+			{
+				fprintf(stdout, "Usage: [<command> <optional dir>]\n");
+            }
+
 			if(strcmp(commandStruct.cmd, CMD_PWD) == 0){
 				cli_pwd(socket_desc);
 			}
 			else
 			{
-				fprintf(stdout, "No valid command available, try again. 
-					See documentation for help\n")
+				fprintf(stdout, "No valid command available, try again. See documentation for help\n");
 			}
 		}
 	}
@@ -83,41 +108,41 @@ void cli_pwd(int socket_desc)
 {
 	char op_code;
 	int file_size;
-	char working_dir_path;
-	
+	char * working_dir_path;
+
 	// Send one opcode which is ASCII char 'W'
 	if(write_opcode(socket_desc, OP_PWD) == -1)
 	{
 		perror("Failed to send pwd command\n");
 		return;
 	}
-	
+
 	// Read the opcode from the server, supposed to be 'W'
 	if(read_opcode(socket_desc, &op_code) == -1)
 	{
 		perror("Unable to read opcode\n");
 		return;
 	}
-	
+
 	// Return if wrong opcode
-	if(op_code != PWD_OP)
+	if(op_code != OP_PWD)
 	{
-		perror("Invalid opcode from pwd: %c\n", op_code);
+		fprintf(stderr, "Invalid opcode from pwd: %c\n", op_code);
 		return;
 	}
-	
+
 	// Read the size of the path from socket
 	if(read_length(socket_desc, &file_size) == -1)
 	{
 		perror("Failed to read path size\n");
 		return;
 	}
-	
+
 	// Allocate memory for the path
-	malloc(working_dir_path, sizeof((char) * (file_size+1)));
-	
+	working_dir_path = malloc(sizeof(char) * (file_size+1));
+
 	// Read the directory path
-	if(readn(socket_desc, directory, file_size) == -1){
+	if(readn(socket_desc, working_dir_path, file_size) == -1){
 		perror("Failed to read directory\n");
 		return;
 	}
