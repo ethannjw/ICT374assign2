@@ -89,6 +89,7 @@ void cmd_prompt(int socket_desc)
 			else if(strcmp(tokenArray[0], CMD_FDR) == 0){
 				cli_fdr(socket_desc);
 			}
+
 			else if(strcmp(tokenArray[0], CMD_PUT) == 0){
 				cli_put(socket_desc, tokenArray[1]);
 			}

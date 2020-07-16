@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <dirent.h>	/* DIR */
 
+
 #include "../stream.h"
 
 /* OP CODES for the network specification */

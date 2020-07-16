@@ -152,6 +152,7 @@ void ser_put(int sd)
 	if (read_length(sd, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
+
 		return;
 	}
 	else
@@ -164,6 +165,7 @@ void ser_put(int sd)
 	if (readn(sd, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
+
 		return;
 	}
 	else
@@ -177,6 +179,7 @@ void ser_put(int sd)
 
 	// check for file exist or error creating file
 	ack_code = SUCCESS_CODE;
+
 	if ((fd = open(file_name, O_RDONLY)) >= 0)
 	{
 		ack_code = FILE_EXIST;
@@ -243,9 +246,10 @@ void ser_put(int sd)
 	while (file_size > 0)
 	{
 		if (block_size > file_size)
-        {
-            block_size = file_size;
-        }
+        	{
+            		block_size = file_size;
+        	}
+
 		if ((nr = readn(sd, buf, block_size)) == -1)
 		{
 			fprintf(stdout, "Failed to read\n");
