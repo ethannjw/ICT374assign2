@@ -12,4 +12,4 @@ stream.o: stream.c stream.h
 	gcc -c ../stream.c
 
 clean:
-	rm *.o
+	rm *.o myftp

@@ -41,7 +41,7 @@ void ser_fdr(int sd)
 	// Define filename and filename array
 	char filenames[BUF_SIZE] = "";
 	int filecount = 0;
-	
+
 	// write the opcode to socket
 	//if (write_opcode(des->sd, OP_PWD) == -1){
 	if (write_opcode(sd, OP_FDR) == -1)
@@ -55,18 +55,18 @@ void ser_fdr(int sd)
 	}
 
 	// Open current dir and struct
-	DIR *dp; 
+	DIR *dp;
 	struct dirent *direntp;
 	dp = opendir(".");
 
-	// insert the filenames 
+	// insert the filenames
 	while (( direntp = readdir(dp)) != NULL )
 	{
 		strcat(filenames, direntp->d_name);
 		strcat(filenames, "  ");
 		filecount++;
 	}
-	
+
 	rmReturnChar(filenames);
 
     int buflen = strlen(filenames);
@@ -187,6 +187,13 @@ void ser_put(int sd)
 		fprintf(stderr, "Failed to create file\n");
 	}
 
+    // check for fstat
+    if(fstat(fd, &stat) < 0)
+    {
+            fprintf(stderr, "Failed to read fstat\n");
+            return;
+    }
+
 	// write the opcode to socket
 	if (write_opcode(sd, OP_PUT) == -1)
 	{
@@ -243,7 +250,7 @@ void ser_put(int sd)
 	{
 		if (block_size > file_size)
 			block_size = file_size;
-		
+
 		if ((nr = readn(sd, buf, block_size)) == -1)
 		{
 			fprintf(stdout, "Failed to read\n");
