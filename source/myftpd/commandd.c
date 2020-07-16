@@ -33,6 +33,7 @@ void serve_a_client(int sd)
 				break;
 		}
 	}
+	return;
 }
 
 // Send filenames present in current folder
@@ -150,7 +151,7 @@ void ser_put(int sd)
 	// read the file length
 	if (read_length(sd, &file_len) == -1)
 	{
-		fprintf(stderr, "Failed to send length\n");
+		fprintf(stderr, "Failed to read length\n");
 		return;
 	}
 	else
@@ -162,7 +163,7 @@ void ser_put(int sd)
 	char file_name[file_len + 1];
 	if (readn(sd, file_name, file_len) == -1)
 	{
-		fprintf(stderr, "Failed to send filename\n");
+		fprintf(stderr, "Failed to read filename\n");
 		return;
 	}
 	else
@@ -176,7 +177,7 @@ void ser_put(int sd)
 
 	// check for file exist or error creating file
 	ack_code = SUCCESS_CODE;
-	if ((fd = open(file_name, O_RDONLY)) != -1)
+	if ((fd = open(file_name, O_RDONLY)) >= 0)
 	{
 		ack_code = FILE_EXIST;
 		fprintf(stderr, "Filename exist\n");
@@ -186,13 +187,6 @@ void ser_put(int sd)
 		ack_code = ERROR_CODE;
 		fprintf(stderr, "Failed to create file\n");
 	}
-
-    // check for fstat
-    if(fstat(fd, &stat) < 0)
-    {
-            fprintf(stderr, "Failed to read fstat\n");
-            return;
-    }
 
 	// write the opcode to socket
 	if (write_opcode(sd, OP_PUT) == -1)
@@ -249,8 +243,9 @@ void ser_put(int sd)
 	while (file_size > 0)
 	{
 		if (block_size > file_size)
-			block_size = file_size;
-
+        {
+            block_size = file_size;
+        }
 		if ((nr = readn(sd, buf, block_size)) == -1)
 		{
 			fprintf(stdout, "Failed to read\n");

@@ -245,6 +245,13 @@ void cli_put(int socket_desc, char *filename)
 		fprintf(stdout, "Successful read the file\n");
 	}
 
+    // check for fstat
+    if(fstat(fd, &stats) < 0)
+    {
+            fprintf(stderr, "Failed to read fstat\n");
+            return;
+    }
+
 	file_size = stats.st_size; // set file size
 
 	// send PUT
@@ -257,7 +264,7 @@ void cli_put(int socket_desc, char *filename)
     {
         fprintf(stdout, "Successful written opcode\n");
 	}
-	
+
 	if (write_length(socket_desc, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to send length\n");
@@ -311,7 +318,7 @@ void cli_put(int socket_desc, char *filename)
 		{
 			fprintf(stdout, "Successful written opcode\n");
 		}
-		
+
 		if (write_length(socket_desc, file_size) == -1)
 		{
 			fprintf(stderr, "Failed to send length\n");
