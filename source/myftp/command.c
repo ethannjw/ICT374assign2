@@ -8,24 +8,25 @@
 
 int tokenise (char line[], char *token[])
 {
-      char *tk;
-      int i=0;
+    char *tk;
+    int i=0;
+    tk = strtok(line, tokenSep);
+    token[i] = tk;
 
-      tk = strtok(line, tokenSep);
-      token[i] = tk;
+    while (tk != NULL)
+    {
 
-      while (tk != NULL) {
+        ++i;
+        if (i>=MAX_TOKEN)
+        {
+            i = -1;
+            break;
+        }
 
-          ++i;
-          if (i>=MAX_TOKEN) {
-              i = -1;
-              break;
-          }
-
-          tk = strtok(NULL, tokenSep);
-          token[i] = tk;
-      }
-      return i;
+        tk = strtok(NULL, tokenSep);
+        token[i] = tk;
+    }
+    return i;
 }
 
 void cmd_prompt(int socket_desc)
@@ -39,11 +40,6 @@ void cmd_prompt(int socket_desc)
 
 	// declare total num of tokens
 	int numTok;
-
-	// declare number of commands
-	int numCommand;
-
-	int i, j;
 
 	while ( 1 )
 	{
@@ -93,6 +89,10 @@ void cmd_prompt(int socket_desc)
 			else if(strcmp(tokenArray[0], CMD_PUT) == 0){
 				cli_put(socket_desc, tokenArray[1]);
 			}
+
+			else if(strcmp(tokenArray[0], CMD_CD) == 0){
+				cli_cd(socket_desc, tokenArray[1]);
+			}
 			else
 			{
 				fprintf(stdout, "No valid command available, try again. See documentation for help\n");
@@ -100,6 +100,86 @@ void cmd_prompt(int socket_desc)
 		}
 	}
 }
+
+void cli_cd(int socket_desc, char* cmd_path)
+{
+    char op_code;
+	char ack_code;
+    rmReturnChar(cmd_path);
+	// process the filepath
+	int path_len = strlen(cmd_path);
+	char file_path[path_len+1];
+	strcpy(file_path, cmd_path);
+	// set last character to null
+	file_path[path_len] = '\0';
+
+	// Send opcode 'C'
+	if(write_opcode(socket_desc, OP_CD) == -1){
+		fprintf(stderr, "Client: Failed to send %c opcode\n", OP_CD);
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Client: Successful sent %c opcode\n", OP_CD);
+    }
+
+    // send path length
+	if(write_length(socket_desc, path_len) == -1){
+		fprintf(stderr, "Client: Failed to write %d path_len\n", path_len);
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Client: Successful written %d path len\n", path_len);
+
+    }
+
+    // send the path
+	if(writen(socket_desc, file_path, strlen(file_path)) == -1)
+    {
+		fprintf(stderr, "Client: Failed to write directory name %s to server\n", file_path);
+		return;
+	}
+
+    // read the reply from server
+	if(read_opcode(socket_desc, &op_code) == -1)
+    {
+		perror("Client: Failed to read opcode from server\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Client: Successful read '%c' opcode\n", op_code);
+    }
+
+	if(op_code != OP_CD)
+    {
+		fprintf(stderr, "Client: Invalid opcode from server: %c\n", op_code);
+		return;
+	}
+
+	if(read_opcode(socket_desc, &ack_code) == -1)
+    {
+		perror("Client: Failed to read ackcode\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Client: Successful read ack code %c\n", ack_code);
+    }
+
+	if(ack_code == SUCCESS_CODE)
+    {
+		return;
+	}
+
+	if(ack_code == ERROR_CODE)
+    {
+		perror("Client: Server cannot find the directory\n");
+		return;
+	}
+}
+
 void cli_fdr(int socket_desc)
 {
 	char op_code;

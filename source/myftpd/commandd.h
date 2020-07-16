@@ -2,8 +2,8 @@
 *   Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
 *   Date:		    25th July 2020
 *   Purpose:		This is the command driver code for running the commands for FTP
+*   Bug:            fdr function crashed if the length is too big
 */
-
 #include <stdlib.h>        /* strlen(), strcmp() etc */
 #include <stdio.h>         /* printf()  */
 #include <sys/types.h>     /* pid_t, u_long, u_short */
@@ -31,46 +31,53 @@
 #define OP_DATA 'D'
 
 /* ACK codes for each network specification */
-#define SUCCESS_CODE '0'
-#define ERROR_CODE   -1
+#define SUCCESS_CODE    '0'
+#define ERROR_CODE	    '1'
 
 /* ACK codes for PUT */
 #define FILE_EXIST '1'
 
-#define  BUF_SIZE       256
+#define  BUF_SIZE       1000
 
 /* desc type containing socket descriptor, client id */
 struct client_struct{
-	int sd; 
+	int sd;
 	int cid;
 };
 typedef struct client_struct cli_desc;
 
-/** Purpose:	To send the list of files in current dir of the server 
+/** Purpose:	To send the list of files in current dir of the server
  *  Param:	int
  *  Return:	void
  *
 */
 void serve_a_client(int sd);
 
-/** Purpose:	To send the list of files in current dir of the server 
+/** Purpose:	To send the list of files in current dir of the server
  *  Param:	int
  *  Return:	void
- *  
+ *
 */
 void ser_fdr(int sd);
 
-/** Purpose:	To send the current working directory of the server 
+/** Purpose:	To send the current working directory of the server
  *  Param:	int
  *  Return:	void
- *  
+ *
 */
 //void ser_pwd(cli_desc *des);
 void ser_pwd(int sd);
 
-/** Purpose:	To upload files to the server 
+/** Purpose:	To upload files to the server
  *  Param:	int
  *  Return:	void
- *  
+ *
 */
 void ser_put(int sd);
+
+/** Purpose:	To change working directory of the server
+ *  Param:	int socket desc
+ *  Return:	void
+ *
+*/
+void ser_cd(int sd);

@@ -28,6 +28,7 @@ void serve_a_client(int sd)
 				ser_fdr(sd);
 				break;
 			case OP_CD:
+			    ser_cd(sd);
 				break;
 			default:
 				break;
@@ -36,6 +37,55 @@ void serve_a_client(int sd)
 	return;
 }
 
+void ser_cd(int sd)
+{
+    int file_size;
+	char ack_code;
+
+	if(read_length(sd,&file_size) == -1)
+    {
+		perror("Server: Failed to read file size from client\n");
+		return;
+	}
+
+	char buf[file_size+1];
+
+	if(readn(sd, buf, file_size) == -1)
+    {
+		perror("Server: Failed to read cd dir from client\n");
+		return;
+	}
+    else
+    {
+        buf[file_size] = '\0';
+        fprintf(stdout, "Server received cd instruction: %s\n", buf);
+    }
+
+    // change directory here and set the ack code to send back to client
+	if(chdir(buf) == 0)
+    {
+		ack_code = SUCCESS_CODE;
+		fprintf(stdout,"Server done cd to: %s\n", buf);
+	}
+	else
+	{
+		ack_code = ERROR_CODE;
+		fprintf(stderr,"Server unable to cd to: %s\n", buf);
+	}
+
+	if(write_opcode(sd, OP_CD) == -1)
+    {
+		perror("Server: Failed to send opcode to client\n");
+		return;
+	}
+
+	if(write_opcode(sd, ack_code) == -1)
+    {
+		perror("Server: Failed to send ackcode to client\n");
+		return;
+	}
+
+}
 // Send filenames present in current folder
 void ser_fdr(int sd)
 {

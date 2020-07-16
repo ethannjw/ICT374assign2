@@ -31,10 +31,11 @@
 #define CMD_PWD "pwd"
 #define CMD_PUT	"put"
 #define CMD_FDR	"dir"
+#define CMD_CD  "cd"
 
 // acknowledgement codes from the server
 #define SUCCESS_CODE	'0'
-#define ERROR_CODE	-1
+#define ERROR_CODE	    '1'
 
 /* ACK codes for PUT */
 #define FILE_EXIST '1'
@@ -75,3 +76,10 @@ void cli_fdr(int socket_desc);
  *
 */
 void cli_put(int socket_desc, char *filename);
+
+/** Purpose:	To change directory of server
+ *  Param:	socket descriptor of connection, filepath
+ *  Return:	void
+ *
+*/
+void cli_cd(int socket_desc, char* file_path);
