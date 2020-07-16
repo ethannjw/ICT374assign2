@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "../stream.h"
+#include <dirent.h>
 
 #define MAX_NUM_COMMANDS    1000
 #define MAX_NUM_CHAR        1000
@@ -28,10 +29,17 @@
 #define OP_DATA	'D'
 
 // define the commands from user
-#define CMD_PWD "pwd"
-#define CMD_PUT	"put"
-#define CMD_FDR	"dir"
-#define CMD_CD  "cd"
+// server commands
+#define CMD_PWD 	"pwd"
+#define CMD_FDR		"dir"
+#define CMD_CD  	"cd"
+#define CMD_PUT		"put"
+#define CMD_GET		"get"
+
+// local commands
+#define CMD_LCD		"lcd"
+#define CMD_LFDR	"ldir"
+#define CMD_LPWD	"lpwd"
 
 // acknowledgement codes from the server
 #define SUCCESS_CODE	'0'
@@ -83,3 +91,24 @@ void cli_put(int socket_desc, char *filename);
  *
 */
 void cli_cd(int socket_desc, char* file_path);
+
+/** Purpose:	To change directory of server
+ *  Param:	socket descriptor of connection, filepath
+ *  Return:	void
+ *
+*/
+void cli_lcd(char * cmd_path);
+
+/** Purpose:	To print out the files present in current working directory of client
+ *  Param:	socket descriptor of connection, filepath
+ *  Return:	void
+ *
+*/
+void cli_lfdr();
+
+/** Purpose:	Print current working directory of client
+ *  Param:	socket descriptor of connection, filepath
+ *  Return:	void
+ *
+*/
+void cli_lpwd();
