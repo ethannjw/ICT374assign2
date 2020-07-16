@@ -28,20 +28,6 @@ int tokenise (char line[], char *token[])
       return i;
 }
 
-void rmReturnChar(char *line)
-{
-	// Removes last char if it is a return char
-	int n = strlen(line);
-	if (line[n-1]=='\n')
-	{
-		line[n-1]='\0';
-	}
-	else if (line[n-1]!='\0')
-    {
-		line[n]='\0';
-	}
-}
-
 void cmd_prompt(int socket_desc)
 {
 	Command commandStruct;
@@ -99,6 +85,9 @@ void cmd_prompt(int socket_desc)
 
 			if(strcmp(tokenArray[0], CMD_PWD) == 0){
 				cli_pwd(socket_desc);
+			}
+			else if(strcmp(tokenArray[0], CMD_FDR) == 0){
+				cli_fdr(socket_desc);
 			}
 			else if(strcmp(tokenArray[0], CMD_PUT) == 0){
 				cli_put(socket_desc, tokenArray[1]);

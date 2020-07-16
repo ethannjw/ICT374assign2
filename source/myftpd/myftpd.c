@@ -67,7 +67,7 @@ void daemon_init(char *dir)
 
 int main(int argc, char *argv[])
 {
-    int sd, nsd, n;
+    int sd, nsd;//, n;
     pid_t pid;
     unsigned short port;
     socklen_t cli_addrlen;

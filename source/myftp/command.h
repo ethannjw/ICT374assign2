@@ -28,7 +28,8 @@
 
 // define the commands from user
 #define CMD_PWD "pwd"
-#define CMD_PUT  "put"
+#define CMD_PUT	"put"
+#define CMD_FDR	"dir"
 
 // acknowledgement codes from the server
 #define SUCCESS_CODE	'0'

@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <netinet/in.h> /* struct sockaddr_in, htons(), htonl(), */
+#include <string.h> /* strlen() */
 
 #define MAX_BLOCK_SIZE (1024*5)    /* maximum size of any piece of */
                                    /* data that can be sent by client */
@@ -62,3 +63,9 @@ int write_length(int socket_desc, int len);
  *					1 : read success
  */
 int read_length(int socket_desc, int *len);
+
+/* Removes the endline character if present. 
+*  otherwise checks if last char is null char
+*  if so, convert the last char to null char
+*/
+void rmReturnChar(char *line);

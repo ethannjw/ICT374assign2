@@ -131,3 +131,18 @@ int read_length(int socket_desc, int *len)
 
 	return 1;
 }
+
+// process the last char in string
+void rmReturnChar(char *line)
+{
+	// Removes last char if it is a return char
+	int n = strlen(line);
+	if (line[n-1]=='\n')
+	{
+		line[n-1]='\0';
+	}
+	else if (line[n-1]!='\0')
+    {
+		line[n]='\0';
+	}
+}
