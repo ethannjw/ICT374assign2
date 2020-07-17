@@ -36,7 +36,7 @@
 
 /* ACK codes for PUT and GET */
 #define FILE_EXIST '1'
-#define FILE_NOT_EXIST '1'
+#define FILE_NOT_EXIST '2'
 
 #define  BUF_SIZE       1000
 

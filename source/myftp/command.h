@@ -47,7 +47,7 @@
 
 /* ACK codes for PUT */
 #define FILE_EXIST '1'
-#define FILE_NOT_EXIST '1'
+#define FILE_NOT_EXIST '2'
 
 // command type containing the command and argument
 struct CommandStruct {

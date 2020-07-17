@@ -442,7 +442,6 @@ void cli_put(int socket_desc, char *filename)
 	close(fd);
 }
 
-
 void cli_lcd(char * cmd_path)
 {
 	rmReturnChar(cmd_path);
@@ -485,23 +484,17 @@ void cli_lpwd()
 
 void cli_get(int socket_desc, char *file_name)
 {
-	char ack_code;
+	char op_code, ack_code;
 	int fd, file_size, block_size, nr, nw;
 	//struct stat stats;
 	char buf[BUF_SIZE];
 	int file_len = strlen(file_name);
 
 	// check for file exist or error creating file
-	if ((fd = open(file_name, O_RDONLY)) >= 0)
+	if (access(file_name, F_OK) >= 0)
 	{
-		ack_code = FILE_EXIST;
+		//ack_code = FILE_EXIST;
 		fprintf(stderr, "File exists\n");
-		return;
-	}
-	else if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) == -1)
-	{
-		ack_code = ERROR_CODE;
-		fprintf(stderr, "Failed to create file\n");
 		return;
 	}
 
@@ -516,6 +509,36 @@ void cli_get(int socket_desc, char *file_name)
         fprintf(stdout, "Successful written opcode\n");
 	}
 
+	if (write_length(socket_desc, file_len) == -1)
+	{
+		fprintf(stderr, "Failed to write length\n");
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Successful write length of %d\n", file_len);
+	}
+
+	if (writen(socket_desc, file_name, file_len) == -1)
+	{
+		fprintf(stderr, "Failed to write filename\n");
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Successful write filename of %s\n", file_name);
+	}
+	
+	if (read_opcode(socket_desc, &op_code) == -1)
+	{
+		fprintf(stderr, "Failed to read opcode\n");
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Successful reading opcode\n");
+	}
+
 	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to read ackcode\n");
@@ -526,8 +549,25 @@ void cli_get(int socket_desc, char *file_name)
         fprintf(stdout, "Successful reading ackcode\n");
 	}
 
+	if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) < 0)
+	{
+		ack_code = ERROR_CODE;
+		fprintf(stderr, "Failed to create file\n");
+		return;
+	}
+
 	if (ack_code == SUCCESS_CODE)
 	{
+		if (read_opcode(socket_desc, &op_code) == -1)
+		{
+			fprintf(stderr, "Failed to read ackcode\n");
+			return;
+		}
+		else
+		{
+			fprintf(stdout, "Successful reading ackcode\n");
+		}
+
 		// read the file size
 		if (read_length(socket_desc, &file_size) == -1)
 		{
@@ -566,11 +606,13 @@ void cli_get(int socket_desc, char *file_name)
 	}
 	else if (ack_code == FILE_NOT_EXIST)
 	{
-		fprintf(stdout, "File exist on server\n");
+		fprintf(stdout, "File does not exist on server\n");
+		unlink(file_name);
 	}
 	else if (ack_code == ERROR_CODE)
 	{
 		fprintf(stdout, "Error sending file\n");
+		unlink(file_name);
 	}
 
 	close(fd);

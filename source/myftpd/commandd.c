@@ -204,7 +204,6 @@ void ser_put(int sd)
 	if (read_length(sd, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
-
 		return;
 	}
 	else
@@ -217,7 +216,6 @@ void ser_put(int sd)
 	if (readn(sd, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
-
 		return;
 	}
 	else
@@ -332,7 +330,6 @@ void ser_get(int sd)
 	if (read_length(sd, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
-
 		return;
 	}
 	else
@@ -345,7 +342,6 @@ void ser_get(int sd)
 	if (readn(sd, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
-
 		return;
 	}
 	else
@@ -367,15 +363,12 @@ void ser_get(int sd)
 		ack_code = ERROR_CODE;
 		fprintf(stderr, "Failed to read file\n");
 	}
-
-    // check for fstat
-    if(lstat(file_name, &stats) < 0)
+    else if(lstat(file_name, &stats) < 0) // check for fstat
     {
 		ack_code = ERROR_CODE;
         fprintf(stderr, "Failed to read fstat\n");
+		//return;
     }
-
-	file_size = stats.st_size; // set file size
 
 	// write the opcode to socket
 	if (write_opcode(sd, OP_GET) == -1)
@@ -389,7 +382,7 @@ void ser_get(int sd)
 	}
 
 	// write the ackcode to socket
-	if (write_opcode(sd, &ack_code) == -1)
+	if (write_opcode(sd, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
 		return;
@@ -411,6 +404,8 @@ void ser_get(int sd)
 		{
 			fprintf(stdout, "Successful written opcode\n");
 		}
+
+		file_size = stats.st_size; // set file size
 
 		if (write_length(sd, file_size) == -1)
 		{
