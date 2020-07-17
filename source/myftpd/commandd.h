@@ -34,8 +34,9 @@
 #define SUCCESS_CODE    '0'
 #define ERROR_CODE	    '1'
 
-/* ACK codes for PUT */
+/* ACK codes for PUT and GET */
 #define FILE_EXIST '1'
+#define FILE_NOT_EXIST '1'
 
 #define  BUF_SIZE       1000
 
@@ -81,3 +82,10 @@ void ser_put(int sd);
  *
 */
 void ser_cd(int sd);
+
+/** Purpose:	To dowbnload file from the server
+ *  Param:	int 
+ *  Return:	void
+ *
+*/
+void ser_get(int sd);

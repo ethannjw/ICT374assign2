@@ -94,7 +94,7 @@ void cmd_prompt(int socket_desc)
 					cli_put(socket_desc, tokenArray[1]);
 				}
 				else if(strcmp(tokenArray[0], CMD_GET) == 0){
-					continue;
+					cli_get(socket_desc, tokenArray[1]);
 				}
 				else if(strcmp(tokenArray[0], CMD_LCD) == 0){
 					cli_lcd(tokenArray[1]);
@@ -481,4 +481,97 @@ void cli_lpwd()
 	getcwd(buf, sizeof(buf));
 	fprintf(stdout, "Client Working Dir: %s\n", buf);
 	return;
+}
+
+void cli_get(int socket_desc, char *file_name)
+{
+	char ack_code;
+	int fd, file_size, block_size, nr, nw;
+	//struct stat stats;
+	char buf[BUF_SIZE];
+	int file_len = strlen(file_name);
+
+	// check for file exist or error creating file
+	if ((fd = open(file_name, O_RDONLY)) >= 0)
+	{
+		ack_code = FILE_EXIST;
+		fprintf(stderr, "File exists\n");
+		return;
+	}
+	else if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) == -1)
+	{
+		ack_code = ERROR_CODE;
+		fprintf(stderr, "Failed to create file\n");
+		return;
+	}
+
+	// send GET
+	if (write_opcode(socket_desc, OP_GET) == -1)
+	{
+		fprintf(stderr, "Failed to write opcode\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Successful written opcode\n");
+	}
+
+	if (read_opcode(socket_desc, &ack_code) == -1)
+	{
+		fprintf(stderr, "Failed to read ackcode\n");
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Successful reading ackcode\n");
+	}
+
+	if (ack_code == SUCCESS_CODE)
+	{
+		// read the file size
+		if (read_length(socket_desc, &file_size) == -1)
+		{
+			fprintf(stderr, "Failed to read size\n");
+			return;
+		}
+		else
+		{
+			fprintf(stdout, "Successful read file size of %d\n", file_size);
+		}
+
+		block_size = BUF_SIZE;
+
+		while (file_size > 0)
+		{
+			if (block_size > file_size)
+				{
+						block_size = file_size;
+				}
+
+			if ((nr = readn(socket_desc, buf, block_size)) == -1)
+			{
+				fprintf(stdout, "Failed to read\n");
+				return; // connection broken down
+			}
+
+			if ((nw = writen(fd, buf, nr)) < nr)
+			{
+				fprintf(stdout, "Failed to write\n");
+				return;
+			}
+			file_size -= nw;
+		}
+
+		fprintf(stdout, "File received\n");
+	}
+	else if (ack_code == FILE_NOT_EXIST)
+	{
+		fprintf(stdout, "File exist on server\n");
+	}
+	else if (ack_code == ERROR_CODE)
+	{
+		fprintf(stdout, "Error sending file\n");
+	}
+
+	close(fd);
 }

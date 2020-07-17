@@ -20,6 +20,7 @@ void serve_a_client(int sd)
 				ser_put(sd);
 				break;
 			case OP_GET:
+				ser_get(sd);
 				break;
 			case OP_PWD:
 				ser_pwd(sd);
@@ -86,6 +87,7 @@ void ser_cd(int sd)
 	}
 
 }
+
 // Send filenames present in current folder
 void ser_fdr(int sd)
 {
@@ -316,4 +318,126 @@ void ser_put(int sd)
 
 	close(fd);
 	fprintf(stdout, "File received\n");
+}
+
+// GET from client to download named file from server.
+void ser_get(int sd)
+{
+	char ack_code;
+	int fd, file_size, file_len, nr;
+	struct stat stats;
+	char buf[BUF_SIZE];
+
+	// read the file length
+	if (read_length(sd, &file_len) == -1)
+	{
+		fprintf(stderr, "Failed to read length\n");
+
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Successful read length of %d\n", file_len);
+	}
+
+	// read the file name
+	char file_name[file_len + 1];
+	if (readn(sd, file_name, file_len) == -1)
+	{
+		fprintf(stderr, "Failed to read filename\n");
+
+		return;
+	}
+	else
+    {
+		file_name[file_len] = '\0';
+        fprintf(stdout, "Successful read filename of %s\n", file_name);
+	}
+
+	// check for file not exist or error reading file
+	ack_code = SUCCESS_CODE;
+
+	if (access(file_name, F_OK) != 0)
+	{
+		ack_code = FILE_NOT_EXIST;
+		fprintf(stderr, "File does not exist\n");
+	}
+	else if ((fd = open(file_name, O_RDONLY)) < 0)
+	{
+		ack_code = ERROR_CODE;
+		fprintf(stderr, "Failed to read file\n");
+	}
+
+    // check for fstat
+    if(lstat(file_name, &stats) < 0)
+    {
+		ack_code = ERROR_CODE;
+        fprintf(stderr, "Failed to read fstat\n");
+    }
+
+	file_size = stats.st_size; // set file size
+
+	// write the opcode to socket
+	if (write_opcode(sd, OP_GET) == -1)
+	{
+		fprintf(stderr, "Failed to write opcode\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Successful written opcode\n");
+	}
+
+	// write the ackcode to socket
+	if (write_opcode(sd, &ack_code) == -1)
+	{
+		fprintf(stderr, "Failed to write ackcode\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Successful written ackcode\n");
+	}
+
+	// check if sucessful ackcode was sent to client
+	if (ack_code == SUCCESS_CODE)
+	{
+		if (write_opcode(sd, OP_GET) == -1)
+		{
+			fprintf(stderr, "Failed to write opcode\n");
+			return;
+		}
+		else
+		{
+			fprintf(stdout, "Successful written opcode\n");
+		}
+
+		if (write_length(sd, file_size) == -1)
+		{
+			fprintf(stderr, "Failed to send length\n");
+			return;
+		}
+		else
+		{
+			fprintf(stdout, "Successful read filesize of %d\n", file_size);
+		}
+
+		while ((nr = readn(fd, buf, BUF_SIZE)) > 0)
+		{
+			if (writen(sd, buf, nr) == -1)
+			{
+				fprintf(stdout, "Failed to send file content\n");
+				return;
+			}
+		}
+
+		fprintf(stdout, "File sent\n");
+	}
+	else
+	{
+		fprintf(stderr, "GET request failed\n");
+		return;
+	}
+
+	close(fd);
 }

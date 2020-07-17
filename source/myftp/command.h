@@ -47,6 +47,7 @@
 
 /* ACK codes for PUT */
 #define FILE_EXIST '1'
+#define FILE_NOT_EXIST '1'
 
 // command type containing the command and argument
 struct CommandStruct {
@@ -112,3 +113,10 @@ void cli_lfdr();
  *
 */
 void cli_lpwd();
+
+/** Purpose:	To download named file from server to client
+ *  Param:	socket descriptor of connection, filepath
+ *  Return:	void
+ *
+*/
+void cli_get(int socket_desc, char *file_name);
