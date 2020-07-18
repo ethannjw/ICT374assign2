@@ -47,23 +47,23 @@ The myftp client should repeatedly display the prompt and wait for a command unt
 - [ ] update header files with up to date information
 - [ ] complete protocol documentation
 
-# Receiving server current working directory
+# Receiving server current working directory path
 
 Upon receiving a pwd command from the user: 
 - the client sends a 1 byte opcode of ASCII character 'W' to the server
 ```
------------------
++---------------+
 | 1 byte opcode |
------------------
++---------------+
 ```
 The server replies with: 
 - the opcode 'W' indicating the successful reciept of the request, 
 - followed by a 4 byte int indicating the length of the data
 - The server then sends a sequence of N bytes which is the current directory path in ASCII
 ```
-------------------------------------------------------------------------
++----------------------------------------------------------------------+
 | 1 byte opcode |     4 byte int     |              Data               |
-------------------------------------------------------------------------
++----------------------------------------------------------------------+
 ```
 
 # Changing the server current working directory
@@ -73,9 +73,9 @@ Upon receiving a cd command from the user:
 - followed by a 4 byte int indicating the length of the directory to change to
 - The client then sends a sequence of N bytes which is the directory path to change to in ASCII
 ```
-------------------------------------------------------------------------
++----------------------------------------------------------------------+
 | 1 byte opcode |     4 byte int     |              Data               |
-------------------------------------------------------------------------
++----------------------------------------------------------------------+
 ```
 The server replies with: 
 - the opcode 'C' indicating the successful reciept of the request, 
@@ -83,7 +83,42 @@ The server replies with:
   - '0' successful change of directory
   - '1' server not able to change the directory
 ```
------------------------------------
++---------------------------------+
 | 1 byte opcode | 1 byte ack code |
------------------------------------
++---------------------------------+
 ```
+
+# Retrieving list of files in server current working directory
+
+Upon receiving a cd command from the user:
+- the client sends a 1 byte opcode of ASCII character 'F' to the server
+```
++---------------+
+| 1 byte opcode |
++---------------+
+```
+The server replies with: 
+- the opcode 'W' indicating the successful reciept of the request, 
+- followed by a one byte acknowledgement code in ASCII which is one of the following characters
+  - '0' successful retreval of directory files
+  - '1' server not able to retrieve the directory files
+  - 'L' successful retreval of directory files but is truncated due to length requirements
+
+If the ack code is '0' or 'L', the server then sends
+- followed by a 4 byte int indicating the length of the data
+- The server then sends a sequence of N bytes which is the current directory path in ASCII
+```
++----------------------------------------------------------------------------------------+
+| 1 byte opcode | 1 byte ack code |     4 byte int     |              Data               |
++----------------------------------------------------------------------------------------+
+```
+
+If the ack code is '1', the server then sends
+- an int of 0, 
+- no further data is sent
+```
++------------------------------------------------------+
+| 1 byte opcode | 1 byte ack code |     4 byte int     |
++------------------------------------------------------+
+```
+
