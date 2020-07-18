@@ -35,11 +35,14 @@
 #define ERROR_CODE	    '1'
 
 /* ACK codes for PUT and GET */
-#define FILE_EXIST '1'
-#define FILE_NOT_EXIST '2'
+#define FILE_EXIST      '1'
+#define FILE_NOT_EXIST  '2'
 
-#define  BUF_SIZE       1000
+/* ACK codes for DIR */
+#define EXCEED_LENGTH   'L'
 
+#define BUF_SIZE       1000
+#define MAX_FILES_BUF   256
 /* desc type containing socket descriptor, client id */
 struct client_struct{
 	int sd;
@@ -84,7 +87,7 @@ void ser_put(int sd);
 void ser_cd(int sd);
 
 /** Purpose:	To dowbnload file from the server
- *  Param:	int 
+ *  Param:	int
  *  Return:	void
  *
 */

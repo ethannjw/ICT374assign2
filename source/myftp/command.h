@@ -49,6 +49,9 @@
 #define FILE_EXIST '1'
 #define FILE_NOT_EXIST '2'
 
+/* ACK codes for DIR */
+#define EXCEED_LENGTH   'L'
+
 // command type containing the command and argument
 struct CommandStruct {
 	char cmd[MAX_NUM_CHAR];	// command

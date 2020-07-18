@@ -92,8 +92,13 @@ void ser_cd(int sd)
 void ser_fdr(int sd)
 {
 	// Define filename and filename array
-	char filenames[BUF_SIZE] = "";
+	char * filestring;
+    // Define size of 100 to store files
+	char * filearray[MAX_FILES_BUF];
 	int filecount = 0;
+	int buflen;
+	// Define acknowledgement code
+	char ack_code;
 
 	// write the opcode to socket
 	//if (write_opcode(des->sd, OP_PWD) == -1){
@@ -110,42 +115,89 @@ void ser_fdr(int sd)
 	// Open current dir and struct
 	DIR *dp;
 	struct dirent *direntp;
-	dp = opendir(".");
 
-	// insert the filenames
-	while (( direntp = readdir(dp)) != NULL )
+    if ((dp = opendir(".")) == NULL)
 	{
-		strcat(filenames, direntp->d_name);
-		strcat(filenames, "  ");
-		filecount++;
+		// set to first entry
+       	perror("Server: Error in opening directory\n");
+       	ack_code = ERROR_CODE;
 	}
+    else
+    {
+    	ack_code = SUCCESS_CODE;
+    }
 
-	rmReturnChar(filenames);
+    if (ack_code == SUCCESS_CODE)
+    {
+        // insert the filenames
+        while (( direntp = readdir(dp)) != NULL )
+        {
+            filearray[filecount] = direntp->d_name;
+            if (filecount >= MAX_FILES_BUF - 1)
+            {
+                fprintf(stderr, "Exceeded program capacity, truncated\n");
+                ack_code = EXCEED_LENGTH;
+                break;
+            }
+            filecount++;
+        }
 
-    int buflen = strlen(filenames);
+        filestring = malloc((sizeof(char) * filecount));
 
-	// send the length of working dir
-	//if (write_length(des->sd, strlen(buf)) == -1){
-	if (write_length(sd, buflen) == -1){
-		fprintf(stderr, "Failed to send length\n");
+        for (int i = 0; i < filecount; i++)
+        {
+            strcat(filestring, filearray[i]);
+            strcat(filestring, "  ");
+        }
+
+        rmReturnChar(filestring);
+
+        buflen = strlen(filestring);
+    }
+    else
+    {
+        buflen = 0;
+    }
+    // write the ackcode to socket
+	//if (write_opcode(des->sd, OP_PWD) == -1){
+	if (write_opcode(sd, ack_code) == -1)
+	{
+		fprintf(stderr, "Failed to write ackcode\n");
 		return;
 	}
+    else
+    {
+        fprintf(stdout, "Successful written ackcode\n");
+	}
+
+    // send the length of working dir
+    //if (write_length(des->sd, strlen(buf)) == -1){
+    if (write_length(sd, buflen) == -1){
+        fprintf(stderr, "Failed to send length\n");
+        return;
+    }
     else
     {
         fprintf(stdout, "Successful written length of %d\n", buflen);
-	}
-	// send the file info
-	//if (writen(des->sd, buf, strlen(buf)) == -1){
-	if (writen(sd, filenames, buflen) == -1){
-		fprintf(stderr, "Failed to send filenames\n");
-		return;
-	}
-    else
-    {
-        fprintf(stdout, "Successful send filenames info\n");
-	}
+    }
 
-	fprintf(stdout, "Send FDR success\n");
+    // Send the file info only if success code
+    if (ack_code == SUCCESS_CODE)
+    {
+        // send the file info
+        //if (writen(des->sd, buf, strlen(buf)) == -1){
+        if (writen(sd, filestring, buflen) == -1){
+            fprintf(stderr, "Failed to send filenames\n");
+            return;
+        }
+        else
+        {
+            fprintf(stdout, "Successful send filenames info\n");
+        }
+
+        fprintf(stdout, "Send FDR success\n");
+        free(filestring);
+    }
 }
 
 // PWD from client to display cwd of server.

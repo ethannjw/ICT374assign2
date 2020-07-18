@@ -64,7 +64,7 @@ void cmd_prompt(int socket_desc)
 				fprintf(stdout, "Usage: Command [optional: file/dir path]\n");
 				continue;
 			}
-			
+
 			else if (numTok == 1)
 			{
 				if(strcmp(tokenArray[0], CMD_FDR) == 0){
@@ -104,7 +104,7 @@ void cmd_prompt(int socket_desc)
 					fprintf(stdout, "No valid command available, try again. See documentation for help\n");
 				}
 			}
-			
+
 
 		}
 	}
@@ -179,12 +179,13 @@ void cli_cd(int socket_desc, char* cmd_path)
 
 	if(ack_code == SUCCESS_CODE)
     {
+        fprintf(stdout, "Server: Successful change directory to %s\n", file_path);
 		return;
 	}
 
 	if(ack_code == ERROR_CODE)
     {
-		perror("Client: Server cannot find the directory\n");
+		perror("Server: Cannot find the requested directory\n");
 		return;
 	}
 }
@@ -192,6 +193,7 @@ void cli_cd(int socket_desc, char* cmd_path)
 void cli_fdr(int socket_desc)
 {
 	char op_code;
+	char ack_code;
 	int file_size, read_size;
 	char * buf;
 
@@ -215,6 +217,26 @@ void cli_fdr(int socket_desc)
     else
     {
         fprintf(stdout, "Client: Successful get opcode '%c'\n", op_code);
+	}
+
+    // Read the ackcode from server
+	if(read_opcode(socket_desc, &ack_code) == -1)
+	{
+		perror("Client: Failed to read ack code from server");
+	}
+
+	// Received ack code
+	if(ack_code == SUCCESS_CODE)
+	{
+	    fprintf(stdout, "Server: Successful read files with code '%c'\n", ack_code);
+	}
+	else if (ack_code == EXCEED_LENGTH)
+    {
+	    fprintf(stdout, "Server: Exceed program length with code '%c'\n", ack_code);
+	}
+    else
+    {
+		fprintf(stderr, "Client: Invalid opcode from fdr: %c\n", ack_code);
 	}
 
 	// Read the size of the file string from socket
@@ -528,7 +550,7 @@ void cli_get(int socket_desc, char *file_name)
     {
         fprintf(stdout, "Successful write filename of %s\n", file_name);
 	}
-	
+
 	if (read_opcode(socket_desc, &op_code) == -1)
 	{
 		fprintf(stderr, "Failed to read opcode\n");
