@@ -14,7 +14,6 @@
 *			        - get [filename] - to download the named file from the current directory of the remote server and save it in the current directory of the client
 *			        - put [filename] - to upload the named file from the current directory of the client to the current directory of the remove server
 *			        - quit - to terminate the myftp session
-*   todo:           The server should accept a second argument that is the port number.
 */
 
 #include  <stdlib.h>        /* strlen(), strcmp() etc */
