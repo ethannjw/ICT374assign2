@@ -1,10 +1,10 @@
-/*  File:		command.c for assignment 2 myftp (client side)
- *  Author:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
- *  Purpose:	Contains the core functions for the client operation.
- *  todo: 		Need to handle if user types in cd, put,get, lcd without second argument causing a segmentation fault
+/*  File:			command.c for assignment 2 myftp (client side)
+ *  Author:			Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Purpose:		Contains the core functions for the client operation.
+ *  todo: 			Need to handle if user types in cd, put,get, lcd without second argument causing a segmentation fault
 */
 
-#include "command.h"
+#include "command.h"		/* head file all command function */
 
 int tokenise (char line[], char *token[])
 {
@@ -29,6 +29,7 @@ int tokenise (char line[], char *token[])
     return i;
 }
 
+// send OPCODE to server
 void cmd_prompt(int socket_desc)
 {
 	// declare token on 100 char
@@ -113,86 +114,7 @@ void cmd_prompt(int socket_desc)
 	}
 }
 
-void cli_cd(int socket_desc, char* cmd_path)
-{
-    char op_code;
-	char ack_code;
-    rmReturnChar(cmd_path);
-	// process the filepath
-	int path_len = strlen(cmd_path);
-	char file_path[path_len+1];
-	strcpy(file_path, cmd_path);
-	// set last character to null
-	file_path[path_len] = '\0';
-
-	// Send opcode 'C'
-	if(write_opcode(socket_desc, OP_CD) == -1){
-		fprintf(stderr, "Client: Failed to send %c opcode\n", OP_CD);
-		return;
-	}
-	else
-    {
-        fprintf(stdout, "Client: Successful sent %c opcode\n", OP_CD);
-    }
-
-    // send path length
-	if(write_length(socket_desc, path_len) == -1){
-		fprintf(stderr, "Client: Failed to write %d path_len\n", path_len);
-		return;
-	}
-	else
-    {
-        fprintf(stdout, "Client: Successful written %d path len\n", path_len);
-
-    }
-
-    // send the path
-	if(writen(socket_desc, file_path, strlen(file_path)) == -1)
-    {
-		fprintf(stderr, "Client: Failed to write directory name %s to server\n", file_path);
-		return;
-	}
-
-    // read the reply from server
-	if(read_opcode(socket_desc, &op_code) == -1)
-    {
-		fprintf(stderr, "Client: Failed to read opcode from server\n");
-		return;
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful read '%c' opcode\n", op_code);
-    }
-
-	if(op_code != OP_CD)
-    {
-		fprintf(stderr, "Client: Invalid opcode from server: %c\n", op_code);
-		return;
-	}
-
-	if(read_opcode(socket_desc, &ack_code) == -1)
-    {
-		perror("Client: Failed to read ackcode\n");
-		return;
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful read ack code %c\n", ack_code);
-    }
-
-	if(ack_code == SUCCESS_CODE)
-    {
-        fprintf(stdout, "Server: Successful change directory to %s\n", file_path);
-		return;
-	}
-
-	if(ack_code == ERROR_CODE)
-    {
-		fprintf(stderr, "Server: Cannot find the requested directory\n");
-		return;
-	}
-}
-
+// list files in server
 void cli_fdr(int socket_desc)
 {
 	char op_code;
@@ -273,6 +195,30 @@ void cli_fdr(int socket_desc)
 	free(buf);
 }
 
+// list files in client
+void cli_lfdr()
+{
+	char filenames[BUF_SIZE] = "";
+	int filecount = 0;
+	// Open current dir and struct
+	DIR *dp;
+	struct dirent *direntp;
+	dp = opendir(".");
+
+	// insert the filenames
+	while (( direntp = readdir(dp)) != NULL )
+	{
+		strcat(filenames, direntp->d_name);
+		strcat(filenames, "  ");
+		filecount++;
+	}
+
+	rmReturnChar(filenames);
+	fprintf(stdout, "%s\n", filenames);
+	return;
+}
+
+// print currect working directory of server
 void cli_pwd(int socket_desc)
 {
 	char op_code;
@@ -335,6 +281,108 @@ void cli_pwd(int socket_desc)
 	free(working_dir_path);
 }
 
+// print current working directory of client
+void cli_lpwd()
+{
+	char buf[BUF_SIZE];
+	getcwd(buf, sizeof(buf));
+	fprintf(stdout, "Client Working Dir: %s\n", buf);
+	return;
+}
+
+// change directory of server
+void cli_cd(int socket_desc, char* cmd_path)
+{
+    char op_code;
+	char ack_code;
+    rmReturnChar(cmd_path);
+	// process the filepath
+	int path_len = strlen(cmd_path);
+	char file_path[path_len+1];
+	strcpy(file_path, cmd_path);
+	// set last character to null
+	file_path[path_len] = '\0';
+
+	// Send opcode 'C'
+	if(write_opcode(socket_desc, OP_CD) == -1){
+		fprintf(stderr, "Client: Failed to send %c opcode\n", OP_CD);
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Client: Successful sent %c opcode\n", OP_CD);
+    }
+
+    // send path length
+	if(write_length(socket_desc, path_len) == -1){
+		fprintf(stderr, "Client: Failed to write %d path_len\n", path_len);
+		return;
+	}
+	else
+    {
+        fprintf(stdout, "Client: Successful written %d path len\n", path_len);
+
+    }
+
+    // send the path
+	if(writen(socket_desc, file_path, strlen(file_path)) == -1)
+    {
+		fprintf(stderr, "Client: Failed to write directory name %s to server\n", file_path);
+		return;
+	}
+
+    // read the reply from server
+	if(read_opcode(socket_desc, &op_code) == -1)
+    {
+		fprintf(stderr, "Client: Failed to read opcode from server\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Client: Successful read '%c' opcode\n", op_code);
+    }
+
+	if(op_code != OP_CD)
+    {
+		fprintf(stderr, "Client: Invalid opcode from server: %c\n", op_code);
+		return;
+	}
+
+	if(read_opcode(socket_desc, &ack_code) == -1)
+    {
+		perror("Client: Failed to read ackcode\n");
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Client: Successful read ack code %c\n", ack_code);
+    }
+
+	if(ack_code == SUCCESS_CODE)
+    {
+        fprintf(stdout, "Server: Successful change directory to %s\n", file_path);
+		return;
+	}
+
+	if(ack_code == ERROR_CODE)
+    {
+		fprintf(stderr, "Server: Cannot find the requested directory\n");
+		return;
+	}
+}
+
+// change directory of client
+void cli_lcd(char * cmd_path)
+{
+	rmReturnChar(cmd_path);
+	if(chdir(cmd_path) == 0)
+    {
+		fprintf(stdout,"Client done cd to: %s\n", cmd_path);
+	}
+	return;
+}
+
+// upload file from client to server
 void cli_put(int socket_desc, char *filename)
 {
 	char op_code, ack_code;
@@ -467,46 +515,7 @@ void cli_put(int socket_desc, char *filename)
 	close(fd);
 }
 
-void cli_lcd(char * cmd_path)
-{
-	rmReturnChar(cmd_path);
-	if(chdir(cmd_path) == 0)
-    {
-		fprintf(stdout,"Client done cd to: %s\n", cmd_path);
-	}
-	return;
-}
-
-void cli_lfdr()
-{
-	char filenames[BUF_SIZE] = "";
-	int filecount = 0;
-	// Open current dir and struct
-	DIR *dp;
-	struct dirent *direntp;
-	dp = opendir(".");
-
-	// insert the filenames
-	while (( direntp = readdir(dp)) != NULL )
-	{
-		strcat(filenames, direntp->d_name);
-		strcat(filenames, "  ");
-		filecount++;
-	}
-
-	rmReturnChar(filenames);
-	fprintf(stdout, "%s\n", filenames);
-	return;
-}
-
-void cli_lpwd()
-{
-	char buf[BUF_SIZE];
-	getcwd(buf, sizeof(buf));
-	fprintf(stdout, "Client Working Dir: %s\n", buf);
-	return;
-}
-
+// download file from server to client
 void cli_get(int socket_desc, char *file_name)
 {
 	char op_code, ack_code;

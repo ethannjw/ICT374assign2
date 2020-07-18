@@ -70,6 +70,19 @@ typedef struct CommandStruct Command;
 */
 void cmd_prompt(int socket_desc);
 
+/** Purpose:	To receive and print out the files present in current working directory of the server
+ *  Param:		socket descriptor of connection, command token
+ *  Return:		void
+ *
+*/
+void cli_fdr(int socket_desc);
+
+/** Purpose:	To print out the files present in current working directory of client
+ *  Param:		socket descriptor of connection, filepath
+ *  Return:		void
+ *
+*/
+void cli_lfdr();
 
 /** Purpose:	To send and receive the current working directory of the server
  *  Param:		socket descriptor of connection, command token
@@ -78,19 +91,12 @@ void cmd_prompt(int socket_desc);
 */
 void cli_pwd(int socket_desc);
 
-/** Purpose:	To receive and print out the files present in current working directory of the server
- *  Param:		socket descriptor of connection, command token
+/** Purpose:	Print current working directory of client
+ *  Param:		socket descriptor of connection, filepath
  *  Return:		void
  *
 */
-void cli_fdr(int socket_desc);
-
-/** Purpose:	To send and upload files to the server
- *  Param:		socket descriptor of connection, command token, filename
- *  Return:		void
- *
-*/
-void cli_put(int socket_desc, char *filename);
+void cli_lpwd();
 
 /** Purpose:	To change directory of server
  *  Param:		socket descriptor of connection, filepath
@@ -106,19 +112,12 @@ void cli_cd(int socket_desc, char* file_path);
 */
 void cli_lcd(char * cmd_path);
 
-/** Purpose:	To print out the files present in current working directory of client
- *  Param:		socket descriptor of connection, filepath
+/** Purpose:	To send and upload files to the server
+ *  Param:		socket descriptor of connection, command token, filename
  *  Return:		void
  *
 */
-void cli_lfdr();
-
-/** Purpose:	Print current working directory of client
- *  Param:		socket descriptor of connection, filepath
- *  Return:		void
- *
-*/
-void cli_lpwd();
+void cli_put(int socket_desc, char *filename);
 
 /** Purpose:	To download named file from server to client
  *  Param:		socket descriptor of connection, filepath

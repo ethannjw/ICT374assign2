@@ -50,7 +50,7 @@ struct client_struct{
 };
 typedef struct client_struct cli_desc;
 
-/** Purpose:	To run the different functions (command argument)
+/** Purpose:	Process OPCODE recieved from client
  *  Param:		socket descriptor of connection
  *  Return:		void
  *
@@ -72,13 +72,6 @@ void ser_fdr(int socket_desc);
 //void ser_pwd(cli_desc *des);
 void ser_pwd(int socket_desc);
 
-/** Purpose:	To upload files to the server
- *  Param:		socket descriptor of connection
- *  Return:		void
- *
-*/
-void ser_put(int socket_desc);
-
 /** Purpose:	To change working directory of the server
  *  Param:		socket descriptor of connection
  *  Return:		void
@@ -86,7 +79,14 @@ void ser_put(int socket_desc);
 */
 void ser_cd(int socket_desc);
 
-/** Purpose:	To dowbnload file from the server
+/** Purpose:	To upload files to the server
+ *  Param:		socket descriptor of connection
+ *  Return:		void
+ *
+*/
+void ser_put(int socket_desc);
+
+/** Purpose:	To download file from the server
  *  Param:		socket descriptor of connection
  *  Return:		void
  *

@@ -1,12 +1,12 @@
-/** File: 		    commandd.c
+/** File: 		    commandd.c for assignment 2 myftp (server side)
 *   Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
 *   Date:		    25th July 2020
 *   Purpose:		This is the command driver code for running the commands for FTP
 */
 
-#include "commandd.h"
+#include "commandd.h"		/* head file all command function */
 
-// Process OPCODE recieved from client
+// process OPCODE recieved from client
 void serve_a_client(int socket_desc)
 {
 	char op_code;
@@ -38,57 +38,7 @@ void serve_a_client(int socket_desc)
 	return;
 }
 
-void ser_cd(int socket_desc)
-{
-    int file_size;
-	char ack_code;
-
-	if(read_length(socket_desc,&file_size) == -1)
-    {
-		perror("Server: Failed to read file size from client\n");
-		return;
-	}
-
-	char buf[file_size+1];
-
-	if(readn(socket_desc, buf, file_size) == -1)
-    {
-		perror("Server: Failed to read cd dir from client\n");
-		return;
-	}
-    else
-    {
-        buf[file_size] = '\0';
-        fprintf(stdout, "Server received cd instruction: %s\n", buf);
-    }
-
-    // change directory here and set the ack code to send back to client
-	if(chdir(buf) == 0)
-    {
-		ack_code = SUCCESS_CODE;
-		fprintf(stdout,"Server done cd to: %s\n", buf);
-	}
-	else
-	{
-		ack_code = ERROR_CODE;
-		fprintf(stderr,"Server unable to cd to: %s\n", buf);
-	}
-
-	if(write_opcode(socket_desc, OP_CD) == -1)
-    {
-		perror("Server: Failed to send opcode to client\n");
-		return;
-	}
-
-	if(write_opcode(socket_desc, ack_code) == -1)
-    {
-		perror("Server: Failed to send ackcode to client\n");
-		return;
-	}
-
-}
-
-// Send filenames present in current folder
+// DIR from client to list files in server
 void ser_fdr(int socket_desc)
 {
 	// Define filename and filename array
@@ -200,7 +150,7 @@ void ser_fdr(int socket_desc)
     }
 }
 
-// PWD from client to display cwd of server.
+// PWD from client to display current working directory of server
 //void ser_pwd(cli_desc *des)
 void ser_pwd(int socket_desc)
 {
@@ -245,7 +195,58 @@ void ser_pwd(int socket_desc)
 	fprintf(stdout, "Send PWD success\n");
 }
 
-// PUT from client to upload files to server.
+// CD from client to change the directory of server
+void ser_cd(int socket_desc)
+{
+    int file_size;
+	char ack_code;
+
+	if(read_length(socket_desc,&file_size) == -1)
+    {
+		perror("Server: Failed to read file size from client\n");
+		return;
+	}
+
+	char buf[file_size+1];
+
+	if(readn(socket_desc, buf, file_size) == -1)
+    {
+		perror("Server: Failed to read cd dir from client\n");
+		return;
+	}
+    else
+    {
+        buf[file_size] = '\0';
+        fprintf(stdout, "Server received cd instruction: %s\n", buf);
+    }
+
+    // change directory here and set the ack code to send back to client
+	if(chdir(buf) == 0)
+    {
+		ack_code = SUCCESS_CODE;
+		fprintf(stdout,"Server done cd to: %s\n", buf);
+	}
+	else
+	{
+		ack_code = ERROR_CODE;
+		fprintf(stderr,"Server unable to cd to: %s\n", buf);
+	}
+
+	if(write_opcode(socket_desc, OP_CD) == -1)
+    {
+		perror("Server: Failed to send opcode to client\n");
+		return;
+	}
+
+	if(write_opcode(socket_desc, ack_code) == -1)
+    {
+		perror("Server: Failed to send ackcode to client\n");
+		return;
+	}
+
+}
+
+// PUT from client to upload files to server
 void ser_put(int socket_desc)
 {
 	char op_code, ack_code;
@@ -370,7 +371,7 @@ void ser_put(int socket_desc)
 	fprintf(stdout, "File received\n");
 }
 
-// GET from client to download named file from server.
+// GET from client to download named file from server
 void ser_get(int socket_desc)
 {
 	char ack_code;
