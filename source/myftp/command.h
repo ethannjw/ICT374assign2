@@ -40,6 +40,7 @@
 #define CMD_LCD		"lcd"
 #define CMD_LFDR	"ldir"
 #define CMD_LPWD	"lpwd"
+#define CMD_HELP	"help"
 
 // acknowledgement codes from the server
 #define SUCCESS_CODE	'0'
@@ -123,3 +124,10 @@ void cli_lpwd();
  *
 */
 void cli_get(int socket_desc, char *file_name);
+
+/** Purpose:	To display the help menu
+ *  Param:	Void
+ *  Return:	void
+ *
+*/
+void cli_help();

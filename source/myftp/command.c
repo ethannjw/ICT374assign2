@@ -79,6 +79,9 @@ void cmd_prompt(int socket_desc)
 				else if(strcmp(tokenArray[0], CMD_LPWD) == 0){
 					cli_lpwd();
 				}
+				else if(strcmp(tokenArray[0], CMD_HELP) == 0){
+					cli_help();
+				}
 				else
 				{
 					fprintf(stdout, "No valid command available, try again. See documentation for help\n");
@@ -638,4 +641,21 @@ void cli_get(int socket_desc, char *file_name)
 	}
 
 	close(fd);
+}
+
+// display the help menu information
+void cli_help()
+{
+    printf(
+    "Command\t\t\t Function\n"
+    "pwd\t\t\t Display current directory of the server\n"
+    "lpwd\t\t\t Display current directory of the client\n"
+    "dir\t\t\t List files of current directory from the server\n"
+    "ldir\t\t\t List files of current directory from the client\n"
+    "cd <directory_pathname>  Change directory of the server\n"
+    "lcd <directory_pathname> Change directory of the client\n"
+    "get <filename>\t\t Download file from the server to client\n"
+    "put <filename>\t\t Upload file from client to server\n"
+	"quit\t\t\t Terminate session\n"
+	"help\t\t\t Display help information\n");
 }
