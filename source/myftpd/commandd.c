@@ -7,29 +7,29 @@
 #include "commandd.h"
 
 // Process OPCODE recieved from client
-void serve_a_client(int sd)
+void serve_a_client(int socket_desc)
 {
 	char op_code;
 
-	while (read_opcode(sd, &op_code) > 0)
+	while (read_opcode(socket_desc, &op_code) > 0)
 	{
 		printf("OPCODE: %c\n", op_code);
 		switch (op_code)
 		{
 			case OP_PUT:
-				ser_put(sd);
+				ser_put(socket_desc);
 				break;
 			case OP_GET:
-				ser_get(sd);
+				ser_get(socket_desc);
 				break;
 			case OP_PWD:
-				ser_pwd(sd);
+				ser_pwd(socket_desc);
 				break;
 			case OP_FDR:
-				ser_fdr(sd);
+				ser_fdr(socket_desc);
 				break;
 			case OP_CD:
-			    ser_cd(sd);
+			    ser_cd(socket_desc);
 				break;
 			default:
 				break;
@@ -38,12 +38,12 @@ void serve_a_client(int sd)
 	return;
 }
 
-void ser_cd(int sd)
+void ser_cd(int socket_desc)
 {
     int file_size;
 	char ack_code;
 
-	if(read_length(sd,&file_size) == -1)
+	if(read_length(socket_desc,&file_size) == -1)
     {
 		perror("Server: Failed to read file size from client\n");
 		return;
@@ -51,7 +51,7 @@ void ser_cd(int sd)
 
 	char buf[file_size+1];
 
-	if(readn(sd, buf, file_size) == -1)
+	if(readn(socket_desc, buf, file_size) == -1)
     {
 		perror("Server: Failed to read cd dir from client\n");
 		return;
@@ -74,13 +74,13 @@ void ser_cd(int sd)
 		fprintf(stderr,"Server unable to cd to: %s\n", buf);
 	}
 
-	if(write_opcode(sd, OP_CD) == -1)
+	if(write_opcode(socket_desc, OP_CD) == -1)
     {
 		perror("Server: Failed to send opcode to client\n");
 		return;
 	}
 
-	if(write_opcode(sd, ack_code) == -1)
+	if(write_opcode(socket_desc, ack_code) == -1)
     {
 		perror("Server: Failed to send ackcode to client\n");
 		return;
@@ -89,7 +89,7 @@ void ser_cd(int sd)
 }
 
 // Send filenames present in current folder
-void ser_fdr(int sd)
+void ser_fdr(int socket_desc)
 {
 	// Define filename and filename array
 	char * filestring;
@@ -101,8 +101,8 @@ void ser_fdr(int sd)
 	char ack_code;
 
 	// write the opcode to socket
-	//if (write_opcode(des->sd, OP_PWD) == -1){
-	if (write_opcode(sd, OP_FDR) == -1)
+	//if (write_opcode(des->socket_desc, OP_PWD) == -1){
+	if (write_opcode(socket_desc, OP_FDR) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
 		return;
@@ -159,8 +159,8 @@ void ser_fdr(int sd)
         buflen = 0;
     }
     // write the ackcode to socket
-	//if (write_opcode(des->sd, OP_PWD) == -1){
-	if (write_opcode(sd, ack_code) == -1)
+	//if (write_opcode(des->socket_desc, OP_PWD) == -1){
+	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
 		return;
@@ -171,7 +171,7 @@ void ser_fdr(int sd)
 	}
 
     // send the length of working dir
-    if (write_length(sd, buflen) == -1)
+    if (write_length(socket_desc, buflen) == -1)
     {
         fprintf(stderr, "Failed to send length\n");
         return;
@@ -185,8 +185,8 @@ void ser_fdr(int sd)
     if (ack_code == SUCCESS_CODE)
     {
         // send the file info
-        //if (writen(des->sd, buf, strlen(buf)) == -1){
-        if (writen(sd, filestring, buflen) == -1){
+        //if (writen(des->socket_desc, buf, strlen(buf)) == -1){
+        if (writen(socket_desc, filestring, buflen) == -1){
             fprintf(stderr, "Failed to send filenames\n");
             return;
         }
@@ -202,7 +202,7 @@ void ser_fdr(int sd)
 
 // PWD from client to display cwd of server.
 //void ser_pwd(cli_desc *des)
-void ser_pwd(int sd)
+void ser_pwd(int socket_desc)
 {
 	char buf[BUF_SIZE];
 
@@ -210,8 +210,8 @@ void ser_pwd(int sd)
 	printf("BUF: %s\n", buf);
 
 	// write the opcode to socket
-	//if (write_opcode(des->sd, OP_PWD) == -1){
-	if (write_opcode(sd, OP_PWD) == -1){
+	//if (write_opcode(des->socket_desc, OP_PWD) == -1){
+	if (write_opcode(socket_desc, OP_PWD) == -1){
 		fprintf(stderr, "Failed to write opcode\n");
 		return;
 	}
@@ -222,8 +222,8 @@ void ser_pwd(int sd)
 
     int buflen = strlen(buf);
 	// send the length of working dir
-	//if (write_length(des->sd, strlen(buf)) == -1){
-	if (write_length(sd, buflen) == -1){
+	//if (write_length(des->socket_desc, strlen(buf)) == -1){
+	if (write_length(socket_desc, buflen) == -1){
 		fprintf(stderr, "Failed to send length\n");
 		return;
 	}
@@ -232,8 +232,8 @@ void ser_pwd(int sd)
         fprintf(stdout, "Successful written length of %d\n", buflen);
 	}
 	// send the dir info
-	//if (writen(des->sd, buf, strlen(buf)) == -1){
-	if (writen(sd, buf, buflen) == -1){
+	//if (writen(des->socket_desc, buf, strlen(buf)) == -1){
+	if (writen(socket_desc, buf, buflen) == -1){
 		fprintf(stderr, "Failed to send directory info\n");
 		return;
 	}
@@ -246,14 +246,14 @@ void ser_pwd(int sd)
 }
 
 // PUT from client to upload files to server.
-void ser_put(int sd)
+void ser_put(int socket_desc)
 {
 	char op_code, ack_code;
 	int file_len, fd, file_size, block_size, nr, nw;
 	char buf[BUF_SIZE];
 
 	// read the file length
-	if (read_length(sd, &file_len) == -1)
+	if (read_length(socket_desc, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
 		return;
@@ -265,7 +265,7 @@ void ser_put(int sd)
 
 	// read the file name
 	char file_name[file_len + 1];
-	if (readn(sd, file_name, file_len) == -1)
+	if (readn(socket_desc, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
 		return;
@@ -294,7 +294,7 @@ void ser_put(int sd)
 	}
 
 	// write the opcode to socket
-	if (write_opcode(sd, OP_PUT) == -1)
+	if (write_opcode(socket_desc, OP_PUT) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
 		return;
@@ -305,7 +305,7 @@ void ser_put(int sd)
 	}
 
 	// write the ackcode to socket
-	if (write_opcode(sd, ack_code) == -1)
+	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
 		return;
@@ -323,7 +323,7 @@ void ser_put(int sd)
 	}
 
 	// reading the respond from client
-	if (read_opcode(sd, &op_code) == -1)
+	if (read_opcode(socket_desc, &op_code) == -1)
 	{
 		fprintf(stderr, "Failed to read opcode\n");
 	}
@@ -333,7 +333,7 @@ void ser_put(int sd)
 	}
 
 	// read the file size
-	if (read_length(sd, &file_size) == -1)
+	if (read_length(socket_desc, &file_size) == -1)
 	{
 		fprintf(stderr, "Failed to read size\n");
 		return;
@@ -352,7 +352,7 @@ void ser_put(int sd)
             		block_size = file_size;
         	}
 
-		if ((nr = readn(sd, buf, block_size)) == -1)
+		if ((nr = readn(socket_desc, buf, block_size)) == -1)
 		{
 			fprintf(stdout, "Failed to read\n");
 			return; // connection broken down
@@ -371,7 +371,7 @@ void ser_put(int sd)
 }
 
 // GET from client to download named file from server.
-void ser_get(int sd)
+void ser_get(int socket_desc)
 {
 	char ack_code;
 	int fd, file_size, file_len, nr;
@@ -379,7 +379,7 @@ void ser_get(int sd)
 	char buf[BUF_SIZE];
 
 	// read the file length
-	if (read_length(sd, &file_len) == -1)
+	if (read_length(socket_desc, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
 		return;
@@ -391,7 +391,7 @@ void ser_get(int sd)
 
 	// read the file name
 	char file_name[file_len + 1];
-	if (readn(sd, file_name, file_len) == -1)
+	if (readn(socket_desc, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
 		return;
@@ -423,7 +423,7 @@ void ser_get(int sd)
     }
 
 	// write the opcode to socket
-	if (write_opcode(sd, OP_GET) == -1)
+	if (write_opcode(socket_desc, OP_GET) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
 		return;
@@ -434,7 +434,7 @@ void ser_get(int sd)
 	}
 
 	// write the ackcode to socket
-	if (write_opcode(sd, ack_code) == -1)
+	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
 		return;
@@ -447,7 +447,7 @@ void ser_get(int sd)
 	// check if sucessful ackcode was sent to client
 	if (ack_code == SUCCESS_CODE)
 	{
-		if (write_opcode(sd, OP_GET) == -1)
+		if (write_opcode(socket_desc, OP_GET) == -1)
 		{
 			fprintf(stderr, "Failed to write opcode\n");
 			return;
@@ -459,7 +459,7 @@ void ser_get(int sd)
 
 		file_size = stats.st_size; // set file size
 
-		if (write_length(sd, file_size) == -1)
+		if (write_length(socket_desc, file_size) == -1)
 		{
 			fprintf(stderr, "Failed to send length\n");
 			return;
@@ -471,7 +471,7 @@ void ser_get(int sd)
 
 		while ((nr = readn(fd, buf, BUF_SIZE)) > 0)
 		{
-			if (writen(sd, buf, nr) == -1)
+			if (writen(socket_desc, buf, nr) == -1)
 			{
 				fprintf(stdout, "Failed to send file content\n");
 				return;

@@ -1,26 +1,25 @@
-/** File: 		    commandd.h
-*   Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
-*   Date:		    25th July 2020
+/** File:			commandd.h for assignment 2 myftp (server side)
+*   Authors:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+*   Date:			25th July 2020
 *   Purpose:		This is the command driver code for running the commands for FTP
 *   Bug:            fdr function crashed if the length is too big
 */
-#include <stdlib.h>        /* strlen(), strcmp() etc */
+
+#include <stdlib.h>        /* exit(), free() */
 #include <stdio.h>         /* printf()  */
 #include <sys/types.h>     /* pid_t, u_long, u_short */
 #include <sys/socket.h>    /* struct sockaddr, socket(), etc */
-#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
-                            /* and INADDR_ANY */
+#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl() */
 #include <sys/wait.h>      /* waitpid(), WNOHAND */
 #include <signal.h>        /* SIGCHLD, sigaction() */
 #include <unistd.h>        /* read(), write() */
 #include <string.h>        /* strlen(), strcmp() etc */
-#include <errno.h>         /* extern int errno, EINTR, perror() */
-#include <sys/stat.h>    /* fstat(), lstat(), stat() */
-#include <fcntl.h>
-#include <dirent.h>	/* DIR */
+//#include <errno.h>         /* extern int errno, EINTR, perror() */
+#include <sys/stat.h>      /* fstat(), lstat(), stat() */
+#include <fcntl.h>         /* manipulate file descriptor */
+#include <dirent.h>	       /* DIR */
 
-
-#include "../stream.h"
+#include "../stream.h"     /* head file for stream read and write */
 
 /* OP CODES for the network specification */
 #define OP_PUT  'P'
@@ -35,60 +34,61 @@
 #define ERROR_CODE	    '1'
 
 /* ACK codes for PUT and GET */
-#define FILE_EXIST      '1'
-#define FILE_NOT_EXIST  '2'
+#define FILE_EXIST 'E'
+#define FILE_NOT_EXIST 'N'
 
 /* ACK codes for DIR */
 #define EXCEED_LENGTH   'L'
 
 #define BUF_SIZE       1000
 #define MAX_FILES_BUF   256
+
 /* desc type containing socket descriptor, client id */
 struct client_struct{
-	int sd;
+	int socket_desc;
 	int cid;
 };
 typedef struct client_struct cli_desc;
 
-/** Purpose:	To send the list of files in current dir of the server
- *  Param:	int
- *  Return:	void
+/** Purpose:	To run the different functions (command argument)
+ *  Param:		socket descriptor of connection
+ *  Return:		void
  *
 */
-void serve_a_client(int sd);
+void serve_a_client(int socket_desc);
 
 /** Purpose:	To send the list of files in current dir of the server
- *  Param:	int
- *  Return:	void
+ *  Param:		socket descriptor of connection
+ *  Return:		void
  *
 */
-void ser_fdr(int sd);
+void ser_fdr(int socket_desc);
 
 /** Purpose:	To send the current working directory of the server
- *  Param:	int
- *  Return:	void
+ *  Param:		socket descriptor of connection
+ *  Return:		void
  *
 */
 //void ser_pwd(cli_desc *des);
-void ser_pwd(int sd);
+void ser_pwd(int socket_desc);
 
 /** Purpose:	To upload files to the server
- *  Param:	int
- *  Return:	void
+ *  Param:		socket descriptor of connection
+ *  Return:		void
  *
 */
-void ser_put(int sd);
+void ser_put(int socket_desc);
 
 /** Purpose:	To change working directory of the server
- *  Param:	int socket desc
- *  Return:	void
+ *  Param:		socket descriptor of connection
+ *  Return:		void
  *
 */
-void ser_cd(int sd);
+void ser_cd(int socket_desc);
 
 /** Purpose:	To dowbnload file from the server
- *  Param:	int
- *  Return:	void
+ *  Param:		socket descriptor of connection
+ *  Return:		void
  *
 */
-void ser_get(int sd);
+void ser_get(int socket_desc);
