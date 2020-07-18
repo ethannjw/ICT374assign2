@@ -34,19 +34,35 @@ quit - to terminate the myftp session.
 
 The myftp client should repeatedly display the prompt and wait for a command until the quit command is entered.
 
+# Todo:
+- [x] pwd
+- [x] lpwd
+- [x] dir
+- [x] ldir
+- [x] cd
+- [x] lcd
+- [x] get
+- [x] put
+- [ ] cleanup code syntax
+- [ ] update header files with up to date information
+- [ ] complete protocol documentation
 
-PWD:
-Upon receiving a pwd command from the user, the client will send a 1 byte opcode of ASCII character 'W' to the server
-----------
-| 1 byte |
-| opcode |
-----------
+# Receiving server current working directory
 
-The server replies with the opcode 'W' indicating the successful reciept of the request, followed by a 4 byte int indicating the length of the data
-The server then sends the rest of the data
----------------------------------------------------------
-| 1 byte |    4 byte      |                             |
-| opcode |     int        |          Data               |
----------------------------------------------------------
-
+Upon receiving a pwd command from the user: 
+- the client sends a 1 byte opcode of ASCII character 'W' to the server
+```
+-----------------
+| 1 byte opcode |
+-----------------
+```
+The server replies with: 
+- the opcode 'W' indicating the successful reciept of the request, 
+- followed by a 4 byte int indicating the length of the data
+- The server then sends a sequence of N bytes which is the current directory path in ASCII
+```
+------------------------------------------------------------------------
+| 1 byte opcode |     4 byte int     |              Data               |
+------------------------------------------------------------------------
+```
 
