@@ -2,10 +2,22 @@
 *   Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
 *   Date:		    25th July 2020
 *   Purpose:		This is the server driver code for running the simple FTP
+*			        Usage: myftp [ hostname | IP_address ] [ port_number ]
+*			        The hostname or IP address and the port number is the name
+*			        of the remote host that provides the myftp service.
+*			        If the hostname is omitted, the localhost is assumed.
+*			        If the port number is omitted, the default port 12345 is assumed.
+*	 		        The program contains the following commands:
+*			        - pwd to display the current directory of the server that is serving the client
+*			        - dir to display the file names under the current directory of the server that is serving the client
+*			        - cd [directory_pathname] - to change the current directory of the server that is serving the client
+*			        - get [filename] - to download the named file from the current directory of the remote server and save it in the current directory of the client
+*			        - put [filename] - to upload the named file from the current directory of the client to the current directory of the remove server
+*			        - quit - to terminate the myftp session
 */
 
 #include  <stdlib.h>        /* strlen(), strcmp() etc */
-#include  <stdio.h>         /* printf()  */
+#include  <stdio.h>         /* printf(), fprintf(), perror() */
 #include  <sys/types.h>     /* pid_t, u_long, u_short */
 #include  <sys/socket.h>    /* struct sockaddr, socket(), etc */
 #include  <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
@@ -21,30 +33,30 @@
 
 #define  SERV_TCP_PORT  12345   /* default server listening port */
 
+/* claim as many zombies as we can */
 void claim_children()
 {
     pid_t pid = 1;
-     
-    while (pid > 0) 
-    { 
-        /* claim as many zombies as we can */
-        pid = waitpid(0, (int *)0, WNOHANG); 
-    } 
+
+    while (pid > 0)
+    {
+        pid = waitpid(0, (int *)0, WNOHANG);
+    }
 }
 
 void daemon_init(char *dir)
-{       
+{
     pid_t pid;
     struct sigaction act;
 
-    if ((pid = fork()) < 0) 
+    if ((pid = fork()) < 0)
     {
-        perror("fork");
-        exit(1); 
-    } 
-    else if (pid > 0) 
+        perror("Server: Fork");
+        exit(1);
+    }
+    else if (pid > 0)
     {
-        printf("Hay, you'd better remember my PID: %d\n", pid);
+        printf("Myftp Server PID: %d\n", pid);
         exit(0);                  /* parent goes bye-bye */
     }
 
@@ -61,13 +73,11 @@ void daemon_init(char *dir)
     sigemptyset(&act.sa_mask);       /* not to block other signals */
     act.sa_flags   = SA_NOCLDSTOP;   /* not catch stopped children */
     sigaction(SIGCHLD,(struct sigaction *)&act,(struct sigaction *)0);
-    /* note: a less than perfect method is to use 
-       signal(SIGCHLD, claim_children); */
 }
 
 int main(int argc, char *argv[])
 {
-    int sd, nsd;//, n;
+    int sd, nsd;
     pid_t pid;
     unsigned short port;
     socklen_t cli_addrlen;
@@ -78,7 +88,9 @@ int main(int argc, char *argv[])
 
     /* get the directory */
     if (argc == 1)
+    {
         getcwd(mydir, sizeof(mydir));
+    }
     else if (argc == 2)
         strncpy(mydir, argv[1], sizeof(mydir));
 
@@ -88,7 +100,7 @@ int main(int argc, char *argv[])
     /* set up listening socket sd */
     if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
     {
-        perror("server:socket");
+        perror("Server: Create socket");
         exit(1);
     }
 
@@ -99,14 +111,14 @@ int main(int argc, char *argv[])
     ser_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     /* note: accept client request sent to any one of the
        network interface(s) on this host. */
-    
+
     /* bind server address to socket sd */
     if (bind(sd, (struct sockaddr *)&ser_addr, sizeof(ser_addr)) <0 )
     {
-        perror("server bind");
+        perror("Server: Bind");
         exit(1);
     }
-    
+
     /* become a listening socket */
     listen(sd, 5);
 
@@ -121,21 +133,21 @@ int main(int argc, char *argv[])
             /* if interrupted by SIGCHLD */
             if (errno == EINTR)
                 continue;
-            
-            perror("server:accept");
+
+            perror("Server: Accept");
             exit(1);
         }
 
         /* create a child process to handle this client */
         if ((pid = fork()) < 0)
         {
-            perror("fork");
+            perror("Server: Fork error");
             exit(1);
         }
         else if (pid > 0)
         {
             close(nsd); /* parent to wait for connection */
-            continue; /* parent to wait for next client */
+            continue;   /* parent to wait for next client */
         }
 
         /* now in child, serve the current client */
