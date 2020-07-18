@@ -153,7 +153,7 @@ void cli_cd(int socket_desc, char* cmd_path)
     // read the reply from server
 	if(read_opcode(socket_desc, &op_code) == -1)
     {
-		perror("Client: Failed to read opcode from server\n");
+		fprintf(stderr, "Client: Failed to read opcode from server\n");
 		return;
 	}
     else
@@ -185,7 +185,7 @@ void cli_cd(int socket_desc, char* cmd_path)
 
 	if(ack_code == ERROR_CODE)
     {
-		perror("Server: Cannot find the requested directory\n");
+		fprintf(stderr, "Server: Cannot find the requested directory\n");
 		return;
 	}
 }
@@ -254,8 +254,8 @@ void cli_fdr(int socket_desc)
 	buf = malloc(sizeof(char) * (file_size+1));
 
 	// Read the directory path
-	if((read_size = readn(socket_desc, buf, (sizeof(char)*file_size))) == -1)
-     {
+	if((read_size = readn(socket_desc, buf, (sizeof(char) * (file_size)))) == -1)
+    {
 		perror("Client: Failed to read directory\n");
 		return;
 	}
@@ -266,7 +266,7 @@ void cli_fdr(int socket_desc)
 
 	rmReturnChar(buf);
 
-	printf("%s\n", buf);
+	fprintf(stdout, "%s\n", buf);
 	free(buf);
 }
 

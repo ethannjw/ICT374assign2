@@ -142,7 +142,7 @@ void ser_fdr(int sd)
             filecount++;
         }
 
-        filestring = malloc((sizeof(char) * filecount));
+        filestring = malloc(((sizeof(filearray[0])+2) * (filecount+1)));
 
         for (int i = 0; i < filecount; i++)
         {
@@ -171,8 +171,8 @@ void ser_fdr(int sd)
 	}
 
     // send the length of working dir
-    //if (write_length(des->sd, strlen(buf)) == -1){
-    if (write_length(sd, buflen) == -1){
+    if (write_length(sd, buflen) == -1)
+    {
         fprintf(stderr, "Failed to send length\n");
         return;
     }
