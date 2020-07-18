@@ -44,6 +44,7 @@ The myftp client should repeatedly display the prompt and wait for a command unt
 - [x] get
 - [x] put
 - [ ] cleanup code syntax
+- [ ] fix up client bash code system
 - [ ] update header files with up to date information
 - [ ] complete protocol documentation
 
