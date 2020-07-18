@@ -1,5 +1,5 @@
 /*
- *  File: 	stream.c for assign2
+ *  File: 		stream.c for assign2
  *  Authors:	Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
  *  Purpose: 	Contains the read/write n, read/write opcode, read/write length
  */

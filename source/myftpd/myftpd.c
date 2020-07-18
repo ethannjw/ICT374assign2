@@ -16,12 +16,11 @@
 *			        - quit - to terminate the myftp session
 */
 
-#include  <stdlib.h>        /* strlen(), strcmp() etc */
+#include  <stdlib.h>        /* exit(), free() */
 #include  <stdio.h>         /* printf(), fprintf(), perror() */
 #include  <sys/types.h>     /* pid_t, u_long, u_short */
 #include  <sys/socket.h>    /* struct sockaddr, socket(), etc */
 #include  <netinet/in.h>    /* struct sockaddr_in, htons(), htonl(), */
-                            /* and INADDR_ANY */
 #include  <sys/wait.h>      /* waitpid(), WNOHAND */
 #include  <signal.h>        /* SIGCHLD, sigaction() */
 #include  <unistd.h>        /* read(), write() */
@@ -122,6 +121,8 @@ int main(int argc, char *argv[])
     /* become a listening socket */
     listen(sd, 5);
 
+    log_message(LOG_NAME, "myftp server started up, listening on port %d\n", SERV_TCP_PORT);
+
     while (1)
     {
         /* wait to accept a client request for connection */
@@ -153,6 +154,7 @@ int main(int argc, char *argv[])
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
         serve_a_client(nsd);
+        log_message(LOG_NAME, "Client session closed\n");
         exit(0);
     }
 }

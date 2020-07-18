@@ -8,16 +8,18 @@
 #include <stdlib.h>        /* exit(), free() */
 #include <stdio.h>         /* printf()  */
 #include <sys/types.h>     /* pid_t, u_long, u_short */
-#include <sys/socket.h>    /* struct sockaddr, socket(), etc */
-#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl() */
-#include <sys/wait.h>      /* waitpid(), WNOHAND */
-#include <signal.h>        /* SIGCHLD, sigaction() */
+//#include <sys/socket.h>    /* struct sockaddr, socket(), etc */
+//#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl() */
+//#include <sys/wait.h>      /* waitpid(), WNOHAND */
+//#include <signal.h>        /* SIGCHLD, sigaction() */
 #include <unistd.h>        /* read(), write() */
 #include <string.h>        /* strlen(), strcmp() etc */
 //#include <errno.h>         /* extern int errno, EINTR, perror() */
 #include <sys/stat.h>      /* fstat(), lstat(), stat() */
 #include <fcntl.h>         /* manipulate file descriptor */
 #include <dirent.h>	       /* DIR */
+#include <time.h>		   /* TIME */
+#include <stdarg.h>		   /* macros va_start, va_copy, va_arg, and va_end */
 
 #include "../stream.h"     /* head file for stream read and write */
 
@@ -40,8 +42,9 @@
 /* ACK codes for DIR */
 #define EXCEED_LENGTH   'L'
 
-#define BUF_SIZE       1000
+#define BUF_SIZE		1000
 #define MAX_FILES_BUF   256
+#define LOG_NAME		"myftpd.log"	/* log file */
 
 /* desc type containing socket descriptor, client id */
 struct client_struct{
@@ -49,6 +52,12 @@ struct client_struct{
 	int cid;
 };
 typedef struct client_struct cli_desc;
+
+/** Purpose:	To log all interactions with the clients
+ *  Param:		filename, string format and arguments
+ *  Return:		void
+ *
+*/void log_message(char *file, const char *format, ...);
 
 /** Purpose:	Process OPCODE recieved from client
  *  Param:		socket descriptor of connection

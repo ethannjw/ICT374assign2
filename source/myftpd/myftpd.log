@@ -1,0 +1,40 @@
+15471 Jul 19 03:46 - myftp server started up, listening on port 12345
+15511 Jul 19 03:46 - Client 15511 connection established
+15511 Jul 19 03:46 - Successful written opcode
+15511 Jul 19 03:46 - Successful written ackcode
+15511 Jul 19 03:46 - Successful written length of 133
+15511 Jul 19 03:46 - Successful send filenames info
+15511 Jul 19 03:46 - Send FDR success
+15597 Jul 19 03:46 - Client 15597 connection established
+15597 Jul 19 03:47 - Successful written opcode
+15597 Jul 19 03:47 - Successful written ackcode
+15597 Jul 19 03:47 - Successful written length of 133
+15597 Jul 19 03:47 - Successful send filenames info
+15597 Jul 19 03:47 - Send FDR success
+15597 Jul 19 03:47 - Successful written opcode
+15597 Jul 19 03:47 - Successful written ackcode
+15597 Jul 19 03:47 - Successful written length of 127
+15597 Jul 19 03:47 - Successful send filenames info
+15597 Jul 19 03:47 - Send FDR success
+15511 Jul 19 03:47 - Client session closed
+15597 Jul 19 03:47 - Successful written opcode
+15597 Jul 19 03:47 - Successful written ackcode
+15597 Jul 19 03:47 - Successful written length of 127
+15597 Jul 19 03:47 - Successful send filenames info
+15597 Jul 19 03:47 - Send FDR success
+15597 Jul 19 03:47 - Client session closed
+16083 Jul 19 03:51 - myftp server started up, listening on port 12345
+16122 Jul 19 03:51 - Client connection established
+16122 Jul 19 03:51 - [DIR] Successful written opcode
+16122 Jul 19 03:51 - [DIR] Successful written ackcode
+16122 Jul 19 03:51 - [DIR] Successful written length of 133
+16122 Jul 19 03:51 - [DIR] Successful send filenames info
+16122 Jul 19 03:51 - [DIR] Send FDR success
+16122 Jul 19 03:51 - [DIR] Successful written opcode
+16122 Jul 19 03:51 - [DIR] Successful written ackcode
+16122 Jul 19 03:51 - [DIR] Successful written length of 127
+16122 Jul 19 03:51 - [DIR] Successful send filenames info
+16122 Jul 19 03:51 - [DIR] Send FDR success
+16122 Jul 19 03:51 - Client session closed
+16505 Jul 19 03:55 - Client connection established
+16505 Jul 19 03:55 - Client session closed

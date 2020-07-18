@@ -6,9 +6,45 @@
 
 #include "commandd.h"		/* head file all command function */
 
+// log interactions with the clients
+void log_message(char *file, const char *format, ...)
+{
+	// variables
+	va_list ap;
+	pid_t pid = getpid();
+	char mytime[100];
+	time_t raw_time;
+	struct tm *time_info;
+
+	// get the current time
+	time(&raw_time);
+	time_info = localtime(&raw_time);
+	strftime(mytime, sizeof(mytime), "%b %d %R", time_info);
+
+	FILE *fp;
+	fp = fopen(file, "a");
+
+	if (fp == NULL)
+	{
+		perror("Server: file");
+		exit(0);
+	}
+
+	fprintf(fp, "%d %s - ", pid, mytime);
+
+	// reference - https://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm
+	// print all the arguments provided
+	va_start(ap, format);
+	vfprintf(fp, format, ap);
+	va_end(ap);
+
+	fclose(fp);
+}
+
 // process OPCODE recieved from client
 void serve_a_client(int socket_desc)
 {
+	log_message(LOG_NAME, "Client connection established\n", getpid());
 	char op_code;
 
 	while (read_opcode(socket_desc, &op_code) > 0)
@@ -55,11 +91,13 @@ void ser_fdr(int socket_desc)
 	if (write_opcode(socket_desc, OP_FDR) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
+		log_message(LOG_NAME, "[DIR] Failed to write opcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written opcode\n");
+		log_message(LOG_NAME, "[DIR] Successful written opcode\n");
 	}
 
 	// Open current dir and struct
@@ -86,6 +124,7 @@ void ser_fdr(int socket_desc)
             if (filecount >= MAX_FILES_BUF - 1)
             {
                 fprintf(stderr, "Exceeded program capacity, truncated\n");
+				log_message(LOG_NAME, "[DIR] Exceeded program capacity, truncated\n");
                 ack_code = EXCEED_LENGTH;
                 break;
             }
@@ -113,22 +152,26 @@ void ser_fdr(int socket_desc)
 	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
+		log_message(LOG_NAME, "[DIR] Failed to write ackcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written ackcode\n");
+		log_message(LOG_NAME, "[DIR] Successful written ackcode\n");
 	}
 
     // send the length of working dir
     if (write_length(socket_desc, buflen) == -1)
     {
         fprintf(stderr, "Failed to send length\n");
+		log_message(LOG_NAME, "[DIR] Failed to send length\n");
         return;
     }
     else
     {
         fprintf(stdout, "Successful written length of %d\n", buflen);
+		log_message(LOG_NAME, "[DIR] Successful written length of %d\n", buflen);
     }
 
     // Send the file info only if success code
@@ -138,14 +181,17 @@ void ser_fdr(int socket_desc)
         //if (writen(des->socket_desc, buf, strlen(buf)) == -1){
         if (writen(socket_desc, filestring, buflen) == -1){
             fprintf(stderr, "Failed to send filenames\n");
+			log_message(LOG_NAME, "[DIR] Failed to send filenames\n");
             return;
         }
         else
         {
             fprintf(stdout, "Successful send filenames info\n");
+			log_message(LOG_NAME, "[DIR] Successful send filenames info\n");
         }
 
         fprintf(stdout, "Send FDR success\n");
+		log_message(LOG_NAME, "[DIR] Send FDR success\n");
         free(filestring);
     }
 }
