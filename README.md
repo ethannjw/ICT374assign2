@@ -37,16 +37,16 @@ The myftp client should repeatedly display the prompt and wait for a command unt
 
 PWD:
 Upon receiving a pwd command from the user, the client will send a 1 byte opcode of ASCII character 'W' to the server
-**********
+----------
 | 1 byte |
 | opcode |
-**********
+----------
 
 The server replies with the opcode 'W' indicating the successful reciept of the request, followed by a 4 byte int indicating the length of the data
 The server then sends the rest of the data
-*********************************************************
+---------------------------------------------------------
 | 1 byte |    4 byte      |                             |
 | opcode |     int        |          Data               |
-*********************************************************
+---------------------------------------------------------
 
 
