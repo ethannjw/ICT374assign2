@@ -66,3 +66,24 @@ The server replies with:
 ------------------------------------------------------------------------
 ```
 
+# Changing the server current working directory
+
+Upon receiving a cd command from the user: 
+- the client sends a 1 byte opcode of ASCII character 'C' to the server
+- followed by a 4 byte int indicating the length of the directory to change to
+- The client then sends a sequence of N bytes which is the directory path to change to in ASCII
+```
+------------------------------------------------------------------------
+| 1 byte opcode |     4 byte int     |              Data               |
+------------------------------------------------------------------------
+```
+The server replies with: 
+- the opcode 'C' indicating the successful reciept of the request, 
+- followed by a one byte acknowledgement code in ASCII which is one of the following characters
+  - '0' successful change of directory
+  - '1' server not able to change the directory
+```
+-----------------------------------
+| 1 byte opcode | 1 byte ack code |
+-----------------------------------
+```
