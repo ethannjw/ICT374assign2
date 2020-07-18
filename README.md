@@ -4,13 +4,8 @@ Assignment 2 Repo for ICT374 submission
 Project 2: A Simple File Transfer Protocol
 Design and implement a simple network protocol that can be used to download files from a remote site and to upload files to a remote site, and a client and a server programs that communicate using that protocol. The protocol should use TCP as its transport layer protocol. The server must be able to serve multiple client requests simultaneously. For simplicity, do not consider any authentication process in this project, hence the server will provide its service to any client with the right site address and port number.
 
-To simplify project marking, please name your server program myftpd with the following command line syntax (here the letter d in myftpd stands for daemon, since the server should run as a daemon process:
-
 myftpd [ initial_current_directory ]
-The server process maintains a current directory. Its initial value should be the one inherited from its parent process unless the optional
-
-initial_current_directory
-is given. In the latter case, the user supplied path should be used to set the initial current directory of the server. This can be done using the function chdir. A client can use the cd command to change the (child) server's current directory later.
+The server process maintains a current directory. Its initial value should be the one inherited from its parent process unless the optional initial_current_directory is given. In the latter case, the user supplied path should be used to set the initial current directory of the server. This can be done using the function chdir. A client can use the cd command to change the (child) server's current directory later.
 
 The client program should be named myftp with the following command line syntax:
 
@@ -38,4 +33,20 @@ put filename - to upload the named file from the current directory of the client
 quit - to terminate the myftp session.
 
 The myftp client should repeatedly display the prompt and wait for a command until the quit command is entered.
+
+
+PWD:
+Upon receiving a pwd command from the user, the client will send a 1 byte opcode of ASCII character 'W' to the server
+**********
+| 1 byte |
+| opcode |
+**********
+
+The server replies with the opcode 'W' indicating the successful reciept of the request, followed by a 4 byte int indicating the length of the data
+The server then sends the rest of the data
+*********************************************************
+| 1 byte |    4 byte      |                             |
+| opcode |     int        |          Data               |
+*********************************************************
+
 
