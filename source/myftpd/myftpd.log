@@ -34,3 +34,66 @@
 869 Jul 19 14:34 - Client connection PID: 869 IP: 127.0.0.1 Port: 42250
 869 Jul 19 14:37 - Client session closed
 880 Jul 19 14:37 - Client connection PID: 880 IP: 127.0.0.1 Port: 10763
+925 Jul 19 15:17 - Myftp server started up, listening on port 12345
+928 Jul 19 15:17 - Client connection PID: 928 IP: 127.0.0.1 
+928 Jul 19 15:17 - [DIR] Successful written opcode
+928 Jul 19 15:17 - [DIR] Successful written ackcode
+928 Jul 19 15:17 - [DIR] Successful written length of 126
+928 Jul 19 15:17 - [DIR] Successful send filenames info
+928 Jul 19 15:17 - [DIR] Send FDR success
+10089 Jul 19 15:26 - Myftp server started up, listening on port 12345
+10111 Jul 19 15:26 - Client connection PID: 10111 IP: 127.0.0.1 
+10111 Jul 19 15:26 - [DIR] Successful written opcode
+10111 Jul 19 15:26 - [DIR] Successful written ackcode
+10111 Jul 19 15:26 - [DIR] Successful written length of 126
+10111 Jul 19 15:26 - [DIR] Successful send filenames info
+10111 Jul 19 15:26 - [DIR] Send FDR success
+10111 Jul 19 15:26 - [DIR] Successful written opcode
+10111 Jul 19 15:26 - [DIR] Successful written ackcode
+10111 Jul 19 15:26 - [DIR] Successful written length of 126
+10111 Jul 19 15:26 - [DIR] Successful send filenames info
+10111 Jul 19 15:26 - [DIR] Send FDR success
+12245 Jul 19 15:39 - Myftp server started up, listening on port 12345
+12247 Jul 19 15:39 - Client connection PID: 12247 IP: 127.0.0.1 
+12247 Jul 19 15:39 - [DIR] Successful written opcode
+12247 Jul 19 15:39 - [DIR] Successful written ackcode
+12247 Jul 19 15:39 - [DIR] Successful written length of 126
+12247 Jul 19 15:39 - [DIR] Successful send filenames info
+12247 Jul 19 15:39 - [DIR] Send FDR success
+12258 Jul 19 15:41 - Myftp server started up, listening on port 12345
+12260 Jul 19 15:41 - Client connection PID: 12260 IP: 127.0.0.1 
+12260 Jul 19 15:41 - [DIR] Successful written opcode
+12260 Jul 19 15:41 - [DIR] Successful written ackcode
+12260 Jul 19 15:41 - [DIR] Successful written length of 126
+12260 Jul 19 15:41 - [DIR] Successful send filenames info
+12260 Jul 19 15:41 - [DIR] Send FDR success
+12260 Jul 19 15:41 - Client session closed
+12271 Jul 19 15:43 - Myftp server started up, listening on port 12345
+12273 Jul 19 15:43 - Client connection PID: 12273 IP: 127.0.0.1 
+12273 Jul 19 15:43 - [DIR] Successful written opcode
+12273 Jul 19 15:43 - [DIR] Successful written ackcode
+12273 Jul 19 15:43 - [DIR] Successful written length of 126
+12273 Jul 19 15:43 - [DIR] Successful send filenames info
+12273 Jul 19 15:43 - [DIR] Send FDR success
+12273 Jul 19 15:43 - [DIR] Successful written opcode
+12273 Jul 19 15:43 - [DIR] Successful written ackcode
+12273 Jul 19 15:43 - [DIR] Successful written length of 126
+12273 Jul 19 15:43 - [DIR] Successful send filenames info
+12273 Jul 19 15:43 - [DIR] Send FDR success
+12273 Jul 19 15:43 - [DIR] Successful written opcode
+12273 Jul 19 15:43 - [DIR] Successful written ackcode
+12273 Jul 19 15:43 - [DIR] Successful written length of 126
+12273 Jul 19 15:43 - [DIR] Successful send filenames info
+12273 Jul 19 15:43 - [DIR] Send FDR success
+12273 Jul 19 15:43 - [DIR] Successful written opcode
+12273 Jul 19 15:43 - [DIR] Successful written ackcode
+12273 Jul 19 15:43 - [DIR] Successful written length of 126
+12273 Jul 19 15:43 - [DIR] Successful send filenames info
+12273 Jul 19 15:43 - [DIR] Send FDR success
+12318 Jul 19 15:52 - Myftp server started up, listening on port 12345
+12320 Jul 19 15:52 - Client connection PID: 12320 IP: 127.0.0.1 
+12320 Jul 19 15:52 - [DIR] Successful written opcode
+12320 Jul 19 15:52 - [DIR] Successful written ackcode
+12320 Jul 19 15:52 - [DIR] Successful written length of 126
+12320 Jul 19 15:52 - [DIR] Successful send filenames info
+12320 Jul 19 15:52 - [DIR] Send FDR success
