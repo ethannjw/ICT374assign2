@@ -78,9 +78,8 @@ void serve_a_client(int socket_desc, struct sockaddr_in cli_addr)
 // DIR from client to list files in server
 void ser_fdr(int socket_desc)
 {
-	// Define filename and filename array
-	char * filestring;
-    // Define size of 100 to store files
+    // Define arrays
+    char filestring[MAX_STRING_LENGTH];
 	char * filearray[MAX_FILES_BUF];
 	int filecount = 0;
 	int buflen;
@@ -135,8 +134,6 @@ void ser_fdr(int socket_desc)
         // Sorts the files by filename
         qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
 
-        // Dynamically declare string to be sent over to client
-        filestring = malloc(((sizeof(filearray[0])+2) * (filecount+1)));
         strcpy(filestring, " ");
 
         for (int i = 0; i < filecount; i++)
@@ -197,7 +194,7 @@ void ser_fdr(int socket_desc)
 
         fprintf(stdout, "Send FDR success\n");
 		log_message(LOG_NAME, "[DIR] Send FDR success\n");
-        free(filestring);
+
     }
 }
 

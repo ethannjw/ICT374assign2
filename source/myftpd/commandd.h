@@ -43,9 +43,10 @@
 /* ACK codes for DIR */
 #define EXCEED_LENGTH   'L'
 
-#define BUF_SIZE		1000
-#define MAX_FILES_BUF   256
-#define LOG_NAME		"myftpd.log"	/* log file */
+#define BUF_SIZE		    1000
+#define MAX_FILES_BUF       256
+#define MAX_STRING_LENGTH   10000
+#define LOG_NAME		    "myftpd.log"	/* log file */
 
 /* desc type containing socket descriptor, client id */
 struct client_struct{
