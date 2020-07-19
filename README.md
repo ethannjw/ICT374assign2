@@ -180,7 +180,7 @@ The server replies with:
 +---------------------------------+
 ```
 If the opcode is 'D' and ack code is '0', the server then sends:
-- 1 byte opcode of ASCII character 'D' to the server
+- 1 byte opcode of ASCII character 'D' to the client
 - followed by a 4 byte int representing the length of the file
 - The client then sends a sequence of N bytes representing the content of the file to the client
 ```
