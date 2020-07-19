@@ -14,6 +14,7 @@
 *			        - get [filename] - to download the named file from the current directory of the remote server and save it in the current directory of the client
 *			        - put [filename] - to upload the named file from the current directory of the client to the current directory of the remove server
 *			        - quit - to terminate the myftp session
+*   Bug:            Once CD to a different directory, logfile no longer has permission access
 */
 
 #include  <stdlib.h>        /* exit(), free() */
@@ -120,8 +121,8 @@ int main(int argc, char *argv[])
 
     /* become a listening socket */
     listen(sd, 5);
-
-    log_message(LOG_NAME, "myftp server started up, listening on port %d\n", SERV_TCP_PORT);
+    printf("Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
+    log_message(LOG_NAME, "Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
 
     while (1)
     {
@@ -153,7 +154,7 @@ int main(int argc, char *argv[])
 
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
-        serve_a_client(nsd);
+        serve_a_client(nsd, cli_addr);
         log_message(LOG_NAME, "Client session closed\n");
         exit(0);
     }

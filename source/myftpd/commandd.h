@@ -20,6 +20,7 @@
 #include <dirent.h>	       /* DIR */
 #include <time.h>		   /* TIME */
 #include <stdarg.h>		   /* macros va_start, va_copy, va_arg, and va_end */
+#include <arpa/inet.h>      /* inet_ntoa() */
 
 #include "../stream.h"     /* head file for stream read and write */
 
@@ -44,7 +45,7 @@
 
 #define BUF_SIZE		1000
 #define MAX_FILES_BUF   256
-#define LOG_NAME		"myftpd.log"	/* log file */
+#define LOG_NAME		"~/myftpd.log"	/* log file */
 
 /* desc type containing socket descriptor, client id */
 struct client_struct{
@@ -64,7 +65,7 @@ typedef struct client_struct cli_desc;
  *  Return:		void
  *
 */
-void serve_a_client(int socket_desc);
+void serve_a_client(int socket_desc, struct sockaddr_in cli_addr);
 
 /** Purpose:	To send the list of files in current dir of the server
  *  Param:		socket descriptor of connection

@@ -26,7 +26,7 @@ void log_message(char *file, const char *format, ...)
 
 	if (fp == NULL)
 	{
-		perror("Server: file");
+		perror("Server: Log file");
 		exit(0);
 	}
 
@@ -42,9 +42,10 @@ void log_message(char *file, const char *format, ...)
 }
 
 // process OPCODE recieved from client
-void serve_a_client(int socket_desc)
+void serve_a_client(int socket_desc, struct sockaddr_in cli_addr)
 {
-	log_message(LOG_NAME, "Client connection established\n", getpid());
+    printf("Client connection PID: %d IP: %s Port: %d\n", getpid(), inet_ntoa(cli_addr.sin_addr), cli_addr.sin_port);
+	log_message(LOG_NAME, "Client connection PID: %d IP: %s Port: %d\n", getpid(), inet_ntoa(cli_addr.sin_addr), cli_addr.sin_port);
 	char op_code;
 
 	while (read_opcode(socket_desc, &op_code) > 0)
@@ -132,11 +133,12 @@ void ser_fdr(int socket_desc)
         }
 
         filestring = malloc(((sizeof(filearray[0])+2) * (filecount+1)));
+        strcat(filestring, " ");
 
         for (int i = 0; i < filecount; i++)
         {
             strcat(filestring, filearray[i]);
-            strcat(filestring, "  ");
+            strcat(filestring, "\t");
         }
 
         rmReturnChar(filestring);

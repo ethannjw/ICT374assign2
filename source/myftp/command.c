@@ -85,7 +85,6 @@ void cmd_prompt(int socket_desc)
 				}
 				else
 				{
-					//fprintf(stdout, "No valid command available, try again. See documentation for help\n");
 					fprintf(stdout, "Invalid comannd, try again. type \"help\" for documentation\n");
 				}
 			}
@@ -106,7 +105,6 @@ void cmd_prompt(int socket_desc)
 				}
 				else
 				{
-					//fprintf(stdout, "No valid command available, try again. See documentation for help\n");
 					fprintf(stdout, "Invalid comannd, try again. type \"help\" for documentation\n");
 				}
 			}
