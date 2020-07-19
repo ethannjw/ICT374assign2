@@ -44,8 +44,8 @@ void log_message(char *file, const char *format, ...)
 // process OPCODE recieved from client
 void serve_a_client(int socket_desc, struct sockaddr_in cli_addr)
 {
-    printf("Client connection PID: %d IP: %s Port: %d\n", getpid(), inet_ntoa(cli_addr.sin_addr), cli_addr.sin_port);
-	log_message(LOG_NAME, "Client connection PID: %d IP: %s Port: %d\n", getpid(), inet_ntoa(cli_addr.sin_addr), cli_addr.sin_port);
+    printf("Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
+	log_message(LOG_NAME, "Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
 	char op_code;
 
 	while (read_opcode(socket_desc, &op_code) > 0)
