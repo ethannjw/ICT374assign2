@@ -120,7 +120,6 @@ void cli_fdr(int socket_desc)
 	char op_code;
 	char ack_code;
 	int file_size, read_size;
-	char * buf;
 
 	// Send the FDR opcode which is 'F'
 	if(write_opcode(socket_desc, OP_FDR) == -1)
@@ -176,7 +175,7 @@ void cli_fdr(int socket_desc)
 	}
 
     // Allocate memory for the path
-	buf = malloc(sizeof(char) * (file_size+1));
+	char buf[(sizeof(char) * (file_size+1))];
 
 	// Read the directory path
 	if((read_size = readn(socket_desc, buf, (sizeof(char) * (file_size)))) == -1)
@@ -189,10 +188,10 @@ void cli_fdr(int socket_desc)
         fprintf(stdout, "Client: Successful read data of size %d\n", read_size);
     }
 
-	rmReturnChar(buf);
+	buf[file_size] = '\0';
 
 	fprintf(stdout, "%s\n", buf);
-	free(buf);
+
 }
 
 // list files in client
@@ -223,7 +222,6 @@ void cli_pwd(int socket_desc)
 {
 	char op_code;
 	int file_size, read_size;
-	char * working_dir_path;
 
 	// Send one opcode which is ASCII char 'W'
 	if(write_opcode(socket_desc, OP_PWD) == -1)
@@ -262,7 +260,7 @@ void cli_pwd(int socket_desc)
 	}
 
     // Allocate memory for the path
-	working_dir_path = malloc(sizeof(char) * (file_size+1));
+	char working_dir_path[(sizeof(char) * (file_size+1))];
 
 	// Read the directory path
 	if((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
@@ -275,10 +273,10 @@ void cli_pwd(int socket_desc)
         fprintf(stdout, "Client: Successful read data of size %d\n", read_size);
     }
 
-	rmReturnChar(working_dir_path);
+	working_dir_path[file_size] = '\0';
 
 	printf("%s\n", working_dir_path);
-	free(working_dir_path);
+
 }
 
 // print current working directory of client
