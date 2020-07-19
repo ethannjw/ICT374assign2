@@ -132,8 +132,12 @@ void ser_fdr(int socket_desc)
             filecount++;
         }
 
+        // Sorts the files by filename
+        qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
+
+        // Dynamically declare string to be sent over to client
         filestring = malloc(((sizeof(filearray[0])+2) * (filecount+1)));
-        strcat(filestring, " ");
+        strcpy(filestring, " ");
 
         for (int i = 0; i < filecount; i++)
         {
@@ -142,7 +146,6 @@ void ser_fdr(int socket_desc)
         }
 
         rmReturnChar(filestring);
-
         buflen = strlen(filestring);
     }
     else

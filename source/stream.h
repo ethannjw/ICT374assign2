@@ -1,6 +1,6 @@
 /*
  *  file:	stream.h
- *  Purpose: 	head file for stream read and stream write. 
+ *  Purpose: 	head file for stream read and stream write.
  */
 
 #include <unistd.h>
@@ -14,13 +14,13 @@
 /*
  * purpose:  read a stream of bytes from "fd" to "buf".
  * pre:      1) size of buf bufsize >= MAX_BLOCK_SIZE,
- * post:     1) buf contains the byte stream; 
+ * post:     1) buf contains the byte stream;
  *           2) return value > 0   : number ofbytes read
  *                           = 0   : connection closed
  *                           = -1  : read error
  *                           = -2  : protocol error
  *                           = -3  : buffer too small
- */           
+ */
 int readn(int fd, char *buf, int bufsize);
 
 
@@ -30,9 +30,9 @@ int readn(int fd, char *buf, int bufsize);
  * pre:      1) nbytes <= MAX_BLOCK_SIZE,
  * post:     1) nbytes bytes from buf written to fd;
  *           2) return value = nbytes : number ofbytes written
- *                           = -3     : too many bytes to send 
+ *                           = -3     : too many bytes to send
  *                           otherwise: write error
- */           
+ */
 int writen(int fd, char *buf, int nbytes);
 
 
@@ -64,8 +64,14 @@ int write_length(int socket_desc, int len);
  */
 int read_length(int socket_desc, int *len);
 
-/* Removes the endline character if present. 
+/* Removes the endline character if present.
 *  otherwise checks if last char is null char
 *  if so, convert the last char to null char
 */
 void rmReturnChar(char *line);
+
+/* Purpose: String compare function used in the qsort function.
+*
+*  Source:  qsort man page
+*/
+int cmpstringp(const void *p1, const void *p2);

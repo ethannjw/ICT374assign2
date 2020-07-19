@@ -42,28 +42,6 @@ int readn(int sd, char *buf, int nbytes)
 	return (n);
 }
 
-/*
-int writen(int fd, char *buf, int nbytes)
-{
-    short data_size = nbytes;     // short must be two bytes long
-    int n, nw;
-
-    if (nbytes > MAX_BLOCK_SIZE)
-         return (-3);    // too many bytes to send in one go
-
-    // send the data size
-    data_size = htons(data_size);
-    if (write(fd, (char *) &data_size, 1) != 1) return (-1);
-    if (write(fd, (char *) (&data_size)+1, 1) != 1) return (-1);
-
-    // send nbytes
-    for (n=0; n<nbytes; n += nw) {
-         if ((nw = write(fd, buf+n, nbytes-n)) <= 0)
-             return (nw);    // write error
-    }
-    return (n);
-}
-*/
 // Code from daniel
 int writen(int sd, char *buf, int nbytes)
 {
@@ -141,8 +119,17 @@ void rmReturnChar(char *line)
 	{
 		line[n-1]='\0';
 	}
+	// Adds null last char if not a null char
 	else if (line[n-1]!='\0')
     {
-		line[n]='\0';
+		line[n-1]='\0';
 	}
+}
+
+int cmpstringp(const void *p1, const void *p2)
+{
+    	// cmp string pointer of pointers taken from qsort man page
+    	// used in the qsort function
+    	return strcmp(* (char * const *) p1, * (char * const *) p2);
+
 }

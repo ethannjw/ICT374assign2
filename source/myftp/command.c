@@ -209,7 +209,7 @@ void cli_lfdr()
 	while (( direntp = readdir(dp)) != NULL )
 	{
 		strcat(filenames, direntp->d_name);
-		strcat(filenames, "  ");
+		strcat(filenames, "\t");
 		filecount++;
 	}
 
