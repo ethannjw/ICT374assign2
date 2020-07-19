@@ -97,6 +97,13 @@ int main(int argc, char *argv[])
     /* turn the program into a daemon */
     daemon_init(mydir);
 
+    // set the absolute path for the log file
+	char log_path[256];
+    getcwd(mydir, sizeof(mydir));
+    strcpy(log_path, mydir);
+	strcat(log_path, LOG_NAME);
+	printf("LOG PATH = %s\n", log_path);
+
     /* set up listening socket sd */
     if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -122,7 +129,7 @@ int main(int argc, char *argv[])
     /* become a listening socket */
     listen(sd, 5);
     printf("Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
-    log_message(LOG_NAME, "Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
+    log_message(log_path, "Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
 
     while (1)
     {
@@ -154,8 +161,8 @@ int main(int argc, char *argv[])
 
         /* now in child, serve the current client */
         close(sd); /* data exchange through socket ns */
-        serve_a_client(nsd, cli_addr);
-        log_message(LOG_NAME, "Client session closed\n");
+        serve_a_client(nsd, cli_addr, log_path);
+        log_message(log_path, "Client session closed\n");
         exit(0);
     }
 }

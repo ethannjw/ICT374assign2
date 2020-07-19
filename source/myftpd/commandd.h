@@ -45,7 +45,7 @@
 
 #define BUF_SIZE		1000
 #define MAX_FILES_BUF   256
-#define LOG_NAME		"myftpd.log"	/* log file */
+#define LOG_NAME		"/myftpd.log"	/* log file */
 
 /* desc type containing socket descriptor, client id */
 struct client_struct{
@@ -55,50 +55,49 @@ struct client_struct{
 typedef struct client_struct cli_desc;
 
 /** Purpose:	To log all interactions with the clients
- *  Param:		filename, string format and arguments
+ *  Param:		logfile, string format and arguments
  *  Return:		void
  *
 */void log_message(char *file, const char *format, ...);
 
 /** Purpose:	Process OPCODE recieved from client
- *  Param:		socket descriptor of connection
+ *  Param:		socket descriptor of connection, IP address, logfile
  *  Return:		void
  *
 */
-void serve_a_client(int socket_desc, struct sockaddr_in cli_addr);
+void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file);
 
 /** Purpose:	To send the list of files in current dir of the server
- *  Param:		socket descriptor of connection
+ *  Param:		socket descriptor of connection, logfile
  *  Return:		void
  *
 */
-void ser_fdr(int socket_desc);
+void ser_fdr(int socket_desc, char *file);
 
 /** Purpose:	To send the current working directory of the server
- *  Param:		socket descriptor of connection
+ *  Param:		socket descriptor of connection, logfile
  *  Return:		void
  *
 */
-//void ser_pwd(cli_desc *des);
-void ser_pwd(int socket_desc);
+void ser_pwd(int socket_desc, char *file);
 
 /** Purpose:	To change working directory of the server
- *  Param:		socket descriptor of connection
+ *  Param:		socket descriptor of connection, logfile
  *  Return:		void
  *
 */
-void ser_cd(int socket_desc);
+void ser_cd(int socket_desc, char *file);
 
-/** Purpose:	To upload files to the server
+/** Purpose:	To upload files to the server, logfile
  *  Param:		socket descriptor of connection
  *  Return:		void
  *
 */
-void ser_put(int socket_desc);
+void ser_put(int socket_desc, char *file);
 
 /** Purpose:	To download file from the server
- *  Param:		socket descriptor of connection
+ *  Param:		socket descriptor of connection, logfile
  *  Return:		void
  *
 */
-void ser_get(int socket_desc);
+void ser_get(int socket_desc, char *file);

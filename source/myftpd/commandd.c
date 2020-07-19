@@ -42,10 +42,10 @@ void log_message(char *file, const char *format, ...)
 }
 
 // process OPCODE recieved from client
-void serve_a_client(int socket_desc, struct sockaddr_in cli_addr)
+void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file)
 {
     printf("Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
-	log_message(LOG_NAME, "Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
+	log_message(file, "Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
 	char op_code;
 
 	while (read_opcode(socket_desc, &op_code) > 0)
@@ -54,19 +54,19 @@ void serve_a_client(int socket_desc, struct sockaddr_in cli_addr)
 		switch (op_code)
 		{
 			case OP_PUT:
-				ser_put(socket_desc);
+				ser_put(socket_desc, file);
 				break;
 			case OP_GET:
-				ser_get(socket_desc);
+				ser_get(socket_desc, file);
 				break;
 			case OP_PWD:
-				ser_pwd(socket_desc);
+				ser_pwd(socket_desc, file);
 				break;
 			case OP_FDR:
-				ser_fdr(socket_desc);
+				ser_fdr(socket_desc, file);
 				break;
 			case OP_CD:
-			    ser_cd(socket_desc);
+			    ser_cd(socket_desc, file);
 				break;
 			default:
 				break;
@@ -76,7 +76,7 @@ void serve_a_client(int socket_desc, struct sockaddr_in cli_addr)
 }
 
 // DIR from client to list files in server
-void ser_fdr(int socket_desc)
+void ser_fdr(int socket_desc, char *file)
 {
 	// Define filename and filename array
 	char * filestring;
@@ -92,13 +92,13 @@ void ser_fdr(int socket_desc)
 	if (write_opcode(socket_desc, OP_FDR) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
-		log_message(LOG_NAME, "[DIR] Failed to write opcode\n");
+		log_message(file, "[DIR] Failed to write opcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written opcode\n");
-		log_message(LOG_NAME, "[DIR] Successful written opcode\n");
+		log_message(file, "[DIR] Successful written opcode\n");
 	}
 
 	// Open current dir and struct
@@ -125,7 +125,7 @@ void ser_fdr(int socket_desc)
             if (filecount >= MAX_FILES_BUF - 1)
             {
                 fprintf(stderr, "Exceeded program capacity, truncated\n");
-				log_message(LOG_NAME, "[DIR] Exceeded program capacity, truncated\n");
+				log_message(file, "[DIR] Exceeded program capacity, truncated\n");
                 ack_code = EXCEED_LENGTH;
                 break;
             }
@@ -157,26 +157,26 @@ void ser_fdr(int socket_desc)
 	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
-		log_message(LOG_NAME, "[DIR] Failed to write ackcode\n");
+		log_message(file, "[DIR] Failed to write ackcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written ackcode\n");
-		log_message(LOG_NAME, "[DIR] Successful written ackcode\n");
+		log_message(file, "[DIR] Successful written ackcode\n");
 	}
 
     // send the length of working dir
     if (write_length(socket_desc, buflen) == -1)
     {
         fprintf(stderr, "Failed to send length\n");
-		log_message(LOG_NAME, "[DIR] Failed to send length\n");
+		log_message(file, "[DIR] Failed to send length\n");
         return;
     }
     else
     {
         fprintf(stdout, "Successful written length of %d\n", buflen);
-		log_message(LOG_NAME, "[DIR] Successful written length of %d\n", buflen);
+		log_message(file, "[DIR] Successful written length of %d\n", buflen);
     }
 
     // Send the file info only if success code
@@ -186,24 +186,23 @@ void ser_fdr(int socket_desc)
         //if (writen(des->socket_desc, buf, strlen(buf)) == -1){
         if (writen(socket_desc, filestring, buflen) == -1){
             fprintf(stderr, "Failed to send filenames\n");
-			log_message(LOG_NAME, "[DIR] Failed to send filenames\n");
+			log_message(file, "[DIR] Failed to send filenames\n");
             return;
         }
         else
         {
             fprintf(stdout, "Successful send filenames info\n");
-			log_message(LOG_NAME, "[DIR] Successful send filenames info\n");
+			log_message(file, "[DIR] Successful send filenames info\n");
         }
 
         fprintf(stdout, "Send FDR success\n");
-		log_message(LOG_NAME, "[DIR] Send FDR success\n");
+		log_message(file, "[DIR] Send FDR success\n");
         free(filestring);
     }
 }
 
 // PWD from client to display current working directory of server
-//void ser_pwd(cli_desc *des)
-void ser_pwd(int socket_desc)
+void ser_pwd(int socket_desc, char *file)
 {
 	char buf[BUF_SIZE];
 
@@ -247,7 +246,7 @@ void ser_pwd(int socket_desc)
 }
 
 // CD from client to change the directory of server
-void ser_cd(int socket_desc)
+void ser_cd(int socket_desc, char *file)
 {
     int file_size;
 	char ack_code;
@@ -298,7 +297,7 @@ void ser_cd(int socket_desc)
 }
 
 // PUT from client to upload files to server
-void ser_put(int socket_desc)
+void ser_put(int socket_desc, char *file)
 {
 	char op_code, ack_code;
 	int file_len, fd, file_size, block_size, nr, nw;
@@ -423,7 +422,7 @@ void ser_put(int socket_desc)
 }
 
 // GET from client to download named file from server
-void ser_get(int socket_desc)
+void ser_get(int socket_desc, char *file)
 {
 	char ack_code;
 	int fd, file_size, file_len, nr;

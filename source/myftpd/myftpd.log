@@ -1,36 +1,14 @@
-725 Jul 19 12:28 - Myftp server started up, listening on port 12345
-727 Jul 19 12:28 - Client connection PID: 727 IP: 127.0.0.1 Port: 60420
-727 Jul 19 12:29 - [DIR] Successful written opcode
-727 Jul 19 12:29 - [DIR] Successful written ackcode
-727 Jul 19 12:29 - [DIR] Successful written length of 133
-727 Jul 19 12:29 - [DIR] Successful send filenames info
-727 Jul 19 12:29 - [DIR] Send FDR success
-739 Jul 19 13:54 - Myftp server started up, listening on port 12345
-741 Jul 19 13:54 - Client connection PID: 741 IP: 127.0.0.1 Port: 47112
-741 Jul 19 13:54 - [DIR] Successful written opcode
-741 Jul 19 13:54 - [DIR] Successful written ackcode
-741 Jul 19 13:54 - [DIR] Successful written length of 133
-741 Jul 19 13:54 - [DIR] Successful send filenames info
-741 Jul 19 13:54 - [DIR] Send FDR success
-741 Jul 19 13:54 - Client session closed
-752 Jul 19 13:57 - Myftp server started up, listening on port 12345
-754 Jul 19 13:57 - Client connection PID: 754 IP: 127.0.0.1 Port: 61192
-754 Jul 19 13:57 - [DIR] Successful written opcode
-754 Jul 19 13:57 - [DIR] Successful written ackcode
-754 Jul 19 13:57 - [DIR] Successful written length of 127
-754 Jul 19 13:57 - [DIR] Successful send filenames info
-754 Jul 19 13:57 - [DIR] Send FDR success
-754 Jul 19 13:57 - Client session closed
-791 Jul 19 14:08 - Myftp server started up, listening on port 12345
-793 Jul 19 14:08 - Client connection PID: 793 IP: 127.0.0.1 Port: 29705
-793 Jul 19 14:08 - [DIR] Successful written opcode
-793 Jul 19 14:08 - [DIR] Successful written ackcode
-793 Jul 19 14:08 - [DIR] Successful written length of 126
-793 Jul 19 14:08 - [DIR] Successful send filenames info
-793 Jul 19 14:08 - [DIR] Send FDR success
-795 Jul 19 14:09 - Myftp server started up, listening on port 12345
-797 Jul 19 14:09 - Client connection PID: 797 IP: 127.0.0.1 Port: 31497
-867 Jul 19 14:34 - Myftp server started up, listening on port 12345
-869 Jul 19 14:34 - Client connection PID: 869 IP: 127.0.0.1 Port: 42250
-869 Jul 19 14:37 - Client session closed
-880 Jul 19 14:37 - Client connection PID: 880 IP: 127.0.0.1 Port: 10763
+13524 Jul 19 16:10 - Client session closed
+13924 Jul 19 16:14 - Myftp server started up, listening on port 12345
+13965 Jul 19 16:14 - Client connection PID: 13965 IP: 127.0.0.1 
+13965 Jul 19 16:14 - [DIR] Successful written opcode
+13965 Jul 19 16:14 - [DIR] Successful written ackcode
+13965 Jul 19 16:14 - [DIR] Successful written length of 114
+13965 Jul 19 16:14 - [DIR] Successful send filenames info
+13965 Jul 19 16:14 - [DIR] Send FDR success
+13965 Jul 19 16:15 - [DIR] Successful written opcode
+13965 Jul 19 16:15 - [DIR] Successful written ackcode
+13965 Jul 19 16:15 - [DIR] Successful written length of 134
+13965 Jul 19 16:15 - [DIR] Successful send filenames info
+13965 Jul 19 16:15 - [DIR] Send FDR success
+13965 Jul 19 16:16 - Client session closed
