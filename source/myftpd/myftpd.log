@@ -152,3 +152,67 @@
 12429 Jul 19 17:07 - [DIR] Successful send filenames info
 12429 Jul 19 17:07 - [DIR] Send FDR success
 12429 Jul 19 17:07 - Client session closed
+260 Jul 19 23:26 - Myftp server started up, listening on port 12345
+262 Jul 19 23:26 - Client connection PID: 262 IP: 127.0.0.1 
+262 Jul 19 23:26 - [DIR] Successful written opcode
+262 Jul 19 23:26 - [DIR] Successful written ackcode
+262 Jul 19 23:26 - [DIR] Successful written length of 126
+262 Jul 19 23:26 - [DIR] Successful send filenames info
+262 Jul 19 23:26 - [DIR] Send FDR success
+262 Jul 19 23:27 - [DIR] Successful written opcode
+262 Jul 19 23:27 - [DIR] Successful written ackcode
+262 Jul 19 23:27 - [DIR] Successful written length of 2083
+262 Jul 19 23:27 - [DIR] Successful send filenames info
+262 Jul 19 23:27 - [DIR] Send FDR success
+262 Jul 19 23:28 - Client session closed
+273 Jul 19 23:29 - Myftp server started up, listening on port 12345
+276 Jul 19 23:29 - Client connection PID: 276 IP: 127.0.0.1 
+276 Jul 19 23:29 - [DIR] Successful written opcode
+276 Jul 19 23:29 - [DIR] Exceeded program capacity, truncated
+276 Jul 19 23:29 - [DIR] Successful written ackcode
+276 Jul 19 23:29 - [DIR] Successful written length of 81
+276 Jul 19 23:30 - Client session closed
+278 Jul 19 23:30 - Myftp server started up, listening on port 12345
+280 Jul 19 23:30 - Client connection PID: 280 IP: 127.0.0.1 
+280 Jul 19 23:30 - [DIR] Successful written opcode
+280 Jul 19 23:30 - [DIR] Successful written ackcode
+280 Jul 19 23:30 - [DIR] Successful written length of 47
+280 Jul 19 23:30 - [DIR] Successful send filenames info
+280 Jul 19 23:30 - [DIR] Send FDR success
+280 Jul 19 23:30 - [DIR] Successful written opcode
+280 Jul 19 23:30 - [DIR] Exceeded program capacity, truncated
+280 Jul 19 23:30 - [DIR] Successful written ackcode
+280 Jul 19 23:30 - [DIR] Successful written length of 67
+280 Jul 19 23:30 - Client session closed
+291 Jul 20 00:00 - Myftp server started up, listening on port 12345
+293 Jul 20 00:00 - Client connection PID: 293 IP: 127.0.0.1 
+293 Jul 20 00:00 - [DIR] Successful written opcode
+293 Jul 20 00:00 - [DIR] Exceeded program capacity, truncated
+293 Jul 20 00:00 - [DIR] Successful written ackcode
+293 Jul 20 00:00 - [DIR] Successful written length of 81
+293 Jul 20 00:00 - [DIR] Successful send filenames info
+293 Jul 20 00:00 - [DIR] Send FDR success
+293 Jul 20 00:00 - [DIR] Successful written opcode
+293 Jul 20 00:00 - [DIR] Successful written ackcode
+293 Jul 20 00:00 - [DIR] Successful written length of 47
+293 Jul 20 00:00 - [DIR] Successful send filenames info
+293 Jul 20 00:00 - [DIR] Send FDR success
+293 Jul 20 00:00 - [DIR] Successful written opcode
+293 Jul 20 00:00 - [DIR] Exceeded program capacity, truncated
+293 Jul 20 00:00 - [DIR] Successful written ackcode
+293 Jul 20 00:00 - [DIR] Successful written length of 67
+293 Jul 20 00:00 - [DIR] Successful send filenames info
+293 Jul 20 00:00 - [DIR] Send FDR success
+293 Jul 20 00:00 - [DIR] Successful written opcode
+293 Jul 20 00:00 - [DIR] Exceeded program capacity, truncated
+293 Jul 20 00:00 - [DIR] Successful written ackcode
+293 Jul 20 00:00 - [DIR] Successful written length of 165
+293 Jul 20 00:00 - [DIR] Successful send filenames info
+293 Jul 20 00:00 - [DIR] Send FDR success
+293 Jul 20 00:00 - [DIR] Successful written opcode
+293 Jul 20 00:00 - [DIR] Exceeded program capacity, truncated
+293 Jul 20 00:00 - [DIR] Successful written ackcode
+293 Jul 20 00:00 - [DIR] Successful written length of 215
+293 Jul 20 00:00 - [DIR] Successful send filenames info
+293 Jul 20 00:00 - [DIR] Send FDR success
+293 Jul 20 00:02 - Client session closed
