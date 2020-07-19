@@ -125,4 +125,43 @@ If the ack code is '1', the server then sends
 | 1 byte opcode | 1 byte ack code |     4 byte int     |
 +------------------------------------------------------+
 ```
+# sending files from client to server
 
+Upon receiving a put command followed by a filename from the user: 
+- the client sends a 1 byte opcode of ASCII character 'P' to the server
+- followed by a 4 byte int indicating the length of the filename
+- The client then sends a sequence of N bytes which is the filename in ASCII
+```
++----------------------------------------------------------------------+
+| 1 byte opcode |     4 byte int     |              Data               |
++----------------------------------------------------------------------+
+```
+The server replies with: 
+- the opcode 'P' indicating the successful reciept of the request, 
+- followed by a one byte acknowledgement code in ASCII which is one of the following characters
+  - '0' ready to accept the file
+  - '1' error accepting the file due to other reasons
+  - 'E' error accepting the file due to filename clash
+```
++---------------------------------+
+| 1 byte opcode | 1 byte ack code |
++---------------------------------+
+```
+After client received the opcode and ack code:
+If the opcode is 'P' and ack code is '0', the client then sends
+- 1 byte opcode of ASCII character 'A' to the server
+- followed by a 4 byte int representing the length of the file
+- The client then sends a sequence of N bytes which is the content of the file
+```
++----------------------------------------------------------------------+
+| 1 byte opcode |     4 byte int     |              Data               |
++----------------------------------------------------------------------+
+```
+If the ack code is '1' or 'E', the client then sends
+- an int of 0, 
+- no further data is sent
+```
++------------------------------------------------------+
+| 1 byte opcode | 1 byte ack code |     4 byte int     |
++------------------------------------------------------+
+```
