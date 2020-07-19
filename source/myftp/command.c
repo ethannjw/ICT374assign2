@@ -265,7 +265,7 @@ void cli_pwd(int socket_desc)
 	working_dir_path = malloc(sizeof(char) * (file_size+1));
 
 	// Read the directory path
-	if((read_size = readn(socket_desc, working_dir_path, (sizeof(char)*file_size))) == -1)
+	if((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
      {
 		perror("Client: Failed to read directory\n");
 		return;
