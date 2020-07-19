@@ -115,12 +115,13 @@ void ser_fdr(int socket_desc, char *file)
     	ack_code = SUCCESS_CODE;
     }
 
-    if (ack_code == SUCCESS_CODE)
+    if (ack_code == SUCCESS_CODE || ack_code == EXCEED_LENGTH)
     {
-        // insert the filenames
+        /* insert the filenames while at the same time limit the max files to 100. */
         while (( direntp = readdir(dp)) != NULL )
         {
             filearray[filecount] = direntp->d_name;
+            filecount++;
             if (filecount >= MAX_FILES_BUF - 1)
             {
                 fprintf(stderr, "Exceeded program capacity, truncated\n");
@@ -128,7 +129,6 @@ void ser_fdr(int socket_desc, char *file)
                 ack_code = EXCEED_LENGTH;
                 break;
             }
-            filecount++;
         }
 
         // Sorts the files by filename
@@ -177,7 +177,7 @@ void ser_fdr(int socket_desc, char *file)
     }
 
     // Send the file info only if success code
-    if (ack_code == SUCCESS_CODE)
+    if (ack_code == SUCCESS_CODE || ack_code == EXCEED_LENGTH)
     {
         // send the file info
         //if (writen(des->socket_desc, buf, strlen(buf)) == -1){

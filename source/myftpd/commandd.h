@@ -43,7 +43,7 @@
 /* ACK codes for DIR */
 #define EXCEED_LENGTH   'L'
 
-#define MAX_FILES_BUF       1000
+#define MAX_FILES_BUF       256
 #define BUF_SIZE            256
 #define MAX_STRING_LENGTH   10000
 #define LOG_NAME		"/myftpd.log"	/* log file */
