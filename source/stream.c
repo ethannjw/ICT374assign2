@@ -122,7 +122,7 @@ void rmReturnChar(char *line)
 	// Adds null last char if not a null char
 	else if (line[n-1]!='\0')
     {
-		line[n-1]='\0';
+		line[n]='\0';
 	}
 }
 

@@ -30,3 +30,7 @@
 793 Jul 19 14:08 - [DIR] Send FDR success
 795 Jul 19 14:09 - Myftp server started up, listening on port 12345
 797 Jul 19 14:09 - Client connection PID: 797 IP: 127.0.0.1 Port: 31497
+867 Jul 19 14:34 - Myftp server started up, listening on port 12345
+869 Jul 19 14:34 - Client connection PID: 869 IP: 127.0.0.1 Port: 42250
+869 Jul 19 14:37 - Client session closed
+880 Jul 19 14:37 - Client connection PID: 880 IP: 127.0.0.1 Port: 10763
