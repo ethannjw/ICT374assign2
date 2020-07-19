@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 725 Jul 19 12:28 - Myftp server started up, listening on port 12345
 727 Jul 19 12:28 - Client connection PID: 727 IP: 127.0.0.1 Port: 60420
 727 Jul 19 12:29 - [DIR] Successful written opcode
@@ -97,3 +98,19 @@
 12320 Jul 19 15:52 - [DIR] Successful written length of 126
 12320 Jul 19 15:52 - [DIR] Successful send filenames info
 12320 Jul 19 15:52 - [DIR] Send FDR success
+=======
+13524 Jul 19 16:10 - Client session closed
+13924 Jul 19 16:14 - Myftp server started up, listening on port 12345
+13965 Jul 19 16:14 - Client connection PID: 13965 IP: 127.0.0.1 
+13965 Jul 19 16:14 - [DIR] Successful written opcode
+13965 Jul 19 16:14 - [DIR] Successful written ackcode
+13965 Jul 19 16:14 - [DIR] Successful written length of 114
+13965 Jul 19 16:14 - [DIR] Successful send filenames info
+13965 Jul 19 16:14 - [DIR] Send FDR success
+13965 Jul 19 16:15 - [DIR] Successful written opcode
+13965 Jul 19 16:15 - [DIR] Successful written ackcode
+13965 Jul 19 16:15 - [DIR] Successful written length of 134
+13965 Jul 19 16:15 - [DIR] Successful send filenames info
+13965 Jul 19 16:15 - [DIR] Send FDR success
+13965 Jul 19 16:16 - Client session closed
+>>>>>>> kim
