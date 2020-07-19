@@ -417,7 +417,7 @@ void cli_put(int socket_desc, char *filename)
 
 	file_size = stats.st_size; // set file size
 
-	// send PUT
+	// send opcode to server
 	if (write_opcode(socket_desc, OP_PUT) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
@@ -428,6 +428,7 @@ void cli_put(int socket_desc, char *filename)
         fprintf(stdout, "Successful written opcode\n");
 	}
 
+	// sent file length
 	if (write_length(socket_desc, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to send length\n");
@@ -438,6 +439,7 @@ void cli_put(int socket_desc, char *filename)
         fprintf(stdout, "Successful read length of %d\n", file_len);
 	}
 
+	// send file name
 	if (writen(socket_desc, file_name, file_len) < 0)
 	{
 		fprintf(stderr, "Failed to send filename\n");
@@ -448,7 +450,7 @@ void cli_put(int socket_desc, char *filename)
         fprintf(stdout, "Successful send filename of %s\n", file_name);
 	}
 
-	// waiting for server response
+	// read opcode from server
 	if (read_opcode(socket_desc, &op_code) == -1)
 	{
 		fprintf(stderr, "Failed to read opcode\n");
@@ -459,6 +461,7 @@ void cli_put(int socket_desc, char *filename)
         fprintf(stdout, "Successful reading opcode\n");
 	}
 
+	// read ackcode from server
 	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to read ackcode\n");
@@ -472,7 +475,7 @@ void cli_put(int socket_desc, char *filename)
 	// send file data
 	if (ack_code == SUCCESS_CODE)
 	{
-		if (write_opcode(socket_desc, OP_PUT) == -1)
+		if (write_opcode(socket_desc, OP_DATA) == -1)
 		{
 			fprintf(stderr, "Failed to write opcode\n");
 			return;
@@ -520,7 +523,6 @@ void cli_get(int socket_desc, char *file_name)
 {
 	char op_code, ack_code;
 	int fd, file_size, block_size, nr, nw;
-	//struct stat stats;
 	char buf[BUF_SIZE];
 	int file_len = strlen(file_name);
 
@@ -532,7 +534,7 @@ void cli_get(int socket_desc, char *file_name)
 		return;
 	}
 
-	// send GET
+	// send opcode to server
 	if (write_opcode(socket_desc, OP_GET) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
@@ -543,6 +545,7 @@ void cli_get(int socket_desc, char *file_name)
         fprintf(stdout, "Successful written opcode\n");
 	}
 
+	// send file length to server
 	if (write_length(socket_desc, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to write length\n");
@@ -553,6 +556,7 @@ void cli_get(int socket_desc, char *file_name)
         fprintf(stdout, "Successful write length of %d\n", file_len);
 	}
 
+	// send file name to server
 	if (writen(socket_desc, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to write filename\n");
@@ -563,6 +567,7 @@ void cli_get(int socket_desc, char *file_name)
         fprintf(stdout, "Successful write filename of %s\n", file_name);
 	}
 
+	// read opcode from server
 	if (read_opcode(socket_desc, &op_code) == -1)
 	{
 		fprintf(stderr, "Failed to read opcode\n");
@@ -573,6 +578,7 @@ void cli_get(int socket_desc, char *file_name)
         fprintf(stdout, "Successful reading opcode\n");
 	}
 
+	// read ackcode from server
 	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to read ackcode\n");
@@ -592,6 +598,7 @@ void cli_get(int socket_desc, char *file_name)
 
 	if (ack_code == SUCCESS_CODE)
 	{
+		// read opcode from server
 		if (read_opcode(socket_desc, &op_code) == -1)
 		{
 			fprintf(stderr, "Failed to read ackcode\n");

@@ -1,75 +1,62 @@
-4029 Jul 19 17:10 - Myftp server started up, listening on port 12345
-4080 Jul 19 17:10 - Client connection PID: 4080 IP: 127.0.0.1 
-4080 Jul 19 17:10 - [PWD] Successful written opcode
-4080 Jul 19 17:10 - [PWD] Successful written length of 49
-4080 Jul 19 17:10 - [PWD] Successful send directory info
-4080 Jul 19 17:10 - [PWD] Send PWD success
-4080 Jul 19 17:10 - [DIR] Successful written opcode
-4080 Jul 19 17:10 - [DIR] Successful written ackcode
-4080 Jul 19 17:10 - [DIR] Successful written length of 114
-4080 Jul 19 17:10 - [DIR] Successful send filenames info
-4080 Jul 19 17:10 - [DIR] Send FDR success
-4080 Jul 19 17:10 - [CD] Server received cd instruction: ..
-4080 Jul 19 17:10 - [CD] Server done cd to: ..
-4080 Jul 19 17:10 - [PWD] Successful written opcode
-4080 Jul 19 17:10 - [PWD] Successful written length of 42
-4080 Jul 19 17:10 - [PWD] Successful send directory info
-4080 Jul 19 17:10 - [PWD] Send PWD success
-4080 Jul 19 17:11 - [PUT] 
-4080 Jul 19 17:11 - [PUT] 
-4080 Jul 19 17:11 - [PUT] Successful written opcode
-4080 Jul 19 17:11 - [PUT] Successful written ackcode
-4080 Jul 19 17:11 - [PUT] Successful reading opcode
-4080 Jul 19 17:11 - [PUT] Successful read file size of 8
-4080 Jul 19 17:11 - [PUT] File received
-4080 Jul 19 17:12 - [GET] Successful read length of 7
-4080 Jul 19 17:12 - [GET] Successful read filename of cow.txt
-4080 Jul 19 17:12 - [GET] File does not exist
-4080 Jul 19 17:12 - [GET] Successful written opcode
-4080 Jul 19 17:12 - [GET] Successful written ackcode
-4080 Jul 19 17:12 - [GET] GET request failed
-4080 Jul 19 17:13 - [PWD] Successful written opcode
-4080 Jul 19 17:13 - [PWD] Successful written length of 42
-4080 Jul 19 17:13 - [PWD] Successful send directory info
-4080 Jul 19 17:13 - [PWD] Send PWD success
-4080 Jul 19 17:13 - [GET] Successful read length of 7
-4080 Jul 19 17:13 - [GET] Successful read filename of cow.txt
-4080 Jul 19 17:13 - [GET] File does not exist
-4080 Jul 19 17:13 - [GET] Successful written opcode
-4080 Jul 19 17:13 - [GET] Successful written ackcode
-4080 Jul 19 17:13 - [GET] GET request failed
-4080 Jul 19 17:13 - [GET] Successful read length of 14
-4080 Jul 19 17:13 - [GET] Successful read filename of Characters.csv
-4080 Jul 19 17:13 - [GET] File does not exist
-4080 Jul 19 17:13 - [GET] Successful written opcode
-4080 Jul 19 17:13 - [GET] Successful written ackcode
-4080 Jul 19 17:13 - [GET] GET request failed
-4080 Jul 19 17:13 - [DIR] Successful written opcode
-4080 Jul 19 17:13 - [DIR] Successful written ackcode
-4080 Jul 19 17:13 - [DIR] Successful written length of 44
-4080 Jul 19 17:13 - [DIR] Successful send filenames info
-4080 Jul 19 17:13 - [DIR] Send FDR success
-4080 Jul 19 17:14 - [PWD] Successful written opcode
-4080 Jul 19 17:14 - [PWD] Successful written length of 42
-4080 Jul 19 17:14 - [PWD] Successful send directory info
-4080 Jul 19 17:14 - [PWD] Send PWD success
-4080 Jul 19 17:15 - Client session closed
-4688 Jul 19 17:15 - Client connection PID: 4688 IP: 127.0.0.1 
-4688 Jul 19 17:15 - [DIR] Successful written opcode
-4688 Jul 19 17:15 - [DIR] Successful written ackcode
-4688 Jul 19 17:15 - [DIR] Successful written length of 106
-4688 Jul 19 17:15 - [DIR] Successful send filenames info
-4688 Jul 19 17:15 - [DIR] Send FDR success
-4688 Jul 19 17:15 - [GET] Successful read length of 7
-4688 Jul 19 17:15 - [GET] Successful read filename of cow.txt
-4688 Jul 19 17:15 - [GET] Successful written opcode
-4688 Jul 19 17:15 - [GET] Successful written ackcode
-4688 Jul 19 17:15 - [GET] Successful written opcode\n4688 Jul 19 17:15 - [GET] Successful read filesize of 7
-4688 Jul 19 17:15 - [GET] File sent
-4688 Jul 19 17:15 - [PUT] 
-4688 Jul 19 17:15 - [PUT] 
-4688 Jul 19 17:15 - [PUT] Successful written opcode
-4688 Jul 19 17:15 - [PUT] Successful written ackcode
-4688 Jul 19 17:15 - [PUT] Successful reading opcode
-4688 Jul 19 17:15 - [PUT] Successful read file size of 12
-4688 Jul 19 17:15 - [PUT] File received
+11052 Jul 20 00:22 - Myftp server started up, listening on port 12345
+11099 Jul 20 00:23 - Client connection PID: 11099 IP: 127.0.0.1 
+11099 Jul 20 00:23 - OPCODE 'P' received
+11099 Jul 20 00:23 - PUT command received
+11099 Jul 20 00:23 - [PUT] Successful read file length 7
+11099 Jul 20 00:23 - [PUT] Successful read filename cat.txt
+11099 Jul 20 00:23 - [PUT] Successful written opcode
+11099 Jul 20 00:23 - [PUT] Successful written ackcode
+11099 Jul 20 00:23 - [PUT] Successful reading opcode
+11099 Jul 20 00:23 - [PUT] Successful read file size 8
+11099 Jul 20 00:23 - [PUT] File received
+11099 Jul 20 00:23 - OPCODE 'G' received
+11099 Jul 20 00:23 - GET command received
+11099 Jul 20 00:23 - [GET] Successful read file length 7
+11099 Jul 20 00:23 - [GET] Successful read filename cow.txt
+11099 Jul 20 00:23 - [GET] Successful written opcode
+11099 Jul 20 00:23 - [GET] Successful written ackcode
+11099 Jul 20 00:23 - [GET] Successful written opcode
+11099 Jul 20 00:23 - [GET] Successful send file size 7
+11099 Jul 20 00:23 - [GET] File sent
+11099 Jul 20 00:23 - OPCODE 'G' received
+11099 Jul 20 00:23 - GET command received
+11099 Jul 20 00:23 - [GET] Successful read file length 4
+11099 Jul 20 00:23 - [GET] Successful read filename tttt
+11099 Jul 20 00:23 - [GET] File does not exist
+11099 Jul 20 00:23 - [GET] Successful written opcode
+11099 Jul 20 00:23 - [GET] Successful written ackcode
+11099 Jul 20 00:23 - [GET] GET request failed
+11099 Jul 20 00:24 - OPCODE 'F' received
+11099 Jul 20 00:24 - DIR command received
+11099 Jul 20 00:24 - [DIR] Successful written opcode
+11099 Jul 20 00:24 - [DIR] Successful written ackcode
+11099 Jul 20 00:24 - [DIR] Successful send directory length 114
+11099 Jul 20 00:24 - [DIR] Successful send filenames info
+11099 Jul 20 00:24 - [DIR] Send FDR success
+11099 Jul 20 00:24 - OPCODE 'W' received
+11099 Jul 20 00:24 - PWD command received
+11099 Jul 20 00:24 - [PWD] Successful written opcode
+11099 Jul 20 00:24 - [PWD] Successful send working directory length 49
+11099 Jul 20 00:24 - [PWD] Successful send directory info
+11099 Jul 20 00:24 - [PWD] Send PWD success
+11099 Jul 20 00:24 - OPCODE 'C' received
+11099 Jul 20 00:24 - CD command received
+11099 Jul 20 00:24 - [CD] Successful read file size 2
+11099 Jul 20 00:24 - [CD] Successful read cd instruction: ..
+11099 Jul 20 00:24 - [CD] Server done cd to: ..
+11099 Jul 20 00:24 - [CD] Successful written opcode
+11099 Jul 20 00:24 - [CD] Successful written ackcode
+11099 Jul 20 00:24 - OPCODE 'F' received
+11099 Jul 20 00:24 - DIR command received
+11099 Jul 20 00:24 - [DIR] Successful written opcode
+11099 Jul 20 00:24 - [DIR] Successful written ackcode
+11099 Jul 20 00:24 - [DIR] Successful send directory length 36
+11099 Jul 20 00:24 - [DIR] Successful send filenames info
+11099 Jul 20 00:24 - [DIR] Send FDR success
+11099 Jul 20 00:24 - OPCODE 'W' received
+11099 Jul 20 00:24 - PWD command received
+11099 Jul 20 00:24 - [PWD] Successful written opcode
+11099 Jul 20 00:24 - [PWD] Successful send working directory length 42
+11099 Jul 20 00:24 - [PWD] Successful send directory info
+11099 Jul 20 00:24 - [PWD] Send PWD success
+11099 Jul 20 00:24 - Client session closed
