@@ -211,11 +211,13 @@ void ser_pwd(int socket_desc, char *file)
 	//if (write_opcode(des->socket_desc, OP_PWD) == -1){
 	if (write_opcode(socket_desc, OP_PWD) == -1){
 		fprintf(stderr, "Failed to write opcode\n");
+		log_message(file, "[PWD] Failed to write opcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written opcode\n");
+		log_message(file, "[PWD] Successful written opcode\n");
 	}
 
     int buflen = strlen(buf);
@@ -223,24 +225,29 @@ void ser_pwd(int socket_desc, char *file)
 	//if (write_length(des->socket_desc, strlen(buf)) == -1){
 	if (write_length(socket_desc, buflen) == -1){
 		fprintf(stderr, "Failed to send length\n");
+		log_message(file, "[PWD] Failed to send length\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written length of %d\n", buflen);
+		log_message(file, "[PWD] Successful written length of %d\n", buflen);
 	}
 	// send the dir info
 	//if (writen(des->socket_desc, buf, strlen(buf)) == -1){
 	if (writen(socket_desc, buf, buflen) == -1){
 		fprintf(stderr, "Failed to send directory info\n");
+		log_message(file, "[PWD] Failed to send directory info\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful send directory info\n");
+		log_message(file, "[PWD] Successful send directory info\n");
 	}
 
 	fprintf(stdout, "Send PWD success\n");
+	log_message(file, "[PWD] Send PWD success\n");
 }
 
 // CD from client to change the directory of server
@@ -252,6 +259,7 @@ void ser_cd(int socket_desc, char *file)
 	if(read_length(socket_desc,&file_size) == -1)
     {
 		perror("Server: Failed to read file size from client\n");
+		log_message(file, "[CD] Server: Failed to read file size from client\n");
 		return;
 	}
 
@@ -260,12 +268,14 @@ void ser_cd(int socket_desc, char *file)
 	if(readn(socket_desc, buf, file_size) == -1)
     {
 		perror("Server: Failed to read cd dir from client\n");
+		log_message(file, "[CD] Server: Failed to read cd dir from client\n");
 		return;
 	}
     else
     {
         buf[file_size] = '\0';
         fprintf(stdout, "Server received cd instruction: %s\n", buf);
+		log_message(file, "[CD] Server received cd instruction: %s\n", buf);
     }
 
     // change directory here and set the ack code to send back to client
@@ -273,22 +283,26 @@ void ser_cd(int socket_desc, char *file)
     {
 		ack_code = SUCCESS_CODE;
 		fprintf(stdout,"Server done cd to: %s\n", buf);
+		log_message(file, "[CD] Server done cd to: %s\n", buf);
 	}
 	else
 	{
 		ack_code = ERROR_CODE;
 		fprintf(stderr,"Server unable to cd to: %s\n", buf);
+		log_message(file, "[CD] Server unable to cd to: %s\n", buf);
 	}
 
 	if(write_opcode(socket_desc, OP_CD) == -1)
     {
 		perror("Server: Failed to send opcode to client\n");
+		log_message(file, "[CD] Server: Failed to send opcode to client\n");
 		return;
 	}
 
 	if(write_opcode(socket_desc, ack_code) == -1)
     {
 		perror("Server: Failed to send ackcode to client\n");
+		log_message(file, "[CD] Server: Failed to send ackcode to client\n");
 		return;
 	}
 
@@ -305,11 +319,13 @@ void ser_put(int socket_desc, char *file)
 	if (read_length(socket_desc, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
+		log_message(file, "[PUT] \n");
 		return;
 	}
 	else
     {
         fprintf(stdout, "Successful read length of %d\n", file_len);
+		log_message(file, "[PUT] \n");
 	}
 
 	// read the file name
@@ -317,16 +333,15 @@ void ser_put(int socket_desc, char *file)
 	if (readn(socket_desc, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
+		log_message(file, "[PUT] \n");
 		return;
 	}
 	else
     {
 		file_name[file_len] = '\0';
         fprintf(stdout, "Successful read filename of %s\n", file_name);
+		log_message(file, "[PUT] \n");
 	}
-
-	// set last character to null
-	//file_name[strcspn(file_name, "\n")] = '\0';
 
 	// check for file exist or error creating file
 	ack_code = SUCCESS_CODE;
@@ -335,39 +350,46 @@ void ser_put(int socket_desc, char *file)
 	{
 		ack_code = FILE_EXIST;
 		fprintf(stderr, "Filename exist\n");
+		log_message(file, "[PUT] Filename exist\n");
 	}
 	else if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) == -1)
 	{
 		ack_code = ERROR_CODE;
 		fprintf(stderr, "Failed to create file\n");
+		log_message(file, "[PUT] Failed to create file\n");
 	}
 
 	// write the opcode to socket
 	if (write_opcode(socket_desc, OP_PUT) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
+		log_message(file, "[PUT] Failed to write opcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written opcode\n");
+		log_message(file, "[PUT] Successful written opcode\n");
 	}
 
 	// write the ackcode to socket
 	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
+		log_message(file, "[PUT] Failed to write ackcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written ackcode\n");
+		log_message(file, "[PUT] Successful written ackcode\n");
 	}
 
 	// check if sucessful ackcode was sent to client
 	if (ack_code != SUCCESS_CODE)
 	{
 		fprintf(stderr, "PUT request failed\n");
+		log_message(file, "[PUT] PUT request failed\n");
 		return;
 	}
 
@@ -375,21 +397,25 @@ void ser_put(int socket_desc, char *file)
 	if (read_opcode(socket_desc, &op_code) == -1)
 	{
 		fprintf(stderr, "Failed to read opcode\n");
+		log_message(file, "[PUT] Failed to read opcode\n");
 	}
 	else
     {
         fprintf(stdout, "Successful reading opcode\n");
+		log_message(file, "[PUT] Successful reading opcode\n");
 	}
 
 	// read the file size
 	if (read_length(socket_desc, &file_size) == -1)
 	{
 		fprintf(stderr, "Failed to read size\n");
+		log_message(file, "[PUT] Failed to read size\n");
 		return;
 	}
 	else
     {
         fprintf(stdout, "Successful read file size of %d\n", file_size);
+		log_message(file, "[PUT] Successful read file size of %d\n", file_size);
 	}
 
 	block_size = BUF_SIZE;
@@ -404,12 +430,14 @@ void ser_put(int socket_desc, char *file)
 		if ((nr = readn(socket_desc, buf, block_size)) == -1)
 		{
 			fprintf(stdout, "Failed to read\n");
+			log_message(file, "[PUT] Failed to read\n");
 			return; // connection broken down
 		}
 
 		if ((nw = writen(fd, buf, nr)) < nr)
 		{
 			fprintf(stdout, "Failed to write\n");
+			log_message(file, "[PUT] Failed to write\n");
 			return;
 		}
 		file_size -= nw;
@@ -417,6 +445,7 @@ void ser_put(int socket_desc, char *file)
 
 	close(fd);
 	fprintf(stdout, "File received\n");
+	log_message(file, "[PUT] File received\n");
 }
 
 // GET from client to download named file from server
@@ -431,11 +460,13 @@ void ser_get(int socket_desc, char *file)
 	if (read_length(socket_desc, &file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read length\n");
+		log_message(file, "[GET] Failed to read length\n");
 		return;
 	}
 	else
     {
         fprintf(stdout, "Successful read length of %d\n", file_len);
+		log_message(file, "[GET] Successful read length of %d\n", file_len);
 	}
 
 	// read the file name
@@ -443,12 +474,14 @@ void ser_get(int socket_desc, char *file)
 	if (readn(socket_desc, file_name, file_len) == -1)
 	{
 		fprintf(stderr, "Failed to read filename\n");
+		log_message(file, "[GET] Failed to read filename\n");
 		return;
 	}
 	else
     {
 		file_name[file_len] = '\0';
         fprintf(stdout, "Successful read filename of %s\n", file_name);
+		log_message(file, "[GET] Successful read filename of %s\n", file_name);
 	}
 
 	// check for file not exist or error reading file
@@ -458,16 +491,19 @@ void ser_get(int socket_desc, char *file)
 	{
 		ack_code = FILE_NOT_EXIST;
 		fprintf(stderr, "File does not exist\n");
+		log_message(file, "[GET] File does not exist\n");
 	}
 	else if ((fd = open(file_name, O_RDONLY)) < 0)
 	{
 		ack_code = ERROR_CODE;
 		fprintf(stderr, "Failed to read file\n");
+		log_message(file, "[GET] Failed to read file\n");
 	}
     else if(lstat(file_name, &stats) < 0) // check for fstat
     {
 		ack_code = ERROR_CODE;
         fprintf(stderr, "Failed to read fstat\n");
+		log_message(file, "[GET] Failed to read fstat\n");
 		//return;
     }
 
@@ -475,22 +511,26 @@ void ser_get(int socket_desc, char *file)
 	if (write_opcode(socket_desc, OP_GET) == -1)
 	{
 		fprintf(stderr, "Failed to write opcode\n");
+		log_message(file, "[GET] Failed to write opcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written opcode\n");
+		log_message(file, "[GET] Successful written opcode\n");
 	}
 
 	// write the ackcode to socket
 	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		fprintf(stderr, "Failed to write ackcode\n");
+		log_message(file, "[GET] Failed to write ackcode\n");
 		return;
 	}
     else
     {
         fprintf(stdout, "Successful written ackcode\n");
+		log_message(file, "[GET] Successful written ackcode\n");
 	}
 
 	// check if sucessful ackcode was sent to client
@@ -499,11 +539,13 @@ void ser_get(int socket_desc, char *file)
 		if (write_opcode(socket_desc, OP_GET) == -1)
 		{
 			fprintf(stderr, "Failed to write opcode\n");
+			log_message(file, "[GET] Failed to write opcode\\n");
 			return;
 		}
 		else
 		{
 			fprintf(stdout, "Successful written opcode\n");
+			log_message(file, "[GET] Successful written opcode\\n");
 		}
 
 		file_size = stats.st_size; // set file size
@@ -511,11 +553,13 @@ void ser_get(int socket_desc, char *file)
 		if (write_length(socket_desc, file_size) == -1)
 		{
 			fprintf(stderr, "Failed to send length\n");
+			log_message(file, "[GET] Failed to send length\n");
 			return;
 		}
 		else
 		{
 			fprintf(stdout, "Successful read filesize of %d\n", file_size);
+			log_message(file, "[GET] Successful read filesize of %d\n", file_size);
 		}
 
 		while ((nr = readn(fd, buf, BUF_SIZE)) > 0)
@@ -523,15 +567,18 @@ void ser_get(int socket_desc, char *file)
 			if (writen(socket_desc, buf, nr) == -1)
 			{
 				fprintf(stdout, "Failed to send file content\n");
+				log_message(file, "[GET] Failed to send file content\n");
 				return;
 			}
 		}
 
 		fprintf(stdout, "File sent\n");
+		log_message(file, "[GET] File sent\n");
 	}
 	else
 	{
 		fprintf(stderr, "GET request failed\n");
+		log_message(file, "[GET] GET request failed\n");
 		return;
 	}
 
