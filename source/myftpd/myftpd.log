@@ -1,0 +1,7 @@
+725 Jul 19 12:28 - Myftp server started up, listening on port 12345
+727 Jul 19 12:28 - Client connection PID: 727 IP: 127.0.0.1 Port: 60420
+727 Jul 19 12:29 - [DIR] Successful written opcode
+727 Jul 19 12:29 - [DIR] Successful written ackcode
+727 Jul 19 12:29 - [DIR] Successful written length of 133
+727 Jul 19 12:29 - [DIR] Successful send filenames info
+727 Jul 19 12:29 - [DIR] Send FDR success

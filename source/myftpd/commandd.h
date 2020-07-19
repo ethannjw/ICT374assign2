@@ -45,7 +45,7 @@
 
 #define BUF_SIZE		1000
 #define MAX_FILES_BUF   256
-#define LOG_NAME		"~/myftpd.log"	/* log file */
+#define LOG_NAME		"myftpd.log"	/* log file */
 
 /* desc type containing socket descriptor, client id */
 struct client_struct{
