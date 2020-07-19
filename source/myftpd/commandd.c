@@ -195,7 +195,6 @@ void ser_fdr(int socket_desc, char *file)
         fprintf(stdout, "Send FDR success\n");
 
 		log_message(file, "[DIR] Send FDR success\n");
-        free(filestring);
 
     }
 }
