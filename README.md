@@ -45,10 +45,10 @@ The myftp client should repeatedly display the prompt and wait for a command unt
 - [x] put
 - [x] fix up client bash code system
 - [x] logger method. Include client IP addr, PID, datetime, function and messages
-- [ ] add logger to all methods
+- [x] add logger to all methods
 - [x] clean up the dir printout so that it uses columns
 - [ ] update header files with up to date information
-- [ ] complete protocol documentation
+- [x] complete protocol documentation
 - [ ] final cleanup for code syntax. Standardise nomenclature
 
 # Receiving server current working directory path
