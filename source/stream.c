@@ -1,55 +1,37 @@
-/*
- *  File: 		stream.c for assign2
- *  Authors:	Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
- *  Purpose: 	Contains the read/write n, read/write opcode, read/write length
- */
+/** File:			stream.c for assignment 2
+ *  Author:			Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+ *  Date:			25th July 2020
+ *  Purpose:		Contains the stream functions for the server and client
+ *  Assumptions:
+*/
 
 #include "stream.h"
 
-/*
-int readn(int fd, char *buf, int bufsize)
-{
-    short data_size;     //sizeof (short) must be 2
-    int n, nr, len;
-
-    //check buffer size len
-    if (bufsize < MAX_BLOCK_SIZE)
-         return (-3);      //buffer too small
-
-    // get the size of data sent to me
-    if (read(fd, (char *) &data_size, 1) != 1) return (-1);
-    if (read(fd, (char *) (&data_size)+1, 1) != 1) return (-1);
-    len = (int) ntohs(data_size);  // convert to host byte order
-
-    // read len number of bytes to buf
-    for (n=0; n < len; n += nr) {
-        if ((nr = read(fd, buf+n, len-n)) <= 0)
-            return (nr);       // error in reading
-    }
-    return (len);
-}
-*/
-// code from daniel
 int readn(int sd, char *buf, int nbytes)
 {
 	int nr = 1;
 	int n = 0;
-	for (n=0; (n < nbytes) && (nr > 0); n += nr) {
-		if ((nr = read(sd, buf+n, nbytes-n)) < 0){
-			return (nr);  //read error
+	for (n = 0; (n < nbytes) && (nr > 0); n += nr)
+    {
+		if ((nr = read(sd, buf+n, nbytes-n)) < 0)
+		{
+			return (nr);
 		}
 	}
 	return (n);
 }
 
-// Code from daniel
 int writen(int sd, char *buf, int nbytes)
 {
 	int nw = 0;
 	int n = 0;
-	for (n=0; n < nbytes; n += nw) {
+	for (n = 0; n < nbytes; n += nw)
+    {
 		if ((nw = write(sd, buf+n, nbytes-n)) <= 0)
-			return (nw); /* write error */
+        {
+            return (nw);
+        }
+
 	}
   return n;
 }
@@ -104,7 +86,7 @@ int read_length(int socket_desc, int *len)
 	{
 		return (-1);
 	}
-	// to network byte order
+	/* to network byte order */
 	*len = ntohl(data);
 
 	return 1;

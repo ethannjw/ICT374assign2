@@ -33,8 +33,8 @@ void log_message(char *file, const char *format, ...)
 
 	fprintf(fp, "%d %s - ", pid, mytime);
 
-	// reference - https://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm
-	// print all the arguments provided
+	/* reference - https://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm */
+	/* print all the arguments provided */
 	va_start(ap, format);
 	vfprintf(fp, format, ap);
 	va_end(ap);
@@ -42,14 +42,14 @@ void log_message(char *file, const char *format, ...)
 	fclose(fp);
 }
 
-// process OPCODE recieved from client
+/* process OPCODE received from client */
 void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file)
 {
     //printf("Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
 	log_message(file, "Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
 	char op_code;
 
-	// read OPCODE from client
+	/* read OPCODE from client */
 	while (read_opcode(socket_desc, &op_code) > 0)
 	{
 		log_message(file, "OPCODE \'%c\' received\n", op_code);
@@ -83,10 +83,9 @@ void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file)
 	return;
 }
 
-// DIR from client to list files in server
+/* List files in server */
 void ser_fdr(int socket_desc, char *file)
 {
-    // variables
     char filestring[MAX_STRING_LENGTH];
 	char *filearray[MAX_TOKEN];
 	int filecount = 0, buflen;

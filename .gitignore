@@ -1,8 +1,8 @@
 **/.DS_Store
 **/desktop.ini
-**/.o
-**/.gch
+**/*.o
+**/*.gch
 source/myftp/myftp
 source/myftpd/myftpd
-**/.log
+**/*.log
 Unit_tests

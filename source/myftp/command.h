@@ -28,14 +28,14 @@
 #define SUCCESS_CODE	'0'
 #define ERROR_CODE	    '1'
 
-// define the commands from user
-// server commands
+/* define the commands from user
+    server commands */
 #define CMD_PWD 	"pwd"
 #define CMD_FDR		"dir"
 #define CMD_CD  	"cd"
 #define CMD_PUT		"put"
 #define CMD_GET		"get"
-// local commands
+/* local commands */
 #define CMD_LCD		"lcd"
 #define CMD_LFDR	"ldir"
 #define CMD_LPWD	"lpwd"
@@ -54,16 +54,14 @@
 #define BUF_SIZE			256
 #define tokenSep            " \t\n"
 
-// command type containing the command and argument
-struct CommandStruct {
-	char cmd[MAX_NUM_CHAR];	// command
-	char arg[MAX_NUM_CHAR];	// argument of the command
+/** Purpose:	Separate string by characters defined in tokenSep
+ *  Param:		char array to process, char array to insert tokens
+ *  Return:		Number of tokens in int
+ *
+*/
+int tokenise (char line[], char *token[]);
 
-};
-typedef struct CommandStruct Command;
-
-
-/** Purpose:	To obtain the command from the user and store it into the command structure for further
+/** Purpose:	Obtain command from user and process appropriately
  *  Param:		socket descriptor of connection
  *  Return:		void
  *
@@ -71,28 +69,26 @@ typedef struct CommandStruct Command;
 void cmd_prompt(int socket_desc);
 
 /** Purpose:	To receive and print out the files present in current working directory of the server
- *  Param:		socket descriptor of connection, command token
+ *  Param:		socket descriptor of connection
  *  Return:		void
  *
 */
 void cli_fdr(int socket_desc);
 
 /** Purpose:	To print out the files present in current working directory of client
- *  Param:		socket descriptor of connection, filepath
  *  Return:		void
  *
 */
 void cli_lfdr();
 
 /** Purpose:	To send and receive the current working directory of the server
- *  Param:		socket descriptor of connection, command token
+ *  Param:		socket descriptor of connection
  *  Return:		void
  *
 */
 void cli_pwd(int socket_desc);
 
 /** Purpose:	Print current working directory of client
- *  Param:		socket descriptor of connection, filepath
  *  Return:		void
  *
 */
@@ -105,15 +101,15 @@ void cli_lpwd();
 */
 void cli_cd(int socket_desc, char* file_path);
 
-/** Purpose:	To change directory of server
- *  Param:		socket descriptor of connection, filepath
+/** Purpose:	To change directory of client
+ *  Param:		filepath
  *  Return:		void
  *
 */
 void cli_lcd(char * cmd_path);
 
 /** Purpose:	To send and upload files to the server
- *  Param:		socket descriptor of connection, command token, filename
+ *  Param:		socket descriptor of connection, filename
  *  Return:		void
  *
 */

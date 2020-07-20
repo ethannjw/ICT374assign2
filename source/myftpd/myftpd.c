@@ -44,7 +44,7 @@ void claim_children()
     }
 }
 
-// change to daemon process
+/* change to daemon process */
 void daemon_init(char *dir)
 {
     pid_t pid;
@@ -96,12 +96,13 @@ int main(int argc, char *argv[])
     /* turn the program into a daemon */
     daemon_init(mydir);
 
-    // set the absolute path for the log file
+    /* set the absolute path for the log file */
 	char log_path[256];
     getcwd(mydir, sizeof(mydir));
     strcpy(log_path, mydir);
 	strcat(log_path, LOG_NAME);
-	printf("LOG PATH = %s\n", log_path);
+	printf("Log File:\n%s\n", log_path);
+	log_message(log_path, "Log File:\n%s\n", log_path);
 
     /* set up listening socket sd */
     if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
@@ -115,8 +116,6 @@ int main(int argc, char *argv[])
     ser_addr.sin_family = AF_INET;
     ser_addr.sin_port = htons(port);
     ser_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    /* note: accept client request sent to any one of the
-       network interface(s) on this host. */
 
     /* bind server address to socket sd */
     if (bind(sd, (struct sockaddr *)&ser_addr, sizeof(ser_addr)) <0 )
@@ -127,7 +126,7 @@ int main(int argc, char *argv[])
 
     /* become a listening socket */
     listen(sd, 5);
-    printf("Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
+    fprintf(stdout, "Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
     log_message(log_path, "Myftp server started up, listening on port %d\n", SERV_TCP_PORT);
 
     while (1)
