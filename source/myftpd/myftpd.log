@@ -83,3 +83,150 @@
 145 Jul 20 15:33 - [PWD] Successful send working directory length 131
 145 Jul 20 15:33 - [PWD] Successful send working directory info
 145 Jul 20 15:33 - [PWD] Send PWD complete
+2725 Jul 20 22:52 - Myftp server started up, listening on port 12345
+2809 Jul 20 22:52 - Client connection PID: 2809 IP: 127.0.0.1 
+2809 Jul 20 22:52 - OPCODE 'G' received
+2809 Jul 20 22:52 - GET command received
+2809 Jul 20 22:52 - [GET] Successful read file length 28
+2809 Jul 20 22:52 - [GET] Successful read filename Metdata-Jan-Dec2007-2009.csv
+2809 Jul 20 22:52 - [GET] Successful written opcode
+2809 Jul 20 22:52 - [GET] Successful written ackcode
+2809 Jul 20 22:52 - [GET] Successful written opcode
+2809 Jul 20 22:52 - [GET] Successful send file size 14134644
+2809 Jul 20 22:52 - [GET] File sent
+2809 Jul 20 22:52 - Client session closed
+3346 Jul 20 22:56 - Myftp server started up, listening on port 12345
+3386 Jul 20 22:57 - Client connection PID: 3386 IP: 127.0.0.1 
+3386 Jul 20 22:57 - OPCODE 'G' received
+3386 Jul 20 22:57 - GET command received
+3386 Jul 20 22:57 - [GET] Successful read file length 28
+3386 Jul 20 22:57 - [GET] Successful read filename Metdata-Jan-Dec2007-2009.csv
+3386 Jul 20 22:57 - [GET] Successful written opcode
+3386 Jul 20 22:57 - [GET] Successful written ackcode
+3386 Jul 20 22:57 - [GET] Successful written opcode
+3386 Jul 20 22:57 - [GET] Successful send file size 14134644
+3386 Jul 20 22:57 - [GET] File sent
+3386 Jul 20 22:57 - OPCODE 'P' received
+3386 Jul 20 22:57 - PUT command received
+3386 Jul 20 22:57 - [PUT] Successful read file length 28
+3386 Jul 20 22:57 - [PUT] Successful read filename Metdata-Jan-Dec2007-2009.csv
+3386 Jul 20 22:57 - [PUT] Successful written opcode
+3386 Jul 20 22:57 - [PUT] Successful written ackcode
+3386 Jul 20 22:57 - [PUT] Successful reading opcode
+3386 Jul 20 22:57 - [PUT] Successful read file size 14134644
+3386 Jul 20 22:57 - [PUT] File received
+3386 Jul 20 22:59 - OPCODE 'F' received
+3386 Jul 20 22:59 - DIR command received
+3386 Jul 20 22:59 - [DIR] Successful written opcode
+3386 Jul 20 22:59 - [DIR] Successful written ackcode
+3386 Jul 20 22:59 - [DIR] Successful send directory length 154
+3386 Jul 20 22:59 - [DIR] Successful send filenames info
+3386 Jul 20 22:59 - [DIR] Send FDR success
+3386 Jul 20 22:59 - OPCODE 'W' received
+3386 Jul 20 22:59 - PWD command received
+3386 Jul 20 22:59 - [PWD] Successful written opcode
+3386 Jul 20 22:59 - [PWD] Successful written ackcode
+3386 Jul 20 22:59 - [PWD] Successful send working directory length 49
+3386 Jul 20 22:59 - [PWD] Successful send working directory info
+3386 Jul 20 22:59 - [PWD] Send PWD complete
+3386 Jul 20 22:59 - OPCODE 'C' received
+3386 Jul 20 22:59 - CD command received
+3386 Jul 20 22:59 - [CD] Successful read file size 2
+3386 Jul 20 22:59 - [CD] Successful read cd instruction: ..
+3386 Jul 20 22:59 - [CD] Server done cd to: ..
+3386 Jul 20 22:59 - [CD] Successful written opcode
+3386 Jul 20 22:59 - [CD] Successful written ackcode
+3386 Jul 20 23:00 - OPCODE 'W' received
+3386 Jul 20 23:00 - PWD command received
+3386 Jul 20 23:00 - [PWD] Successful written opcode
+3386 Jul 20 23:00 - [PWD] Successful written ackcode
+3386 Jul 20 23:00 - [PWD] Successful send working directory length 42
+3386 Jul 20 23:00 - [PWD] Successful send working directory info
+3386 Jul 20 23:00 - [PWD] Send PWD complete
+3386 Jul 20 23:00 - OPCODE 'C' received
+3386 Jul 20 23:00 - CD command received
+3386 Jul 20 23:00 - [CD] Successful read file size 8
+3386 Jul 20 23:00 - [CD] Successful read cd instruction: /home/uz
+3386 Jul 20 23:00 - [CD] Server unable to cd to: /home/uz
+3386 Jul 20 23:00 - [CD] Successful written opcode
+3386 Jul 20 23:00 - [CD] Successful written ackcode
+3386 Jul 20 23:00 - OPCODE 'C' received
+3386 Jul 20 23:00 - CD command received
+3386 Jul 20 23:00 - [CD] Successful read file size 9
+3386 Jul 20 23:00 - [CD] Successful read cd instruction: /home/uzu
+3386 Jul 20 23:00 - [CD] Server done cd to: /home/uzu
+3386 Jul 20 23:00 - [CD] Successful written opcode
+3386 Jul 20 23:00 - [CD] Successful written ackcode
+3386 Jul 20 23:00 - OPCODE 'F' received
+3386 Jul 20 23:00 - DIR command received
+3386 Jul 20 23:00 - [DIR] Successful written opcode
+3386 Jul 20 23:00 - [DIR] Successful written ackcode
+3386 Jul 20 23:00 - [DIR] Successful send directory length 385
+3386 Jul 20 23:00 - [DIR] Successful send filenames info
+3386 Jul 20 23:00 - [DIR] Send FDR success
+3386 Jul 20 23:01 - OPCODE 'F' received
+3386 Jul 20 23:01 - DIR command received
+3386 Jul 20 23:01 - [DIR] Successful written opcode
+3386 Jul 20 23:01 - [DIR] Successful written ackcode
+3386 Jul 20 23:01 - [DIR] Successful send directory length 385
+3386 Jul 20 23:01 - [DIR] Successful send filenames info
+3386 Jul 20 23:01 - [DIR] Send FDR success
+3386 Jul 20 23:01 - OPCODE 'C' received
+3386 Jul 20 23:01 - CD command received
+3386 Jul 20 23:01 - [CD] Successful read file size 21
+3386 Jul 20 23:01 - [CD] Successful read cd instruction: /home/uzu/Assignment2
+3386 Jul 20 23:01 - [CD] Server done cd to: /home/uzu/Assignment2
+3386 Jul 20 23:01 - [CD] Successful written opcode
+3386 Jul 20 23:01 - [CD] Successful written ackcode
+3386 Jul 20 23:01 - OPCODE 'F' received
+3386 Jul 20 23:01 - DIR command received
+3386 Jul 20 23:01 - [DIR] Successful written opcode
+3386 Jul 20 23:01 - [DIR] Successful written ackcode
+3386 Jul 20 23:01 - [DIR] Successful send directory length 19
+3386 Jul 20 23:01 - [DIR] Successful send filenames info
+3386 Jul 20 23:01 - [DIR] Send FDR success
+3386 Jul 20 23:02 - OPCODE 'C' received
+3386 Jul 20 23:02 - CD command received
+3386 Jul 20 23:02 - [CD] Successful read file size 13
+3386 Jul 20 23:02 - [CD] Successful read cd instruction: ICT374assign2
+3386 Jul 20 23:02 - [CD] Server done cd to: ICT374assign2
+3386 Jul 20 23:02 - [CD] Successful written opcode
+3386 Jul 20 23:02 - [CD] Successful written ackcode
+3386 Jul 20 23:02 - OPCODE 'F' received
+3386 Jul 20 23:02 - DIR command received
+3386 Jul 20 23:02 - [DIR] Successful written opcode
+3386 Jul 20 23:02 - [DIR] Successful written ackcode
+3386 Jul 20 23:02 - [DIR] Successful send directory length 49
+3386 Jul 20 23:02 - [DIR] Successful send filenames info
+3386 Jul 20 23:02 - [DIR] Send FDR success
+3386 Jul 20 23:02 - OPCODE 'C' received
+3386 Jul 20 23:02 - CD command received
+3386 Jul 20 23:02 - [CD] Successful read file size 13
+3386 Jul 20 23:02 - [CD] Successful read cd instruction: source/myfptd
+3386 Jul 20 23:02 - [CD] Server unable to cd to: source/myfptd
+3386 Jul 20 23:02 - [CD] Successful written opcode
+3386 Jul 20 23:02 - [CD] Successful written ackcode
+3386 Jul 20 23:02 - OPCODE 'C' received
+3386 Jul 20 23:02 - CD command received
+3386 Jul 20 23:02 - [CD] Successful read file size 13
+3386 Jul 20 23:02 - [CD] Successful read cd instruction: source/myftpd
+3386 Jul 20 23:02 - [CD] Server done cd to: source/myftpd
+3386 Jul 20 23:02 - [CD] Successful written opcode
+3386 Jul 20 23:02 - [CD] Successful written ackcode
+3386 Jul 20 23:02 - OPCODE 'F' received
+3386 Jul 20 23:02 - DIR command received
+3386 Jul 20 23:02 - [DIR] Successful written opcode
+3386 Jul 20 23:02 - [DIR] Successful written ackcode
+3386 Jul 20 23:02 - [DIR] Successful send directory length 154
+3386 Jul 20 23:02 - [DIR] Successful send filenames info
+3386 Jul 20 23:02 - [DIR] Send FDR success
+3386 Jul 20 23:02 - OPCODE 'P' received
+3386 Jul 20 23:02 - PUT command received
+3386 Jul 20 23:02 - [PUT] Successful read file length 11
+3386 Jul 20 23:02 - [PUT] Successful read filename newfile.txt
+3386 Jul 20 23:02 - [PUT] Successful written opcode
+3386 Jul 20 23:02 - [PUT] Successful written ackcode
+3386 Jul 20 23:02 - [PUT] Successful reading opcode
+3386 Jul 20 23:02 - [PUT] Successful read file size 18
+3386 Jul 20 23:02 - [PUT] File received
+3386 Jul 20 23:03 - Client session closed
