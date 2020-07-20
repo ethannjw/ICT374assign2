@@ -32,8 +32,8 @@
 #define ERROR_CODE	    '1'
 
 /* ACK codes for PUT and GET */
-#define FILE_EXIST 'E'
-#define FILE_NOT_EXIST 'N'
+#define FILE_EXIST      'E'
+#define FILE_NOT_EXIST  'N'
 
 /* ACK codes for DIR */
 #define EXCEED_LENGTH   'L'
@@ -41,15 +41,7 @@
 #define MAX_TOKEN           256
 #define BUF_SIZE            256
 #define MAX_STRING_LENGTH   10000
-#define LOG_NAME		"/myftpd.log"	/* log file */
-
-
-/* desc type containing socket descriptor, client id */
-struct client_struct{
-	int socket_desc;
-	int cid;
-};
-typedef struct client_struct cli_desc;
+#define LOG_NAME		    "/myftpd.log"	/* log file */
 
 /** Purpose:	To log all interactions with the clients
  *  Param:		logfile, string format and arguments
@@ -57,7 +49,7 @@ typedef struct client_struct cli_desc;
  *
 */void log_message(char *file, const char *format, ...);
 
-/** Purpose:	Process OPCODE recieved from client
+/** Purpose:	Process OPCODE received from client
  *  Param:		socket descriptor of connection, IP address, logfile
  *  Return:		void
  *
@@ -85,8 +77,8 @@ void ser_pwd(int socket_desc, char *file);
 */
 void ser_cd(int socket_desc, char *file);
 
-/** Purpose:	To upload files to the server, logfile
- *  Param:		socket descriptor of connection
+/** Purpose:	To upload files to the server
+ *  Param:		socket descriptor of connection, logfile
  *  Return:		void
  *
 */
