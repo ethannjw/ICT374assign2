@@ -242,3 +242,172 @@
 4956 Jul 20 23:23 - [PUT] Successful read file size 14134644
 4956 Jul 20 23:23 - [PUT] File received
 4956 Jul 20 23:23 - Client session closed
+5836 Jul 20 23:33 - Myftp server started up, listening on port 12345
+5946 Jul 20 23:34 - Client connection PID: 5946 IP: 127.0.0.1 
+5946 Jul 20 23:34 - OPCODE 'W' received
+5946 Jul 20 23:34 - PWD command received
+5946 Jul 20 23:34 - [PWD] Successful written opcode
+5946 Jul 20 23:34 - [PWD] Successful written ackcode
+5946 Jul 20 23:34 - [PWD] Successful send working directory length 49
+5946 Jul 20 23:34 - [PWD] Successful send working directory info
+5946 Jul 20 23:34 - [PWD] Send PWD complete
+5946 Jul 20 23:34 - OPCODE 'F' received
+5946 Jul 20 23:34 - DIR command received
+5946 Jul 20 23:34 - [DIR] Successful written opcode
+5946 Jul 20 23:34 - [DIR] Successful written ackcode
+5946 Jul 20 23:34 - [DIR] Successful send directory length 137
+5946 Jul 20 23:34 - [DIR] Successful send filenames info
+5946 Jul 20 23:34 - [DIR] Send FDR success
+5946 Jul 20 23:38 - OPCODE 'C' received
+5946 Jul 20 23:38 - CD command received
+5946 Jul 20 23:38 - [CD] Successful read file size 2
+5946 Jul 20 23:38 - [CD] Successful read cd instruction: ..
+5946 Jul 20 23:38 - [CD] Server done cd to: ..
+5946 Jul 20 23:38 - [CD] Successful written opcode
+5946 Jul 20 23:38 - [CD] Successful written ackcode
+5946 Jul 20 23:47 - Client session closed
+6442 Jul 20 23:48 - Myftp server started up, listening on port 12345
+6526 Jul 20 23:48 - Client connection PID: 6526 IP: 127.0.0.1 
+6526 Jul 20 23:48 - OPCODE 'W' received
+6526 Jul 20 23:48 - PWD command received
+6526 Jul 20 23:48 - [PWD] Successful written opcode
+6526 Jul 20 23:48 - [PWD] Successful written ackcode
+6526 Jul 20 23:48 - [PWD] Successful send working directory length 49
+6526 Jul 20 23:48 - [PWD] Successful send working directory info
+6526 Jul 20 23:48 - [PWD] Send PWD complete
+6526 Jul 20 23:49 - OPCODE 'F' received
+6526 Jul 20 23:49 - DIR command received
+6526 Jul 20 23:49 - [DIR] Successful written opcode
+6526 Jul 20 23:49 - [DIR] Successful written ackcode
+6526 Jul 20 23:49 - [DIR] Successful send directory length 129
+6526 Jul 20 23:49 - [DIR] Successful send filenames info
+6526 Jul 20 23:49 - [DIR] Send FDR success
+6526 Jul 20 23:49 - OPCODE 'G' received
+6526 Jul 20 23:49 - GET command received
+6526 Jul 20 23:49 - [GET] Successful read file length 7
+6526 Jul 20 23:49 - [GET] Successful read filename cow.txt
+6526 Jul 20 23:49 - [GET] Successful written opcode
+6526 Jul 20 23:49 - [GET] Successful written ackcode
+6526 Jul 20 23:49 - [GET] Successful written opcode
+6526 Jul 20 23:49 - [GET] Successful send file size 7
+6526 Jul 20 23:49 - [GET] File sent
+6526 Jul 20 23:49 - OPCODE 'G' received
+6526 Jul 20 23:49 - GET command received
+6526 Jul 20 23:49 - [GET] Successful read file length 3
+6526 Jul 20 23:49 - [GET] Successful read filename ttt
+6526 Jul 20 23:49 - [GET] File does not exist
+6526 Jul 20 23:49 - [GET] Successful written opcode
+6526 Jul 20 23:49 - [GET] Successful written ackcode
+6526 Jul 20 23:49 - [GET] GET request failed
+6526 Jul 20 23:50 - OPCODE 'P' received
+6526 Jul 20 23:50 - PUT command received
+6526 Jul 20 23:50 - [PUT] Successful read file length 8
+6526 Jul 20 23:50 - [PUT] Successful read filename duck.txt
+6526 Jul 20 23:50 - [PUT] Successful written opcode
+6526 Jul 20 23:50 - [PUT] Successful written ackcode
+6526 Jul 20 23:50 - [PUT] Successful reading opcode
+6526 Jul 20 23:50 - [PUT] Successful read file size 12
+6526 Jul 20 23:50 - [PUT] File received
+6526 Jul 20 23:51 - OPCODE 'C' received
+6526 Jul 20 23:51 - CD command received
+6526 Jul 20 23:51 - [CD] Successful read file size 5
+6526 Jul 20 23:51 - [CD] Successful read cd instruction: /home
+6526 Jul 20 23:51 - [CD] Server done cd to: /home
+6526 Jul 20 23:51 - [CD] Successful written opcode
+6526 Jul 20 23:51 - [CD] Successful written ackcode
+6526 Jul 20 23:51 - OPCODE 'F' received
+6526 Jul 20 23:51 - DIR command received
+6526 Jul 20 23:51 - [DIR] Successful written opcode
+6526 Jul 20 23:51 - [DIR] Successful written ackcode
+6526 Jul 20 23:51 - [DIR] Successful send directory length 14
+6526 Jul 20 23:51 - [DIR] Successful send filenames info
+6526 Jul 20 23:51 - [DIR] Send FDR success
+6526 Jul 20 23:51 - OPCODE 'W' received
+6526 Jul 20 23:51 - PWD command received
+6526 Jul 20 23:51 - [PWD] Successful written opcode
+6526 Jul 20 23:51 - [PWD] Successful written ackcode
+6526 Jul 20 23:51 - [PWD] Successful send working directory length 5
+6526 Jul 20 23:51 - [PWD] Successful send working directory info
+6526 Jul 20 23:51 - [PWD] Send PWD complete
+6526 Jul 20 23:51 - OPCODE 'F' received
+6526 Jul 20 23:51 - DIR command received
+6526 Jul 20 23:51 - [DIR] Successful written opcode
+6526 Jul 20 23:51 - [DIR] Successful written ackcode
+6526 Jul 20 23:51 - [DIR] Successful send directory length 14
+6526 Jul 20 23:51 - [DIR] Successful send filenames info
+6526 Jul 20 23:51 - [DIR] Send FDR success
+6526 Jul 20 23:51 - Client session closed
+7501 Jul 21 00:05 - Client connection PID: 7501 IP: 127.0.0.1 
+7501 Jul 21 00:05 - OPCODE 'F' received
+7501 Jul 21 00:05 - DIR command received
+7501 Jul 21 00:05 - [DIR] Successful written opcode
+7501 Jul 21 00:05 - [DIR] Successful written ackcode
+7501 Jul 21 00:05 - [DIR] Successful send directory length 138
+7501 Jul 21 00:05 - [DIR] Successful send filenames info
+7501 Jul 21 00:05 - [DIR] Send FDR success
+7501 Jul 21 00:05 - Client session closed
+8019 Jul 21 00:16 - Myftp server started up, listening on port 12345
+8057 Jul 21 00:16 - Client connection PID: 8057 IP: 127.0.0.1 
+8057 Jul 21 00:16 - OPCODE 'W' received
+8057 Jul 21 00:16 - PWD command received
+8057 Jul 21 00:16 - [PWD] Successful written opcode
+8057 Jul 21 00:16 - [PWD] Successful written ackcode
+8057 Jul 21 00:16 - [PWD] Successful send working directory length 49
+8057 Jul 21 00:16 - [PWD] Successful send working directory info
+8057 Jul 21 00:16 - [PWD] Send PWD complete
+8057 Jul 21 00:16 - OPCODE 'F' received
+8057 Jul 21 00:16 - DIR command received
+8057 Jul 21 00:16 - [DIR] Successful written opcode
+8057 Jul 21 00:16 - [DIR] Successful written ackcode
+8057 Jul 21 00:16 - [DIR] Successful send directory length 138
+8057 Jul 21 00:16 - [DIR] Successful send filenames info
+8057 Jul 21 00:16 - [DIR] Send FDR success
+8057 Jul 21 00:16 - OPCODE 'C' received
+8057 Jul 21 00:16 - CD command received
+8057 Jul 21 00:16 - [CD] Successful read file size 2
+8057 Jul 21 00:16 - [CD] Successful read cd instruction: ..
+8057 Jul 21 00:16 - [CD] Server done cd to: ..
+8057 Jul 21 00:16 - [CD] Successful written opcode
+8057 Jul 21 00:16 - [CD] Successful written ackcode
+8057 Jul 21 00:16 - OPCODE 'W' received
+8057 Jul 21 00:16 - PWD command received
+8057 Jul 21 00:16 - [PWD] Successful written opcode
+8057 Jul 21 00:16 - [PWD] Successful written ackcode
+8057 Jul 21 00:16 - [PWD] Successful send working directory length 42
+8057 Jul 21 00:16 - [PWD] Successful send working directory info
+8057 Jul 21 00:16 - [PWD] Send PWD complete
+8057 Jul 21 00:16 - OPCODE 'F' received
+8057 Jul 21 00:16 - DIR command received
+8057 Jul 21 00:16 - [DIR] Successful written opcode
+8057 Jul 21 00:16 - [DIR] Successful written ackcode
+8057 Jul 21 00:16 - [DIR] Successful send directory length 36
+8057 Jul 21 00:16 - [DIR] Successful send filenames info
+8057 Jul 21 00:16 - [DIR] Send FDR success
+8057 Jul 21 00:16 - Client session closed
+8276 Jul 21 00:16 - Client connection PID: 8276 IP: 127.0.0.1 
+8276 Jul 21 00:17 - OPCODE 'P' received
+8276 Jul 21 00:17 - PUT command received
+8276 Jul 21 00:17 - [PUT] Successful read file length 7
+8276 Jul 21 00:17 - [PUT] Successful read filename cat.txt
+8276 Jul 21 00:17 - [PUT] Successful written opcode
+8276 Jul 21 00:17 - [PUT] Successful written ackcode
+8276 Jul 21 00:17 - [PUT] Successful reading opcode
+8276 Jul 21 00:17 - [PUT] Successful read file size 8
+8276 Jul 21 00:17 - [PUT] File received
+8276 Jul 21 00:17 - OPCODE 'G' received
+8276 Jul 21 00:17 - GET command received
+8276 Jul 21 00:17 - [GET] Successful read file length 14
+8276 Jul 21 00:17 - [GET] Successful read filename Characters.csv
+8276 Jul 21 00:17 - [GET] Successful written opcode
+8276 Jul 21 00:17 - [GET] Successful written ackcode
+8276 Jul 21 00:17 - [GET] Successful written opcode
+8276 Jul 21 00:17 - [GET] Successful send file size 71
+8276 Jul 21 00:17 - [GET] File sent
+8276 Jul 21 00:17 - OPCODE 'F' received
+8276 Jul 21 00:17 - DIR command received
+8276 Jul 21 00:17 - [DIR] Successful written opcode
+8276 Jul 21 00:17 - [DIR] Successful written ackcode
+8276 Jul 21 00:17 - [DIR] Successful send directory length 146
+8276 Jul 21 00:17 - [DIR] Successful send filenames info
+8276 Jul 21 00:17 - [DIR] Send FDR success
+8276 Jul 21 00:17 - Client session closed

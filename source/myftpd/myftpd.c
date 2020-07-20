@@ -29,7 +29,7 @@
 #include  <errno.h>         /* extern int errno, EINTR, perror() */
 #include  <sys/stat.h>      /* fstat(), lstat(), stat() */
 
-#include  "commandd.h"
+#include  "commandd.h"		/* head file all command function */
 
 #define  SERV_TCP_PORT  12345   /* default server listening port */
 
@@ -44,6 +44,7 @@ void claim_children()
     }
 }
 
+// change to daemon process
 void daemon_init(char *dir)
 {
     pid_t pid;
@@ -60,9 +61,6 @@ void daemon_init(char *dir)
         exit(0);                  /* parent goes bye-bye */
     }
 
-    //char dir[BUF_SIZE];
-    //getcwd(dir, sizeof(dir));
-
     /* child continues */
     setsid();                      /* become session leader */
     chdir(dir);                    /* change working directory */
@@ -77,6 +75,7 @@ void daemon_init(char *dir)
 
 int main(int argc, char *argv[])
 {
+    // variables
     int sd, nsd;
     pid_t pid;
     unsigned short port;
@@ -84,7 +83,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in ser_addr, cli_addr;
     char mydir[BUF_SIZE];
 
-    port = SERV_TCP_PORT;
+    port = SERV_TCP_PORT; // set the port number 12345
 
     /* get the directory */
     if (argc == 1)
@@ -163,6 +162,7 @@ int main(int argc, char *argv[])
         close(sd); /* data exchange through socket ns */
         serve_a_client(nsd, cli_addr, log_path);
         log_message(log_path, "Client session closed\n");
+
         exit(0);
     }
 }

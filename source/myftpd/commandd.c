@@ -199,7 +199,6 @@ void ser_pwd(int socket_desc, char *file)
         log_message(file, "[PWD] Error getting current working directory\n");
 
     }
-	printf("BUF: %s\n", buf);
 
 	// write the opcode to client
 	if (write_opcode(socket_desc, OP_PWD) == -1)

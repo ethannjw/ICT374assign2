@@ -15,7 +15,6 @@ int tokenise (char line[], char *token[])
 
     while (tk != NULL)
     {
-
         ++i;
         if (i>=MAX_TOKEN)
         {
@@ -43,7 +42,6 @@ void cmd_prompt(int socket_desc)
 
 	while ( 1 )
 	{
-
 		fprintf(stdout, " > "); // command prompt
 
 		fgets( input, 99, stdin);
@@ -52,9 +50,7 @@ void cmd_prompt(int socket_desc)
 		rmReturnChar(input);
 
 		if (strcmp(input, "quit") == 0)
-		{
 			return;
-		}
 		else
 		{
 	    	bzero(tokenArray, sizeof(tokenArray));
@@ -108,8 +104,6 @@ void cmd_prompt(int socket_desc)
 					fprintf(stdout, "Invalid comannd, try again. type \"help\" for documentation\n");
 				}
 			}
-
-
 		}
 	}
 }
@@ -117,88 +111,72 @@ void cmd_prompt(int socket_desc)
 // list files in server
 void cli_fdr(int socket_desc)
 {
-	char op_code;
-	char ack_code;
+	// variables
+	char op_code, ack_code;
 	int file_size, read_size;
 
 	// Send the FDR opcode which is 'F'
-	if(write_opcode(socket_desc, OP_FDR) == -1)
+	if (write_opcode(socket_desc, OP_FDR) == -1)
 	{
-		perror("Client: Failed to send FDR 'F' command");
+		fprintf(stderr, "Client: Failed to write opcode\n");
+		return;
 	}
 
 	// Read the opcode from server
-	if(read_opcode(socket_desc, &op_code) == -1)
+	if (read_opcode(socket_desc, &op_code) == -1)
 	{
-		perror("Client: Failed to read FDR 'F' from server");
+		fprintf(stderr, "Client: Failed to read opcode\n");
+		return;
 	}
 
 	// Check if received correct opcode
-	if(op_code != OP_FDR)
+	if (op_code != OP_FDR)
 	{
 		fprintf(stderr, "Client: Invalid opcode from fdr: %c\n", op_code);
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful get opcode '%c'\n", op_code);
+		return;
 	}
 
     // Read the ackcode from server
 	if(read_opcode(socket_desc, &ack_code) == -1)
 	{
-		perror("Client: Failed to read ack code from server");
+		fprintf(stderr, "Client: Failed to read ackcode\n");
+		return;
 	}
 
-	// Received ack code
-	if(ack_code == SUCCESS_CODE)
-	{
-	    fprintf(stdout, "Server: Successful read files with code '%c'\n", ack_code);
-	}
-	else if (ack_code == EXCEED_LENGTH)
+	if (ack_code == EXCEED_LENGTH)
     {
 	    fprintf(stdout, "Server: Exceed program length with code '%c'\n", ack_code);
 	}
-    else
-    {
-		fprintf(stderr, "Client: Invalid opcode from fdr: %c\n", ack_code);
-	}
 
 	// Read the size of the file string from socket
-	if(read_length(socket_desc, &file_size) == -1)
+	if (read_length(socket_desc, &file_size) == -1)
 	{
-		perror("Client: Failed to read path size\n");
+		fprintf(stderr, "Client: Failed to read path size\n");
 		return;
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful get length %d\n", file_size);
 	}
 
     // Allocate memory for the path
 	char buf[(sizeof(char) * (file_size+1))];
 
 	// Read the directory path
-	if((read_size = readn(socket_desc, buf, (sizeof(char) * (file_size)))) == -1)
+	if ((read_size = readn(socket_desc, buf, (sizeof(char) * (file_size)))) == -1)
     {
-		perror("Client: Failed to read directory\n");
+		fprintf(stderr, "Client: Failed to read directory\n");
 		return;
 	}
-    else
-    {
-        fprintf(stdout, "Client: Successful read data of size %d\n", read_size);
-    }
 
 	buf[file_size] = '\0';
 
 	fprintf(stdout, "%s\n", buf);
-
 }
 
 // list files in client
 void cli_lfdr()
 {
+	// variables
     char * filearray[MAX_TOKEN];
 	int filecount = 0;
+
 	// Open current dir and struct
 	DIR *dp;
 	struct dirent *direntp;
@@ -208,6 +186,7 @@ void cli_lfdr()
 		fprintf(stderr, "Client: Failed to open directory\n");
         return;
 	}
+
 	// insert the filenames
 	while (( direntp = readdir(dp)) != NULL )
 	{
@@ -236,62 +215,50 @@ void cli_lfdr()
 // print currect working directory of server
 void cli_pwd(int socket_desc)
 {
+	// variables
 	char op_code, ack_code;
 	int file_size, read_size;
 
 	// Send one opcode which is ASCII char 'W'
-	if(write_opcode(socket_desc, OP_PWD) == -1)
+	if (write_opcode(socket_desc, OP_PWD) == -1)
 	{
-		perror("Client: Failed to send pwd command\n");
+		fprintf(stderr, "Client: Failed to write opcode\n");
 		return;
 	}
 
 	// Read the opcode from the server, supposed to be 'W'
-	if(read_opcode(socket_desc, &op_code) == -1)
+	if (read_opcode(socket_desc, &op_code) == -1)
 	{
-		perror("Client: Unable to read opcode\n");
+		fprintf(stderr, "Client: Failed to read opcode\n");
 		return;
 	}
 
     // Read the opcode from the server, supposed to be 'W'
-	if(read_opcode(socket_desc, &ack_code) == -1)
+	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
-		perror("Client: Unable to read ackcode\n");
+		fprintf(stderr, "Client: Failed to read ackcode\n");
 		return;
 	}
-
 
 	// Return if wrong opcode
-	if(op_code != OP_PWD)
+	if (op_code != OP_PWD)
 	{
-		fprintf(stderr, "Client: Client: Invalid opcode from pwd: %c\n", op_code);
+		fprintf(stderr, "Client: Invalid opcode from pwd: %c\n", op_code);
 		return;
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful get opcode '%c'\n", op_code);
 	}
 
     // Receive the ack_code
-	if(ack_code != SUCCESS_CODE)
+	if (ack_code != SUCCESS_CODE)
 	{
 		fprintf(stderr, "Server: Failed to get pwd with code %c\n", ack_code);
 		return;
 	}
-    else
-    {
-        fprintf(stdout, "Server: Successful ack code '%c'\n", ack_code);
-	}
 
 	// Read the size of the path from socket
-	if(read_length(socket_desc, &file_size) == -1)
+	if (read_length(socket_desc, &file_size) == -1)
 	{
-		perror("Client: Failed to read path size\n");
+		fprintf(stderr, "Client: Failed to read path size\n");
 		return;
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful get length %d\n", file_size);
 	}
 
     // Print out the working dir
@@ -301,14 +268,10 @@ void cli_pwd(int socket_desc)
         char working_dir_path[(sizeof(char) * (file_size+1))];
 
         // Read the directory path
-        if((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
-         {
-            perror("Client: Failed to read directory\n");
-            return;
-        }
-        else
+        if ((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
         {
-            fprintf(stdout, "Client: Successful read data of size %d\n", read_size);
+            fprintf(stderr, "Client: Failed to read directory\n");
+			return;
         }
 
         working_dir_path[file_size] = '\0';
@@ -329,39 +292,33 @@ void cli_lpwd()
 // change directory of server
 void cli_cd(int socket_desc, char* cmd_path)
 {
-    char op_code;
-	char ack_code;
+	// variables
+    char op_code, ack_code;
     rmReturnChar(cmd_path);
+
 	// process the filepath
 	int path_len = strlen(cmd_path);
 	char file_path[path_len+1];
 	strcpy(file_path, cmd_path);
-	// set last character to null
-	file_path[path_len] = '\0';
+	
+	file_path[path_len] = '\0'; // set last character to null
 
 	// Send opcode 'C'
-	if(write_opcode(socket_desc, OP_CD) == -1){
-		fprintf(stderr, "Client: Failed to send %c opcode\n", OP_CD);
+	if (write_opcode(socket_desc, OP_CD) == -1)
+	{
+		fprintf(stderr, "Client: Failed to write opcode\n");
 		return;
 	}
-	else
-    {
-        fprintf(stdout, "Client: Successful sent %c opcode\n", OP_CD);
-    }
 
     // send path length
-	if(write_length(socket_desc, path_len) == -1){
+	if (write_length(socket_desc, path_len) == -1)
+	{
 		fprintf(stderr, "Client: Failed to write %d path_len\n", path_len);
 		return;
 	}
-	else
-    {
-        fprintf(stdout, "Client: Successful written %d path len\n", path_len);
-
-    }
 
     // send the path
-	if(writen(socket_desc, file_path, strlen(file_path)) == -1)
+	if (writen(socket_desc, file_path, strlen(file_path)) == -1)
     {
 		fprintf(stderr, "Client: Failed to write directory name %s to server\n", file_path);
 		return;
@@ -370,13 +327,9 @@ void cli_cd(int socket_desc, char* cmd_path)
     // read the reply from server
 	if(read_opcode(socket_desc, &op_code) == -1)
     {
-		fprintf(stderr, "Client: Failed to read opcode from server\n");
+		fprintf(stderr, "Client: Failed to read opcode\n");
 		return;
 	}
-    else
-    {
-        fprintf(stdout, "Client: Successful read '%c' opcode\n", op_code);
-    }
 
 	if(op_code != OP_CD)
     {
@@ -386,17 +339,7 @@ void cli_cd(int socket_desc, char* cmd_path)
 
 	if(read_opcode(socket_desc, &ack_code) == -1)
     {
-		perror("Client: Failed to read ackcode\n");
-		return;
-	}
-    else
-    {
-        fprintf(stdout, "Client: Successful read ack code %c\n", ack_code);
-    }
-
-	if(ack_code == SUCCESS_CODE)
-    {
-        fprintf(stdout, "Server: Successful change directory to %s\n", file_path);
+		fprintf(stderr, "Client: Failed to read ackcode\n");
 		return;
 	}
 
@@ -411,6 +354,7 @@ void cli_cd(int socket_desc, char* cmd_path)
 void cli_lcd(char * cmd_path)
 {
 	rmReturnChar(cmd_path);
+
 	if(chdir(cmd_path) == -1)
     {
 		fprintf(stderr, "Client: Unable to CD to %s\n", cmd_path);
@@ -421,34 +365,31 @@ void cli_lcd(char * cmd_path)
 // upload file from client to server
 void cli_put(int socket_desc, char *filename)
 {
+	// variables 
 	char op_code, ack_code;
 	int fd, file_size, nr;
 	struct stat stats;
-	char buf[BUF_SIZE];
+	char buf[BUF_SIZE]; // buffer for file content
 
-	int file_len = strlen(filename);
-	char file_name[file_len + 1];
+	int file_len = strlen(filename); // set file length
+	char file_name[file_len + 1]; // define file_name
 
-	strcpy(file_name, filename);
-	// set last character to null
-	file_name[file_len] = '\0';
+	strcpy(file_name, filename); // copy filename to file_name
+	
+	file_name[file_len] = '\0'; // set last character to null
 
 	// file validation
 	if ((fd = open(file_name, O_RDONLY)) == -1)
 	{
-		fprintf(stderr, "Failed to open file\n");
+		fprintf(stderr, "Failed to read file\n");
 		return;
-	}
-	else
-	{
-		fprintf(stdout, "Successful read the file\n");
 	}
 
     // check for fstat
     if(fstat(fd, &stats) < 0)
     {
-            fprintf(stderr, "Failed to read fstat\n");
-            return;
+        fprintf(stderr, "Failed to read fstat\n");
+        return;
     }
 
 	file_size = stats.st_size; // set file size
@@ -456,56 +397,36 @@ void cli_put(int socket_desc, char *filename)
 	// send opcode to server
 	if (write_opcode(socket_desc, OP_PUT) == -1)
 	{
-		fprintf(stderr, "Failed to write opcode\n");
+		fprintf(stderr, "Client: Failed to write opcode\n");
 		return;
-	}
-    else
-    {
-        fprintf(stdout, "Successful written opcode\n");
 	}
 
 	// sent file length
 	if (write_length(socket_desc, file_len) == -1)
 	{
-		fprintf(stderr, "Failed to send length\n");
+		fprintf(stderr, "Client: Failed to send length\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful read length of %d\n", file_len);
 	}
 
 	// send file name
 	if (writen(socket_desc, file_name, file_len) < 0)
 	{
-		fprintf(stderr, "Failed to send filename\n");
+		fprintf(stderr, "Client: Failed to send filename\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful send filename of %s\n", file_name);
 	}
 
 	// read opcode from server
 	if (read_opcode(socket_desc, &op_code) == -1)
 	{
-		fprintf(stderr, "Failed to read opcode\n");
+		fprintf(stderr, "Client: Failed to read opcode\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful reading opcode\n");
 	}
 
 	// read ackcode from server
 	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
-		fprintf(stderr, "Failed to read ackcode\n");
+		fprintf(stderr, "Client: Failed to read ackcode\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful reading ackcode\n");
 	}
 
 	// send file data
@@ -513,34 +434,24 @@ void cli_put(int socket_desc, char *filename)
 	{
 		if (write_opcode(socket_desc, OP_DATA) == -1)
 		{
-			fprintf(stderr, "Failed to write opcode\n");
+			fprintf(stderr, "Client: Failed to write opcode\n");
 			return;
-		}
-		else
-		{
-			fprintf(stdout, "Successful written opcode\n");
 		}
 
 		if (write_length(socket_desc, file_size) == -1)
 		{
-			fprintf(stderr, "Failed to send length\n");
+			fprintf(stderr, "Client: Failed to send length\n");
 			return;
-		}
-		else
-		{
-			fprintf(stdout, "Successful read filesize of %d\n", file_size);
 		}
 
 		while ((nr = readn(fd, buf, BUF_SIZE)) > 0)
 		{
 			if (writen(socket_desc, buf, nr) == -1)
 			{
-				fprintf(stdout, "Failed to send file content\n");
+				fprintf(stdout, "Client: Failed to send file content\n");
 				return;
 			}
 		}
-
-		fprintf(stdout, "File sent\n");
 	}
 	else if (ack_code == FILE_EXIST)
 	{
@@ -557,15 +468,16 @@ void cli_put(int socket_desc, char *filename)
 // download file from server to client
 void cli_get(int socket_desc, char *file_name)
 {
+	// variables
 	char op_code, ack_code;
 	int fd, file_size, block_size, nr, nw;
-	char buf[BUF_SIZE];
+	char buf[BUF_SIZE]; // buffer for file content
+
 	int file_len = strlen(file_name);
 
 	// check for file exist or error creating file
 	if (access(file_name, F_OK) >= 0)
 	{
-		//ack_code = FILE_EXIST;
 		fprintf(stderr, "File exists\n");
 		return;
 	}
@@ -573,62 +485,42 @@ void cli_get(int socket_desc, char *file_name)
 	// send opcode to server
 	if (write_opcode(socket_desc, OP_GET) == -1)
 	{
-		fprintf(stderr, "Failed to write opcode\n");
+		fprintf(stderr, "Client: Failed to write opcode\n");
 		return;
-	}
-    else
-    {
-        fprintf(stdout, "Successful written opcode\n");
 	}
 
 	// send file length to server
 	if (write_length(socket_desc, file_len) == -1)
 	{
-		fprintf(stderr, "Failed to write length\n");
+		fprintf(stderr, "Client: Failed to write length\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful write length of %d\n", file_len);
 	}
 
 	// send file name to server
 	if (writen(socket_desc, file_name, file_len) == -1)
 	{
-		fprintf(stderr, "Failed to write filename\n");
+		fprintf(stderr, "Client: Failed to write filename\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful write filename of %s\n", file_name);
 	}
 
 	// read opcode from server
 	if (read_opcode(socket_desc, &op_code) == -1)
 	{
-		fprintf(stderr, "Failed to read opcode\n");
+		fprintf(stderr, "Client: Failed to read opcode\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful reading opcode\n");
 	}
 
 	// read ackcode from server
 	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
-		fprintf(stderr, "Failed to read ackcode\n");
+		fprintf(stderr, "Client: Failed to read ackcode\n");
 		return;
-	}
-	else
-    {
-        fprintf(stdout, "Successful reading ackcode\n");
 	}
 
 	if ((fd = open(file_name, O_WRONLY|O_CREAT, 0766)) < 0)
 	{
 		ack_code = ERROR_CODE;
-		fprintf(stderr, "Failed to create file\n");
+		fprintf(stderr, "Client: Failed to create file\n");
 		return;
 	}
 
@@ -637,26 +529,18 @@ void cli_get(int socket_desc, char *file_name)
 		// read opcode from server
 		if (read_opcode(socket_desc, &op_code) == -1)
 		{
-			fprintf(stderr, "Failed to read ackcode\n");
+			fprintf(stderr, "Client: Failed to read ackcode\n");
 			return;
-		}
-		else
-		{
-			fprintf(stdout, "Successful reading ackcode\n");
 		}
 
 		// read the file size
 		if (read_length(socket_desc, &file_size) == -1)
 		{
-			fprintf(stderr, "Failed to read size\n");
+			fprintf(stderr, "Client: Failed to read size\n");
 			return;
 		}
-		else
-		{
-			fprintf(stdout, "Successful read file size of %d\n", file_size);
-		}
 
-		block_size = BUF_SIZE;
+		block_size = BUF_SIZE; // set block size
 
 		while (file_size > 0)
 		{
@@ -667,19 +551,17 @@ void cli_get(int socket_desc, char *file_name)
 
 			if ((nr = readn(socket_desc, buf, block_size)) == -1)
 			{
-				fprintf(stdout, "Failed to read\n");
-				return; // connection broken down
+				fprintf(stdout, "Client: Failed to read\n");
+				return;
 			}
 
 			if ((nw = writen(fd, buf, nr)) < nr)
 			{
-				fprintf(stdout, "Failed to write\n");
+				fprintf(stdout, "Client: Failed to write\n");
 				return;
 			}
 			file_size -= nw;
 		}
-
-		fprintf(stdout, "File received\n");
 	}
 	else if (ack_code == FILE_NOT_EXIST)
 	{

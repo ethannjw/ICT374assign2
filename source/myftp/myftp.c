@@ -19,17 +19,18 @@
 *			    - quit - to terminate the myftp session
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
+#include  <stdlib.h>        /* exit(), free() */
+#include  <stdio.h>         /* printf(), fprintf(), perror() */
+#include  <sys/types.h>     /* pid_t, u_long, u_short */
+#include  <sys/socket.h>    /* struct sockaddr, socket(), etc */
 #include <netinet/in.h>		// struct sockaddr_in, htons, htonl
 #include <netdb.h>		    // struct hostent, gethostbyname()
-#include <string.h>
+#include  <string.h>        /* strlen(), strcmp() etc */
 #include <stdio.h>		    // stdin(), stdout()
 #include <stdlib.h>		    // exit()
-#include <unistd.h>
-#include "command.h"        // all the main commands
+#include <unistd.h>        /* read(), write() */
+
+#include "command.h"		/* head file all command function */
 
 #define SERV_TCP_PORT 12345	// default server listening port
 

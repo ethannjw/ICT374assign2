@@ -8,13 +8,8 @@
 #include <stdlib.h>        /* exit(), free() */
 #include <stdio.h>         /* printf()  */
 #include <sys/types.h>     /* pid_t, u_long, u_short */
-//#include <sys/socket.h>    /* struct sockaddr, socket(), etc */
-//#include <netinet/in.h>    /* struct sockaddr_in, htons(), htonl() */
-//#include <sys/wait.h>      /* waitpid(), WNOHAND */
-//#include <signal.h>        /* SIGCHLD, sigaction() */
 #include <unistd.h>        /* read(), write() */
 #include <string.h>        /* strlen(), strcmp() etc */
-//#include <errno.h>         /* extern int errno, EINTR, perror() */
 #include <sys/stat.h>      /* fstat(), lstat(), stat() */
 #include <fcntl.h>         /* manipulate file descriptor */
 #include <dirent.h>	       /* DIR */
