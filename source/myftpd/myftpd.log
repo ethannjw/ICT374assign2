@@ -1,0 +1,58 @@
+85 Jul 20 08:56 - OPCODE 'W' received
+85 Jul 20 08:56 - PWD command received
+85 Jul 20 08:56 - [PWD] Successful written opcode
+85 Jul 20 08:56 - [PWD] Successful send working directory length 128
+105 Jul 20 10:05 - Myftp server started up, listening on port 12345
+148 Jul 20 10:06 - Client connection PID: 148 IP: 127.0.0.1 
+148 Jul 20 10:06 - OPCODE 'F' received
+148 Jul 20 10:06 - DIR command received
+148 Jul 20 10:06 - [DIR] Successful written opcode
+148 Jul 20 10:06 - [DIR] Successful written ackcode
+148 Jul 20 10:06 - [DIR] Successful send directory length 137
+148 Jul 20 10:06 - [DIR] Successful send filenames info
+148 Jul 20 10:06 - [DIR] Send FDR success
+148 Jul 20 10:06 - OPCODE 'C' received
+148 Jul 20 10:06 - CD command received
+148 Jul 20 10:06 - [CD] Successful read file size 4
+148 Jul 20 10:06 - [CD] Successful read cd instruction: /bin
+148 Jul 20 10:06 - [CD] Server done cd to: /bin
+148 Jul 20 10:06 - [CD] Successful written opcode
+148 Jul 20 10:06 - [CD] Successful written ackcode
+148 Jul 20 10:07 - Client session closed
+159 Jul 20 10:07 - Client connection PID: 159 IP: 127.0.0.1 
+159 Jul 20 10:07 - OPCODE 'C' received
+159 Jul 20 10:07 - CD command received
+159 Jul 20 10:07 - [CD] Successful read file size 5
+159 Jul 20 10:07 - [CD] Successful read cd instruction: /sbin
+159 Jul 20 10:07 - [CD] Server done cd to: /sbin
+159 Jul 20 10:07 - [CD] Successful written opcode
+159 Jul 20 10:07 - [CD] Successful written ackcode
+159 Jul 20 10:07 - OPCODE 'F' received
+159 Jul 20 10:07 - DIR command received
+159 Jul 20 10:07 - [DIR] Successful written opcode
+159 Jul 20 10:07 - [DIR] Successful written ackcode
+159 Jul 20 10:07 - [DIR] Successful send directory length 2083
+159 Jul 20 10:07 - [DIR] Successful send filenames info
+159 Jul 20 10:07 - [DIR] Send FDR success
+159 Jul 20 10:12 - Client session closed
+187 Jul 20 10:12 - Client connection PID: 187 IP: 127.0.0.1 
+187 Jul 20 10:12 - OPCODE 'F' received
+187 Jul 20 10:12 - DIR command received
+187 Jul 20 10:12 - [DIR] Successful written opcode
+187 Jul 20 10:12 - [DIR] Successful written ackcode
+187 Jul 20 10:12 - [DIR] Successful send directory length 137
+187 Jul 20 10:12 - [DIR] Successful send filenames info
+187 Jul 20 10:12 - [DIR] Send FDR success
+187 Jul 20 10:12 - OPCODE 'C' received
+187 Jul 20 10:12 - CD command received
+187 Jul 20 10:12 - [CD] Successful read file size 3
+187 Jul 20 10:12 - [CD] Successful read cd instruction: ter
+187 Jul 20 10:12 - [CD] Server unable to cd to: ter
+187 Jul 20 10:12 - [CD] Successful written opcode
+187 Jul 20 10:12 - [CD] Successful written ackcode
+187 Jul 20 10:13 - Client session closed
+198 Jul 20 10:13 - Client connection PID: 198 IP: 127.0.0.1 
+198 Jul 20 10:13 - Client session closed
+200 Jul 20 10:15 - Myftp server started up, listening on port 12345
+211 Jul 20 10:15 - Client connection PID: 211 IP: 127.0.0.1 
+211 Jul 20 10:16 - Client session closed

@@ -197,23 +197,39 @@ void cli_fdr(int socket_desc)
 // list files in client
 void cli_lfdr()
 {
-	char filenames[BUF_SIZE] = "";
+    char * filearray[MAX_TOKEN];
 	int filecount = 0;
 	// Open current dir and struct
 	DIR *dp;
 	struct dirent *direntp;
-	dp = opendir(".");
-
+    if ((dp = opendir(".")) == NULL)
+	{
+		// set to first entry
+		fprintf(stderr, "Client: Failed to open directory\n");
+        return;
+	}
 	// insert the filenames
 	while (( direntp = readdir(dp)) != NULL )
 	{
-		strcat(filenames, direntp->d_name);
-		strcat(filenames, "\t");
+		filearray[filecount] = direntp->d_name;
 		filecount++;
+        if (filecount >= MAX_TOKEN - 1)
+            {
+				fprintf(stderr, "Client: Exceeded program capacity, truncated\n");
+                break;
+            }
 	}
 
-	rmReturnChar(filenames);
-	fprintf(stdout, "%s\n", filenames);
+	// Sorts the files by filename
+    qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
+
+    for (int i = 0; i < filecount; i++)
+    {
+        fprintf(stdout, "%s\t", filearray[i]);
+    }
+
+	fprintf(stdout, "\n");
+
 	return;
 }
 
@@ -284,7 +300,7 @@ void cli_lpwd()
 {
 	char buf[BUF_SIZE];
 	getcwd(buf, sizeof(buf));
-	fprintf(stdout, "Client Working Dir: %s\n", buf);
+	fprintf(stdout, "%s\n", buf);
 	return;
 }
 
@@ -373,9 +389,9 @@ void cli_cd(int socket_desc, char* cmd_path)
 void cli_lcd(char * cmd_path)
 {
 	rmReturnChar(cmd_path);
-	if(chdir(cmd_path) == 0)
+	if(chdir(cmd_path) == -1)
     {
-		fprintf(stdout,"Client done cd to: %s\n", cmd_path);
+		fprintf(stderr, "Client: Unable to CD to %s\n", cmd_path);
 	}
 	return;
 }

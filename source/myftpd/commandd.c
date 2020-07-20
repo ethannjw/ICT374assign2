@@ -88,7 +88,7 @@ void ser_fdr(int socket_desc, char *file)
 {
     // variables
     char filestring[MAX_STRING_LENGTH];
-	char *filearray[MAX_FILES_BUF];
+	char *filearray[MAX_TOKEN];
 	int filecount = 0, buflen;
 	char ack_code;
 
@@ -124,7 +124,7 @@ void ser_fdr(int socket_desc, char *file)
         {
             filearray[filecount] = direntp->d_name;
             filecount++;
-            if (filecount >= MAX_FILES_BUF - 1)
+            if (filecount >= MAX_TOKEN - 1)
             {
 				log_message(file, "[DIR] Exceeded program capacity, truncated\n");
                 ack_code = EXCEED_LENGTH;
@@ -243,7 +243,7 @@ void ser_cd(int socket_desc, char *file)
 	}
 	else
 		log_message(file, "[CD] Successful read file size %d\n", file_size);
-	
+
 	char buf[file_size+1];
 
 	if (readn(socket_desc, buf, file_size) == -1)
@@ -375,7 +375,7 @@ void ser_put(int socket_desc, char *file)
 	}
 	else
 		log_message(file, "[PUT] Successful read file size %d\n", file_size);
-	
+
 	// read the file contents
 	block_size = BUF_SIZE;
 	while (file_size > 0)
@@ -470,14 +470,14 @@ void ser_get(int socket_desc, char *file)
 	}
     else
 		log_message(file, "[GET] Successful written ackcode\n");
-	
+
 	// exit if ackcode is not SUCCESS_CODE
 	if (ack_code != SUCCESS_CODE)
 	{
 		log_message(file, "[GET] GET request failed\n");
 		return;
 	}
-	
+
 	// write opcode to client
 	if (write_opcode(socket_desc, OP_DATA) == -1)
 		{

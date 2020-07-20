@@ -47,9 +47,13 @@ The myftp client should repeatedly display the prompt and wait for a command unt
 - [x] logger method. Include client IP addr, PID, datetime, function and messages
 - [x] add logger to all methods
 - [x] clean up the dir printout so that it uses columns
-- [ ] update header files with up to date information
 - [x] complete protocol documentation
+- [x] Final functionality tests
 - [ ] final cleanup for code syntax. Standardise nomenclature
+- [ ] update header files with up to date information
+- [ ] Justification (solution discussion)
+- [ ] Test Cases (test evidence)
+- [ ] Source code (source code listing)
 
 # Receiving server current working directory path
 

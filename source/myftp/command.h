@@ -50,7 +50,7 @@
 
 #define MAX_NUM_COMMANDS    1000
 #define MAX_NUM_CHAR        1000
-#define MAX_TOKEN           100
+#define MAX_TOKEN           256
 #define BUF_SIZE			256
 #define tokenSep            " \t\n"
 
