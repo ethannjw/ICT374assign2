@@ -230,3 +230,15 @@
 3386 Jul 20 23:02 - [PUT] Successful read file size 18
 3386 Jul 20 23:02 - [PUT] File received
 3386 Jul 20 23:03 - Client session closed
+4918 Jul 20 23:22 - Myftp server started up, listening on port 12345
+4956 Jul 20 23:22 - Client connection PID: 4956 IP: 127.0.0.1 
+4956 Jul 20 23:23 - OPCODE 'P' received
+4956 Jul 20 23:23 - PUT command received
+4956 Jul 20 23:23 - [PUT] Successful read file length 28
+4956 Jul 20 23:23 - [PUT] Successful read filename Metdata-Jan-Dec2007-2009.csv
+4956 Jul 20 23:23 - [PUT] Successful written opcode
+4956 Jul 20 23:23 - [PUT] Successful written ackcode
+4956 Jul 20 23:23 - [PUT] Successful reading opcode
+4956 Jul 20 23:23 - [PUT] Successful read file size 14134644
+4956 Jul 20 23:23 - [PUT] File received
+4956 Jul 20 23:23 - Client session closed

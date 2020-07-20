@@ -336,7 +336,7 @@ void ser_put(int socket_desc, char *file)
 	// variables
 	char op_code, ack_code;
 	int file_len, fd, file_size, block_size, nr, nw;
-	char buf[MAX_BUF_SIZE];
+	char buf[BUF_SIZE];
 
 	// read the file length
 	if (read_length(socket_desc, &file_len) == -1)
@@ -418,7 +418,7 @@ void ser_put(int socket_desc, char *file)
 		log_message(file, "[PUT] Successful read file size %d\n", file_size);
 
 	// read the file contents
-	block_size = MAX_BUF_SIZE;
+	block_size = BUF_SIZE;
 	while (file_size > 0)
 	{
 		// check if block size < remaining file size
@@ -451,7 +451,7 @@ void ser_get(int socket_desc, char *file)
 	char ack_code;
 	int fd, file_size, file_len, nr;
 	struct stat stats;
-	char buf[MAX_BUF_SIZE];
+	char buf[BUF_SIZE];
 
 	// read the file length
 	if (read_length(socket_desc, &file_len) == -1)
@@ -540,7 +540,7 @@ void ser_get(int socket_desc, char *file)
 		log_message(file, "[GET] Successful send file size %d\n", file_size);
 
 	// send file contents
-	while ((nr = readn(fd, buf, MAX_BUF_SIZE)) > 0)
+	while ((nr = readn(fd, buf, BUF_SIZE)) > 0)
 	{
 		if (writen(socket_desc, buf, nr) == -1)
 		{
