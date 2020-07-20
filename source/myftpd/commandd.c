@@ -192,8 +192,13 @@ void ser_pwd(int socket_desc, char *file)
 {
 	// variables
 	char buf[BUF_SIZE];
+    char ack_code = SUCCESS_CODE;
 
-	getcwd(buf, sizeof(buf)); // ger current directory
+	if (getcwd(buf, sizeof(buf)) == NULL)
+    {
+        log_message(file, "[PWD] Error getting current working directory\n");
+
+    }
 	printf("BUF: %s\n", buf);
 
 	// write the opcode to client
@@ -203,29 +208,65 @@ void ser_pwd(int socket_desc, char *file)
 		return;
 	}
     else
-		log_message(file, "[PWD] Successful written opcode\n");
+    {
+        log_message(file, "[PWD] Successful written opcode\n");
+    }
 
-    int buflen = strlen(buf);
-
-	// send the length of working dir
-	if (write_length(socket_desc, buflen) == -1)
+    // write the ackcode to client
+	if (write_opcode(socket_desc, ack_code) == -1)
 	{
-		log_message(file, "[PWD] Failed to send working directory length\n");
+		log_message(file, "[PWD] Failed to write ackcode\n");
 		return;
 	}
     else
-		log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
+    {
+        log_message(file, "[PWD] Successful written ackcode\n");
+    }
 
-	// send the dir info
-	if (writen(socket_desc, buf, buflen) == -1)
-	{
-		log_message(file, "[PWD] Failed to send directory info\n");
-		return;
-	}
+    // Send the data to client
+    if (ack_code == SUCCESS_CODE)
+    {
+            int buflen = strlen(buf);
+
+        // send the length of working dir
+        if (write_length(socket_desc, buflen) == -1)
+        {
+            log_message(file, "[PWD] Failed to send working directory length\n");
+            return;
+        }
+        else
+        {
+            log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
+        }
+
+
+        // send the dir info
+        if (writen(socket_desc, buf, buflen) == -1)
+        {
+            log_message(file, "[PWD] Failed to send working directory info\n");
+            return;
+        }
+        else
+        {
+            log_message(file, "[PWD] Successful send working directory info\n");
+        }
+
+    }
     else
-		log_message(file, "[PWD] Successful send directory info\n");
+    {
+        int buflen = 0;
 
-	log_message(file, "[PWD] Send PWD success\n");
+        // send the length of working dir
+        if (write_length(socket_desc, buflen) == -1)
+        {
+            log_message(file, "[PWD] Failed to send working directory length\n");
+            return;
+        }
+        else
+            log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
+    }
+
+	log_message(file, "[PWD] Send PWD complete\n");
 }
 
 // CD from client to change the directory of server

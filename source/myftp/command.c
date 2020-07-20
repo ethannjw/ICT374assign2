@@ -236,7 +236,7 @@ void cli_lfdr()
 // print currect working directory of server
 void cli_pwd(int socket_desc)
 {
-	char op_code;
+	char op_code, ack_code;
 	int file_size, read_size;
 
 	// Send one opcode which is ASCII char 'W'
@@ -253,6 +253,14 @@ void cli_pwd(int socket_desc)
 		return;
 	}
 
+    // Read the opcode from the server, supposed to be 'W'
+	if(read_opcode(socket_desc, &ack_code) == -1)
+	{
+		perror("Client: Unable to read ackcode\n");
+		return;
+	}
+
+
 	// Return if wrong opcode
 	if(op_code != OP_PWD)
 	{
@@ -262,6 +270,17 @@ void cli_pwd(int socket_desc)
     else
     {
         fprintf(stdout, "Client: Successful get opcode '%c'\n", op_code);
+	}
+
+    // Receive the ack_code
+	if(ack_code != SUCCESS_CODE)
+	{
+		fprintf(stderr, "Server: Failed to get pwd with code %c\n", ack_code);
+		return;
+	}
+    else
+    {
+        fprintf(stdout, "Server: Successful ack code '%c'\n", ack_code);
 	}
 
 	// Read the size of the path from socket
@@ -275,24 +294,27 @@ void cli_pwd(int socket_desc)
         fprintf(stdout, "Client: Successful get length %d\n", file_size);
 	}
 
-    // Allocate memory for the path
-	char working_dir_path[(sizeof(char) * (file_size+1))];
-
-	// Read the directory path
-	if((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
-     {
-		perror("Client: Failed to read directory\n");
-		return;
-	}
-    else
+    // Print out the working dir
+	if (ack_code ==  SUCCESS_CODE)
     {
-        fprintf(stdout, "Client: Successful read data of size %d\n", read_size);
+        // Allocate memory for the path
+        char working_dir_path[(sizeof(char) * (file_size+1))];
+
+        // Read the directory path
+        if((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
+         {
+            perror("Client: Failed to read directory\n");
+            return;
+        }
+        else
+        {
+            fprintf(stdout, "Client: Successful read data of size %d\n", read_size);
+        }
+
+        working_dir_path[file_size] = '\0';
+
+        printf("%s\n", working_dir_path);
     }
-
-	working_dir_path[file_size] = '\0';
-
-	printf("%s\n", working_dir_path);
-
 }
 
 // print current working directory of client

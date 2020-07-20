@@ -56,3 +56,30 @@
 200 Jul 20 10:15 - Myftp server started up, listening on port 12345
 211 Jul 20 10:15 - Client connection PID: 211 IP: 127.0.0.1 
 211 Jul 20 10:16 - Client session closed
+92 Jul 20 15:26 - Myftp server started up, listening on port 12345
+123 Jul 20 15:26 - Client connection PID: 123 IP: 127.0.0.1 
+123 Jul 20 15:26 - OPCODE 'W' received
+123 Jul 20 15:26 - PWD command received
+123 Jul 20 15:26 - [PWD] Successful written opcode
+123 Jul 20 15:26 - [PWD] Successful written ackcode
+123 Jul 20 15:26 - [PWD] Successful send working directory length 131
+123 Jul 20 15:26 - [PWD] Successful send working directory info
+123 Jul 20 15:26 - [PWD] Send PWD complete
+123 Jul 20 15:32 - Client session closed
+134 Jul 20 15:32 - Client connection PID: 134 IP: 127.0.0.1 
+134 Jul 20 15:32 - OPCODE 'W' received
+134 Jul 20 15:32 - PWD command received
+134 Jul 20 15:32 - [PWD] Successful written opcode
+134 Jul 20 15:32 - [PWD] Successful written ackcode
+134 Jul 20 15:32 - [PWD] Successful send working directory length 131
+134 Jul 20 15:32 - [PWD] Successful send working directory info
+134 Jul 20 15:32 - [PWD] Send PWD complete
+134 Jul 20 15:33 - Client session closed
+145 Jul 20 15:33 - Client connection PID: 145 IP: 127.0.0.1 
+145 Jul 20 15:33 - OPCODE 'W' received
+145 Jul 20 15:33 - PWD command received
+145 Jul 20 15:33 - [PWD] Successful written opcode
+145 Jul 20 15:33 - [PWD] Successful written ackcode
+145 Jul 20 15:33 - [PWD] Successful send working directory length 131
+145 Jul 20 15:33 - [PWD] Successful send working directory info
+145 Jul 20 15:33 - [PWD] Send PWD complete

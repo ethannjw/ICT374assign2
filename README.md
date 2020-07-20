@@ -60,19 +60,34 @@ The myftp client should repeatedly display the prompt and wait for a command unt
 Upon receiving a pwd command from the user: 
 - the client sends a 1 byte opcode of ASCII character 'W' to the server
 ```
-+---------------+
++-------------------+
 | 1 byte opcode |
-+---------------+
++-------------------+
 ```
 The server replies with: 
 - the opcode 'W' indicating the successful reciept of the request, 
-- followed by a 4 byte int indicating the length of the data
+- followed by a one byte acknowledgement code in ASCII which is one of the following characters
+  - '0' successful retreval of working directory path
+  - '1' server not able to retrieve the working directory path
+
+If the ack code is '0'', the server then sends
+- a 4 byte int indicating the length of the data
 - The server then sends a sequence of N bytes which is the current directory path in ASCII
 ```
-+----------------------------------------------------------------------+
++------------------------------------------------------------------------+
 | 1 byte opcode |     4 byte int     |              Data               |
-+----------------------------------------------------------------------+
++------------------------------------------------------------------------+
 ```
+
+If the ack code is '1', the server then sends
+- an int of 0, 
+- no further data is sent
+```
++----------------------------------------------------------------+
+| 1 byte opcode | 1 byte ack code |     4 byte int     |
++----------------------------------------------------------------+
+```
+
 
 # Changing the server current working directory
 
