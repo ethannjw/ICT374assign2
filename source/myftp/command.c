@@ -81,7 +81,7 @@ void cmd_prompt(int socket_desc)
 				}
 				else
 				{
-					fprintf(stdout, "Invalid comannd, try again. type \"help\" for documentation\n");
+					fprintf(stdout, "Invalid command, try again. type \"help\" for documentation\n");
 				}
 			}
 
@@ -101,8 +101,12 @@ void cmd_prompt(int socket_desc)
 				}
 				else
 				{
-					fprintf(stdout, "Invalid comannd, try again. type \"help\" for documentation\n");
+					fprintf(stdout, "Invalid command, try again. type \"help\" for documentation\n");
 				}
+			}
+			else
+            {
+                fprintf(stdout, "Invalid command, try again. type \"help\" for documentation\n");
 			}
 		}
 	}
@@ -300,7 +304,7 @@ void cli_cd(int socket_desc, char* cmd_path)
 	int path_len = strlen(cmd_path);
 	char file_path[path_len+1];
 	strcpy(file_path, cmd_path);
-	
+
 	file_path[path_len] = '\0'; // set last character to null
 
 	// Send opcode 'C'
@@ -365,7 +369,7 @@ void cli_lcd(char * cmd_path)
 // upload file from client to server
 void cli_put(int socket_desc, char *filename)
 {
-	// variables 
+	// variables
 	char op_code, ack_code;
 	int fd, file_size, nr;
 	struct stat stats;
@@ -375,7 +379,7 @@ void cli_put(int socket_desc, char *filename)
 	char file_name[file_len + 1]; // define file_name
 
 	strcpy(file_name, filename); // copy filename to file_name
-	
+
 	file_name[file_len] = '\0'; // set last character to null
 
 	// file validation
