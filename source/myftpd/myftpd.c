@@ -45,7 +45,7 @@ void claim_children()
 }
 
 /* change to daemon process */
-void daemon_init(char *dir)
+void daemon_init(void)
 {
     pid_t pid;
     struct sigaction act;
@@ -63,7 +63,6 @@ void daemon_init(char *dir)
 
     /* child continues */
     setsid();                      /* become session leader */
-    chdir(dir);                    /* change working directory */
     umask(0);                      /* clear file mode creation mask */
 
     /* catch SIGCHLD to remove zombies from system */
@@ -91,10 +90,24 @@ int main(int argc, char *argv[])
         getcwd(mydir, sizeof(mydir));
     }
     else if (argc == 2)
+    {
         strncpy(mydir, argv[1], sizeof(mydir));
+    }
+    else
+    {
+        fprintf(stdout, "Usage: %s [Initial_Current_Directory]\n", argv[0]);
+        exit(1);
+    }
+
+    // check if directory exist
+    if (chdir(mydir) < 0)
+    {
+        fprintf(stdout, "Failed to set initial directory to %s\n", mydir);
+        exit(1);
+    }
 
     /* turn the program into a daemon */
-    daemon_init(mydir);
+    daemon_init();
 
     /* set the absolute path for the log file */
 	char log_path[256];
