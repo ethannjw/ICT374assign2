@@ -1,6 +1,6 @@
-/** File: 		    commandd.c for assignment 2 myftp (server side)
+/** File:		commandd.c for assignment 2 myftp (server side)
 *   Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
-*   Date:		    25th July 2020
+*   Date:		25th July 2020
 *   Purpose:		This is the command driver code for running the commands for FTP
 */
 
@@ -33,8 +33,8 @@ void log_message(char *file, const char *format, ...)
 
 	fprintf(fp, "%d %s - ", pid, mytime);
 
-	/* reference - https://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm */
-	/* print all the arguments provided */
+	// reference - https://www.tutorialspoint.com/c_standard_library/c_macro_va_start.htm
+	// print all the arguments provided
 	va_start(ap, format);
 	vfprintf(fp, format, ap);
 	va_end(ap);
@@ -42,14 +42,13 @@ void log_message(char *file, const char *format, ...)
 	fclose(fp);
 }
 
-/* process OPCODE received from client */
+//process OPCODE received from client
 void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file)
 {
-    //printf("Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
 	log_message(file, "Client connection PID: %d IP: %s \n", getpid(), inet_ntoa(cli_addr.sin_addr));
 	char op_code;
 
-	/* read OPCODE from client */
+	// read OPCODE from client
 	while (read_opcode(socket_desc, &op_code) > 0)
 	{
 		log_message(file, "OPCODE \'%c\' received\n", op_code);
@@ -83,106 +82,113 @@ void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file)
 	return;
 }
 
-/* List files in server */
+// List files in server 
 void ser_fdr(int socket_desc, char *file)
 {
-    char filestring[MAX_STRING_LENGTH];
+	// variables
+    	char filestring[MAX_STRING_LENGTH];
 	char *filearray[MAX_TOKEN];
 	int filecount = 0, buflen;
 	char ack_code;
 
 	// write the opcode to socket
-	//if (write_opcode(des->socket_desc, OP_PWD) == -1){
 	if (write_opcode(socket_desc, OP_FDR) == -1)
 	{
 		log_message(file, "[DIR] Failed to write opcode\n");
 		return;
 	}
-    else
+    	else
+	{
 		log_message(file, "[DIR] Successful written opcode\n");
+	}
 
 	// Open current dir and struct
 	DIR *dp;
 	struct dirent *direntp;
 
-    if ((dp = opendir(".")) == NULL)
+    	if ((dp = opendir(".")) == NULL)
 	{
 		// set to first entry
 		log_message(file, "[DIR] Failed to open directory\n");
-       	ack_code = ERROR_CODE;
+       		ack_code = ERROR_CODE;
 	}
-    else
-    {
-    	ack_code = SUCCESS_CODE;
-    }
+    	else
+	{
+		ack_code = SUCCESS_CODE;
+	}
 
-    if (ack_code == SUCCESS_CODE || ack_code == EXCEED_LENGTH)
-    {
-        /* insert the filenames while at the same time limit the max files to 100. */
-        while (( direntp = readdir(dp)) != NULL )
-        {
-            filearray[filecount] = direntp->d_name;
-            filecount++;
-            if (filecount >= MAX_TOKEN - 1)
-            {
+    	if (ack_code == SUCCESS_CODE || ack_code == EXCEED_LENGTH)
+    	{
+        	// insert the filenames while at the same time limit the max files to 100.
+        	while (( direntp = readdir(dp)) != NULL )
+        	{
+            		filearray[filecount] = direntp->d_name;
+            		filecount++;
+		
+            		if (filecount >= MAX_TOKEN - 1)
+            		{
 				log_message(file, "[DIR] Exceeded program capacity, truncated\n");
-                ack_code = EXCEED_LENGTH;
-                break;
-            }
-        }
+                		ack_code = EXCEED_LENGTH;
+                		break;
+            		}
+        	}
 
-        // Sorts the files by filename
-        qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
+        	// Sorts the files by filename
+        	qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
 
-        strcpy(filestring, " ");
+        	strcpy(filestring, " ");
 
-        for (int i = 0; i < filecount; i++)
-        {
-            strcat(filestring, filearray[i]);
-            strcat(filestring, "\t");
-        }
+        	for (int i = 0; i < filecount; i++)
+        	{
+            		strcat(filestring, filearray[i]);
+            		strcat(filestring, "\t");
+        	}
 
-        buflen = strlen(filestring);
-    }
-    else
-    {
-        buflen = 0;
-    }
+        	buflen = strlen(filestring);
+    	}
+    	else
+    	{	
+        	buflen = 0;
+    	}
 
-    // write the ackcode to socket
+    	// write the ackcode to socket
 	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		log_message(file, "[DIR] Failed to write ackcode\n");
 		return;
 	}
-    else
+    	else
+	{
 		log_message(file, "[DIR] Successful written ackcode\n");
+	}
 
-    // send the length of working dir
-    if (write_length(socket_desc, buflen) == -1)
-    {
+    	// send the length of working dir
+    	if (write_length(socket_desc, buflen) == -1)
+    	{
 		log_message(file, "[DIR] Failed to send directory length\n");
-        return;
-    }
-    else
+        	return;
+    	}
+    	else
+	{
 		log_message(file, "[DIR] Successful send directory length %d\n", buflen);
+	}
 
-    // Send the file info only if success code
-    if (ack_code == SUCCESS_CODE || ack_code == EXCEED_LENGTH)
-    {
-        // send the file info
-        //if (writen(des->socket_desc, buf, strlen(buf)) == -1){
-        if (writen(socket_desc, filestring, buflen) == -1)
+    	// Send the file info only if success code
+    	if (ack_code == SUCCESS_CODE || ack_code == EXCEED_LENGTH)
+    	{
+        	// send the file info
+        	if (writen(socket_desc, filestring, buflen) == -1)
 		{
 			log_message(file, "[DIR] Failed to send filenames\n");
-            return;
-        }
-        else
-
+            		return;
+        	}
+        	else
+		{
 			log_message(file, "[DIR] Successful send filenames info\n");
+		}
 
 		log_message(file, "[DIR] Send FDR success\n");
-    }
+    	}
 }
 
 // PWD from client to display current working directory of server
@@ -190,13 +196,13 @@ void ser_pwd(int socket_desc, char *file)
 {
 	// variables
 	char buf[BUF_SIZE];
-    char ack_code = SUCCESS_CODE;
+    	char ack_code = SUCCESS_CODE;
 
 	if (getcwd(buf, sizeof(buf)) == NULL)
-    {
-        log_message(file, "[PWD] Error getting current working directory\n");
+   	{
+        	log_message(file, "[PWD] Error getting current working directory\n");
 
-    }
+    	}
 
 	// write the opcode to client
 	if (write_opcode(socket_desc, OP_PWD) == -1)
@@ -204,64 +210,65 @@ void ser_pwd(int socket_desc, char *file)
 		log_message(file, "[PWD] Failed to write opcode\n");
 		return;
 	}
-    else
-    {
-        log_message(file, "[PWD] Successful written opcode\n");
-    }
+    	else
+    	{
+        	log_message(file, "[PWD] Successful written opcode\n");
+    	}
 
-    // write the ackcode to client
+    	// write the ackcode to client
 	if (write_opcode(socket_desc, ack_code) == -1)
 	{
 		log_message(file, "[PWD] Failed to write ackcode\n");
 		return;
 	}
-    else
-    {
-        log_message(file, "[PWD] Successful written ackcode\n");
-    }
+    	else
+    	{
+        	log_message(file, "[PWD] Successful written ackcode\n");
+    	}
 
-    // Send the data to client
-    if (ack_code == SUCCESS_CODE)
-    {
-            int buflen = strlen(buf);
+    	// Send the data to client
+    	if (ack_code == SUCCESS_CODE)
+    	{
+           	int buflen = strlen(buf);
+	    
+	    	// send the length of working dir
+	    	if (write_length(socket_desc, buflen) == -1)
+		{
+      	      		log_message(file, "[PWD] Failed to send working directory length\n");
+            		return;
+        	}
+        	else
+        	{
+            		log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
+        	}
 
-        // send the length of working dir
-        if (write_length(socket_desc, buflen) == -1)
-        {
-            log_message(file, "[PWD] Failed to send working directory length\n");
-            return;
-        }
-        else
-        {
-            log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
-        }
+        	// send the dir info
+        	if (writen(socket_desc, buf, buflen) == -1)
+        	{
+            		log_message(file, "[PWD] Failed to send working directory info\n");
+            		return;
+        	}
+        	else
+        	{
+            		log_message(file, "[PWD] Successful send working directory info\n");
+        	}
 
+    	}
+    	else
+    	{
+        	int buflen = 0;
 
-        // send the dir info
-        if (writen(socket_desc, buf, buflen) == -1)
-        {
-            log_message(file, "[PWD] Failed to send working directory info\n");
-            return;
-        }
-        else
-        {
-            log_message(file, "[PWD] Successful send working directory info\n");
-        }
-
-    }
-    else
-    {
-        int buflen = 0;
-
-        // send the length of working dir
-        if (write_length(socket_desc, buflen) == -1)
-        {
-            log_message(file, "[PWD] Failed to send working directory length\n");
-            return;
-        }
-        else
-            log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
-    }
+        	// send the length of working dir
+        	if (write_length(socket_desc, buflen) == -1)
+        	{
+            		log_message(file, "[PWD] Failed to send working directory length\n");
+            		return;
+        	}
+        	else
+		{
+            		log_message(file, "[PWD] Successful send working directory length %d\n", buflen);
+		}
+    	}
 
 	log_message(file, "[PWD] Send PWD complete\n");
 }
@@ -270,34 +277,37 @@ void ser_pwd(int socket_desc, char *file)
 void ser_cd(int socket_desc, char *file)
 {
 	// variables
-    int file_size;
+    	int file_size;
 	char ack_code;
 
-	// read the file size
+	// read the file length
 	if (read_length(socket_desc, &file_size) == -1)
-    {
+    	{
 		log_message(file, "[CD] Failed to read file size\n");
 		return;
 	}
 	else
+	{
 		log_message(file, "[CD] Successful read file size %d\n", file_size);
+	}
 
 	char buf[file_size+1];
 
+	// read file size
 	if (readn(socket_desc, buf, file_size) == -1)
-    {
+    	{
 		log_message(file, "[CD] Failed to read cd dir\n");
 		return;
 	}
-    else
-    {
-        buf[file_size] = '\0';
+    	else
+    	{
+        	buf[file_size] = '\0';
 		log_message(file, "[CD] Successful read cd instruction: %s\n", buf);
-    }
+    	}
 
-    // change directory here and set the ack code to send back to client
+    	// change directory here and set the ack code to send back to client
 	if (chdir(buf) == 0)
-    {
+    	{
 		ack_code = SUCCESS_CODE;
 		log_message(file, "[CD] Server done cd to: %s\n", buf);
 	}
@@ -309,22 +319,25 @@ void ser_cd(int socket_desc, char *file)
 
 	// write opcode to client
 	if (write_opcode(socket_desc, OP_CD) == -1)
-    {
+    	{
 		log_message(file, "[CD] Failed to write opcode\n");
 		return;
 	}
 	else
+	{
 		log_message(file, "[CD] Successful written opcode\n");
+	}
 
 	// write ackcode to client
 	if (write_opcode(socket_desc, ack_code) == -1)
-    {
+    	{
 		log_message(file, "[CD] Failed to write ackcode\n");
 		return;
 	}
 	else
+	{
 		log_message(file, "[CD] Successful written ackcode\n");
-
+	}
 }
 
 // PUT from client to upload files to server
@@ -342,7 +355,9 @@ void ser_put(int socket_desc, char *file)
 		return;
 	}
 	else
+	{
 		log_message(file, "[PUT] Successful read file length %d\n", file_len);
+	}
 
 	// read the file name
 	char file_name[file_len + 1];
@@ -352,7 +367,7 @@ void ser_put(int socket_desc, char *file)
 		return;
 	}
 	else
-    {
+    	{
 		file_name[file_len] = '\0'; // set last character to null
 		log_message(file, "[PUT] Successful read filename %s\n", file_name);
 	}
@@ -377,8 +392,10 @@ void ser_put(int socket_desc, char *file)
 		log_message(file, "[PUT] Failed to write opcode\n");
 		return;
 	}
-    else
+    	else
+	{
 		log_message(file, "[PUT] Successful written opcode\n");
+	}
 
 	// write the ackcode to client
 	if (write_opcode(socket_desc, ack_code) == -1)
@@ -386,8 +403,10 @@ void ser_put(int socket_desc, char *file)
 		log_message(file, "[PUT] Failed to write ackcode\n");
 		return;
 	}
-    else
+    	else
+	{
 		log_message(file, "[PUT] Successful written ackcode\n");
+	}
 
 	// exit if ackcode is not SUCCESS_CODE
 	if (ack_code != SUCCESS_CODE)
@@ -403,7 +422,9 @@ void ser_put(int socket_desc, char *file)
 		return;
 	}
 	else
+	{
 		log_message(file, "[PUT] Successful reading opcode\n");
+	}
 
 	// read the file size
 	if (read_length(socket_desc, &file_size) == -1)
@@ -412,7 +433,9 @@ void ser_put(int socket_desc, char *file)
 		return;
 	}
 	else
+	{
 		log_message(file, "[PUT] Successful read file size %d\n", file_size);
+	}
 
 	// read the file contents
 	block_size = BUF_SIZE;
@@ -457,7 +480,9 @@ void ser_get(int socket_desc, char *file)
 		return;
 	}
 	else
+	{
 		log_message(file, "[GET] Successful read file length %d\n", file_len);
+	}
 
 	// read the file name
 	char file_name[file_len + 1];
@@ -467,7 +492,7 @@ void ser_get(int socket_desc, char *file)
 		return;
 	}
 	else
-    {
+    	{
 		file_name[file_len] = '\0'; // set last character to null
 		log_message(file, "[GET] Successful read filename %s\n", file_name);
 	}
@@ -485,11 +510,11 @@ void ser_get(int socket_desc, char *file)
 		ack_code = ERROR_CODE;
 		log_message(file, "[GET] Failed to read file\n");
 	}
-    else if(lstat(file_name, &stats) < 0) // check for fstat
-    {
+    	else if(lstat(file_name, &stats) < 0) // check for fstat
+    	{
 		ack_code = ERROR_CODE;
 		log_message(file, "[GET] Failed to read fstat\n");
-    }
+    	}
 
 	// write the opcode to client
 	if (write_opcode(socket_desc, OP_GET) == -1)
@@ -497,8 +522,10 @@ void ser_get(int socket_desc, char *file)
 		log_message(file, "[GET] Failed to write opcode\n");
 		return;
 	}
-    else
+    	else
+	{
 		log_message(file, "[GET] Successful written opcode\n");
+	}
 
 	// write the ackcode to client
 	if (write_opcode(socket_desc, ack_code) == -1)
@@ -506,8 +533,10 @@ void ser_get(int socket_desc, char *file)
 		log_message(file, "[GET] Failed to write ackcode\n");
 		return;
 	}
-    else
+    	else
+	{
 		log_message(file, "[GET] Successful written ackcode\n");
+	}
 
 	// exit if ackcode is not SUCCESS_CODE
 	if (ack_code != SUCCESS_CODE)
@@ -518,23 +547,27 @@ void ser_get(int socket_desc, char *file)
 
 	// write opcode to client
 	if (write_opcode(socket_desc, OP_DATA) == -1)
-		{
-			log_message(file, "[GET] Failed to write opcode\\n");
-			return;
-		}
+	{
+		log_message(file, "[GET] Failed to write opcode\\n");
+		return;
+	}
 	else
+	{
 		log_message(file, "[GET] Successful written opcode\n");
+	}
 
 	file_size = stats.st_size; // set file size
 
 	// send file size to client
 	if (write_length(socket_desc, file_size) == -1)
-		{
-			log_message(file, "[GET] Failed to send file length\n");
-			return;
-		}
+	{
+		log_message(file, "[GET] Failed to send file length\n");
+		return;
+	}
 	else
+	{
 		log_message(file, "[GET] Successful send file size %d\n", file_size);
+	}
 
 	// send file contents
 	while ((nr = readn(fd, buf, BUF_SIZE)) > 0)
