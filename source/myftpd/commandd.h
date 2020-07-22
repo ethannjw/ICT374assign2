@@ -1,8 +1,7 @@
-/** File:			commandd.h for assignment 2 myftp (server side)
+/** File:       commandd.h for assignment 2 myftp (server side)
 *   Authors:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
-*   Date:			25th July 2020
+*   Date:			  25th July 2020
 *   Purpose:		This is the command driver code for running the commands for FTP
-*   Bug:            fdr function crashed if the length is too big
 */
 
 #include <stdlib.h>        /* exit(), free() */
