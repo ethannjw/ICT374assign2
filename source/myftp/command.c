@@ -385,14 +385,14 @@ void cli_put(int socket_desc, char *filename)
 	// file validation
 	if ((fd = open(file_name, O_RDONLY)) == -1)
 	{
-		fprintf(stderr, "Failed to read file\n");
+		fprintf(stderr, "Client: Failed to read source file\n");
 		return;
 	}
 
     // check for fstat
     if(fstat(fd, &stats) < 0)
     {
-        fprintf(stderr, "Failed to read fstat\n");
+        fprintf(stderr, "Client: Failed to read fstat\n");
         return;
     }
 
@@ -459,11 +459,11 @@ void cli_put(int socket_desc, char *filename)
 	}
 	else if (ack_code == FILE_EXIST)
 	{
-		fprintf(stdout, "File exist on server\n");
+		fprintf(stdout, "Server: File exist on server. Unable to send\n");
 	}
 	else if (ack_code == ERROR_CODE)
 	{
-		fprintf(stdout, "Error sending file\n");
+		fprintf(stdout, "Server: Error in sending file\n");
 	}
 
 	close(fd);
@@ -482,7 +482,7 @@ void cli_get(int socket_desc, char *file_name)
 	// check for file exist or error creating file
 	if (access(file_name, F_OK) >= 0)
 	{
-		fprintf(stderr, "File exists\n");
+		fprintf(stderr, "Client: File exists in current folder. Unable to get\n");
 		return;
 	}
 
@@ -555,13 +555,13 @@ void cli_get(int socket_desc, char *file_name)
 
 			if ((nr = readn(socket_desc, buf, block_size)) == -1)
 			{
-				fprintf(stdout, "Client: Failed to read\n");
+				fprintf(stdout, "Client: Failed to read data\n");
 				return;
 			}
 
 			if ((nw = writen(fd, buf, nr)) < nr)
 			{
-				fprintf(stdout, "Client: Failed to write\n");
+				fprintf(stdout, "Client: Failed to write data\n");
 				return;
 			}
 			file_size -= nw;
@@ -569,12 +569,12 @@ void cli_get(int socket_desc, char *file_name)
 	}
 	else if (ack_code == FILE_NOT_EXIST)
 	{
-		fprintf(stdout, "File does not exist on server\n");
+		fprintf(stdout, "Server: File does not exist on server\n");
 		unlink(file_name);
 	}
 	else if (ack_code == ERROR_CODE)
 	{
-		fprintf(stdout, "Error sending file\n");
+		fprintf(stdout, "Server: Error sending file to client\n");
 		unlink(file_name);
 	}
 

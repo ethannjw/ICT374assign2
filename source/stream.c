@@ -101,11 +101,7 @@ void rmReturnChar(char *line)
 	{
 		line[n-1]='\0';
 	}
-	// Adds null last char if not a null char
-	else if (line[n-1]!='\0')
-    {
-		line[n]='\0';
-	}
+
 }
 
 int cmpstringp(const void *p1, const void *p2)

@@ -10,9 +10,6 @@
 #include <netinet/in.h> /* struct sockaddr_in, htons(), htonl(), */
 #include <string.h>     /* strlen() */
 
-#define MAX_BLOCK_SIZE (1024*5)    /* maximum size of any piece of */
-                                   /* data that can be sent by client */
-
 /**
  * Purpose: read a stream of bytes from "fd" to "buf".
  * Param:   socket descriptor, string to read to, number of bytes to read

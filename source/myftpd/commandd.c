@@ -142,7 +142,6 @@ void ser_fdr(int socket_desc, char *file)
             strcat(filestring, "\t");
         }
 
-        rmReturnChar(filestring);
         buflen = strlen(filestring);
     }
     else
