@@ -1,6 +1,7 @@
-/** File:			stream.h for assignment 2
+/** 
+ *  File:			  stream.h for assignment 2
  *  Author:			Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
- *  Date:			25th July 2020
+ *  Date:			  25th July 2020
  *  Purpose:		Contains the stream functions for the server and client
  *  Assumptions:
 */
