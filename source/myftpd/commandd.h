@@ -1,22 +1,22 @@
-/** File:       commandd.h for assignment 2 myftp (server side)
+/** File:		commandd.h for assignment 2 myftp (server side)
 *   Authors:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
-*   Date:			  25th July 2020
+*   Date:		25th July 2020
 *   Purpose:		This is the command driver code for running the commands for FTP
 */
 
-#include <stdlib.h>        /* exit(), free() */
-#include <stdio.h>         /* printf()  */
-#include <sys/types.h>     /* pid_t, u_long, u_short */
-#include <unistd.h>        /* read(), write() */
-#include <string.h>        /* strlen(), strcmp() etc */
-#include <sys/stat.h>      /* fstat(), lstat(), stat() */
-#include <fcntl.h>         /* manipulate file descriptor */
-#include <dirent.h>	       /* DIR */
-#include <time.h>		   /* TIME */
-#include <stdarg.h>		   /* macros va_start, va_copy, va_arg, and va_end */
-#include <arpa/inet.h>      /* inet_ntoa() */
+#include <stdlib.h>        	/* exit(), free() */
+#include <stdio.h>         	/* printf()  */
+#include <sys/types.h>     	/* pid_t, u_long, u_short */
+#include <unistd.h>        	/* read(), write() */
+#include <string.h>        	/* strlen(), strcmp() etc */
+#include <sys/stat.h>      	/* fstat(), lstat(), stat() */
+#include <fcntl.h>         	/* manipulate file descriptor */
+#include <dirent.h>	   	/* DIR */
+#include <time.h>		/* TIME */
+#include <stdarg.h>		/* macros va_start, va_copy, va_arg, and va_end */
+#include <arpa/inet.h>      	/* inet_ntoa() */
 
-#include "../stream.h"     /* head file for stream read and write */
+#include "../stream.h"     	/* head file for stream read and write */
 
 /* OP CODES for the network specification */
 #define OP_PUT  'P'
@@ -37,55 +37,55 @@
 /* ACK codes for DIR */
 #define EXCEED_LENGTH   'L'
 
-#define MAX_TOKEN           256
-#define BUF_SIZE            256
-#define MAX_STRING_LENGTH   10000
-#define LOG_NAME		    "/myftpd.log"	/* log file */
+#define MAX_TOKEN           	256
+#define BUF_SIZE            	256
+#define MAX_STRING_LENGTH   	10000
+#define LOG_NAME		"/myftpd.log"		/* log file */
 
 /** Purpose:	To log all interactions with the clients
- *  Param:		logfile, string format and arguments
- *  Return:		void
+ *  Param:	logfile, string format and arguments
+ *  Return:	void
  *
 */void log_message(char *file, const char *format, ...);
 
 /** Purpose:	Process OPCODE received from client
- *  Param:		socket descriptor of connection, IP address, logfile
- *  Return:		void
+ *  Param:	socket descriptor of connection, IP address, logfile
+ *  Return:	void
  *
 */
 void serve_a_client(int socket_desc, struct sockaddr_in cli_addr, char *file);
 
 /** Purpose:	To send the list of files in current dir of the server
- *  Param:		socket descriptor of connection, logfile
- *  Return:		void
+ *  Param:	socket descriptor of connection, logfile
+ *  Return:	void
  *
 */
 void ser_fdr(int socket_desc, char *file);
 
 /** Purpose:	To send the current working directory of the server
- *  Param:		socket descriptor of connection, logfile
- *  Return:		void
+ *  Param:	socket descriptor of connection, logfile
+ *  Return:	void
  *
 */
 void ser_pwd(int socket_desc, char *file);
 
 /** Purpose:	To change working directory of the server
- *  Param:		socket descriptor of connection, logfile
- *  Return:		void
+ *  Param:	socket descriptor of connection, logfile
+ *  Return:	void
  *
 */
 void ser_cd(int socket_desc, char *file);
 
 /** Purpose:	To upload files to the server
- *  Param:		socket descriptor of connection, logfile
- *  Return:		void
+ *  Param:	socket descriptor of connection, logfile
+ *  Return:	void
  *
 */
 void ser_put(int socket_desc, char *file);
 
 /** Purpose:	To download file from the server
- *  Param:		socket descriptor of connection, logfile
- *  Return:		void
+ *  Param:	socket descriptor of connection, logfile
+ *  Return:	void
  *
 */
 void ser_get(int socket_desc, char *file);
