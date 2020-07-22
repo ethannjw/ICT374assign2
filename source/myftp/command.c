@@ -1,7 +1,7 @@
-/*  File:			command.c for assignment 2 myftp (client side)
- *  Author:			Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
+/*  File:		command.c for assignment 2 myftp (client side)
+ *  Author:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
  *  Purpose:		Contains the core functions for the client operation.
- *  todo: 			Need to handle if user types in cd, put,get, lcd without second argument causing a segmentation fault
+ *  todo: 		Need to handle if user types in cd, put,get, lcd without second argument causing a segmentation fault
 */
 
 #include "command.h"		/* head file all command function */
@@ -15,8 +15,8 @@ int tokenise (char line[], char *token[])
 
     while (tk != NULL)
     {
-        ++i;
-        if (i>=MAX_TOKEN)
+        i++;
+        if (i >= MAX_TOKEN)
         {
             i = -1;
             break;
@@ -50,10 +50,12 @@ void cmd_prompt(int socket_desc)
 		rmReturnChar(input);
 
 		if (strcmp(input, "quit") == 0)
+		{
 			return;
+		}
 		else
 		{
-	    	bzero(tokenArray, sizeof(tokenArray));
+	    		bzero(tokenArray, sizeof(tokenArray));
 			numTok = tokenise(input, tokenArray);
 
 			if (numTok <= 0)
@@ -64,19 +66,24 @@ void cmd_prompt(int socket_desc)
 
 			else if (numTok == 1)
 			{
-				if(strcmp(tokenArray[0], CMD_FDR) == 0){
+				if(strcmp(tokenArray[0], CMD_FDR) == 0)
+				{
 					cli_fdr(socket_desc);
 				}
-				else if(strcmp(tokenArray[0], CMD_PWD) == 0){
+				else if(strcmp(tokenArray[0], CMD_PWD) == 0)
+				{
 					cli_pwd(socket_desc);
 				}
-				else if(strcmp(tokenArray[0], CMD_LFDR) == 0){
+				else if(strcmp(tokenArray[0], CMD_LFDR) == 0)
+				{
 					cli_lfdr();
 				}
-				else if(strcmp(tokenArray[0], CMD_LPWD) == 0){
+				else if(strcmp(tokenArray[0], CMD_LPWD) == 0)
+				{
 					cli_lpwd();
 				}
-				else if(strcmp(tokenArray[0], CMD_HELP) == 0){
+				else if(strcmp(tokenArray[0], CMD_HELP) == 0)
+				{
 					cli_help();
 				}
 				else
@@ -87,16 +94,20 @@ void cmd_prompt(int socket_desc)
 
 			else if (numTok == 2)
 			{
-				if(strcmp(tokenArray[0], CMD_CD) == 0){
+				if(strcmp(tokenArray[0], CMD_CD) == 0)
+				{
 					cli_cd(socket_desc, tokenArray[1]);
 				}
-				else if(strcmp(tokenArray[0], CMD_PUT) == 0){
+				else if(strcmp(tokenArray[0], CMD_PUT) == 0)
+				{
 					cli_put(socket_desc, tokenArray[1]);
 				}
-				else if(strcmp(tokenArray[0], CMD_GET) == 0){
+				else if(strcmp(tokenArray[0], CMD_GET) == 0)
+				{
 					cli_get(socket_desc, tokenArray[1]);
 				}
-				else if(strcmp(tokenArray[0], CMD_LCD) == 0){
+				else if(strcmp(tokenArray[0], CMD_LCD) == 0)
+				{
 					cli_lcd(tokenArray[1]);
 				}
 				else
@@ -105,8 +116,8 @@ void cmd_prompt(int socket_desc)
 				}
 			}
 			else
-            {
-                fprintf(stdout, "Invalid command, try again. type \"help\" for documentation\n");
+            		{
+                		fprintf(stdout, "Invalid command, try again. type \"help\" for documentation\n");
 			}
 		}
 	}
@@ -140,7 +151,7 @@ void cli_fdr(int socket_desc)
 		return;
 	}
 
-    // Read the ackcode from server
+    	// Read the ackcode from server
 	if(read_opcode(socket_desc, &ack_code) == -1)
 	{
 		fprintf(stderr, "Client: Failed to read ackcode\n");
@@ -148,7 +159,7 @@ void cli_fdr(int socket_desc)
 	}
 
 	if (ack_code == EXCEED_LENGTH)
-    {
+    	{
 	    fprintf(stdout, "Server: Exceed program length with code '%c'\n", ack_code);
 	}
 
@@ -159,12 +170,12 @@ void cli_fdr(int socket_desc)
 		return;
 	}
 
-    // Allocate memory for the path
+    	// Allocate memory for the path
 	char buf[(sizeof(char) * (file_size+1))];
 
 	// Read the directory path
 	if ((read_size = readn(socket_desc, buf, (sizeof(char) * (file_size)))) == -1)
-    {
+    	{
 		fprintf(stderr, "Client: Failed to read directory\n");
 		return;
 	}
@@ -178,13 +189,13 @@ void cli_fdr(int socket_desc)
 void cli_lfdr()
 {
 	// variables
-    char * filearray[MAX_TOKEN];
+    	char * filearray[MAX_TOKEN];
 	int filecount = 0;
 
 	// Open current dir and struct
 	DIR *dp;
 	struct dirent *direntp;
-    if ((dp = opendir(".")) == NULL)
+    	if ((dp = opendir(".")) == NULL)
 	{
 		// set to first entry
 		fprintf(stderr, "Client: Failed to open directory\n");
@@ -196,20 +207,20 @@ void cli_lfdr()
 	{
 		filearray[filecount] = direntp->d_name;
 		filecount++;
-        if (filecount >= MAX_TOKEN - 1)
-            {
-				fprintf(stderr, "Client: Exceeded program capacity, truncated\n");
-                break;
-            }
+        	if (filecount >= MAX_TOKEN - 1)
+           	{
+			fprintf(stderr, "Client: Exceeded program capacity, truncated\n");
+                	break;
+            	}
 	}
 
 	// Sorts the files by filename
-    qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
+    	qsort(&filearray[0], filecount, sizeof(char *), cmpstringp);
 
-    for (int i = 0; i < filecount; i++)
-    {
-        fprintf(stdout, "%s\t", filearray[i]);
-    }
+    	for (int i = 0; i < filecount; i++)
+    	{
+        	fprintf(stdout, "%s\t", filearray[i]);
+    	}
 
 	fprintf(stdout, "\n");
 
@@ -237,7 +248,7 @@ void cli_pwd(int socket_desc)
 		return;
 	}
 
-    // Read the opcode from the server, supposed to be 'W'
+    	// Read the opcode from the server, supposed to be 'W'
 	if (read_opcode(socket_desc, &ack_code) == -1)
 	{
 		fprintf(stderr, "Client: Failed to read ackcode\n");
@@ -251,7 +262,7 @@ void cli_pwd(int socket_desc)
 		return;
 	}
 
-    // Receive the ack_code
+    	// Receive the ack_code
 	if (ack_code != SUCCESS_CODE)
 	{
 		fprintf(stderr, "Server: Failed to get pwd with code %c\n", ack_code);
@@ -265,23 +276,23 @@ void cli_pwd(int socket_desc)
 		return;
 	}
 
-    // Print out the working dir
+    	// Print out the working dir
 	if (ack_code ==  SUCCESS_CODE)
-    {
-        // Allocate memory for the path
-        char working_dir_path[(sizeof(char) * (file_size+1))];
+    	{
+        	// Allocate memory for the path
+        	char working_dir_path[(sizeof(char) * (file_size+1))];
 
-        // Read the directory path
-        if ((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
-        {
-            fprintf(stderr, "Client: Failed to read directory\n");
+        	// Read the directory path
+        	if ((read_size = readn(socket_desc, working_dir_path, file_size)) == -1)
+        	{
+		    	fprintf(stderr, "Client: Failed to read directory\n");
 			return;
-        }
+		}
 
-        working_dir_path[file_size] = '\0';
+        	working_dir_path[file_size] = '\0';
 
-        printf("%s\n", working_dir_path);
-    }
+        	printf("%s\n", working_dir_path);
+    	}
 }
 
 // print current working directory of client
@@ -297,8 +308,8 @@ void cli_lpwd()
 void cli_cd(int socket_desc, char* cmd_path)
 {
 	// variables
-    char op_code, ack_code;
-    rmReturnChar(cmd_path);
+    	char op_code, ack_code;
+    	rmReturnChar(cmd_path);
 
 	// process the filepath
 	int path_len = strlen(cmd_path);
@@ -314,41 +325,41 @@ void cli_cd(int socket_desc, char* cmd_path)
 		return;
 	}
 
-    // send path length
+    	// send path length
 	if (write_length(socket_desc, path_len) == -1)
 	{
 		fprintf(stderr, "Client: Failed to write %d path_len\n", path_len);
 		return;
 	}
 
-    // send the path
+   	// send the path
 	if (writen(socket_desc, file_path, strlen(file_path)) == -1)
-    {
+    	{
 		fprintf(stderr, "Client: Failed to write directory name %s to server\n", file_path);
 		return;
 	}
 
-    // read the reply from server
+    	// read the reply from server
 	if(read_opcode(socket_desc, &op_code) == -1)
-    {
+    	{
 		fprintf(stderr, "Client: Failed to read opcode\n");
 		return;
 	}
 
 	if(op_code != OP_CD)
-    {
+    	{
 		fprintf(stderr, "Client: Invalid opcode from server: %c\n", op_code);
 		return;
 	}
 
 	if(read_opcode(socket_desc, &ack_code) == -1)
-    {
+    	{
 		fprintf(stderr, "Client: Failed to read ackcode\n");
 		return;
 	}
 
 	if(ack_code == ERROR_CODE)
-    {
+    	{
 		fprintf(stderr, "Server: Cannot find the requested directory\n");
 		return;
 	}
@@ -360,7 +371,7 @@ void cli_lcd(char * cmd_path)
 	rmReturnChar(cmd_path);
 
 	if(chdir(cmd_path) == -1)
-    {
+    	{
 		fprintf(stderr, "Client: Unable to CD to %s\n", cmd_path);
 	}
 	return;
@@ -389,12 +400,12 @@ void cli_put(int socket_desc, char *filename)
 		return;
 	}
 
-    // check for fstat
-    if(fstat(fd, &stats) < 0)
-    {
-        fprintf(stderr, "Client: Failed to read fstat\n");
-        return;
-    }
+    	// check for fstat
+    	if(fstat(fd, &stats) < 0)
+    	{
+		fprintf(stderr, "Client: Failed to read fstat\n");
+        	return;
+    	}
 
 	file_size = stats.st_size; // set file size
 
@@ -585,15 +596,15 @@ void cli_get(int socket_desc, char *file_name)
 void cli_help()
 {
     printf(
-    "Command\t\t\t Function\n"
-    "pwd\t\t\t Display current directory of the server\n"
-    "lpwd\t\t\t Display current directory of the client\n"
-    "dir\t\t\t List files of current directory from the server\n"
-    "ldir\t\t\t List files of current directory from the client\n"
-    "cd <directory_pathname>  Change directory of the server\n"
-    "lcd <directory_pathname> Change directory of the client\n"
-    "get <filename>\t\t Download file from the server to client\n"
-    "put <filename>\t\t Upload file from client to server\n"
+    	"Command\t\t\t Function\n"
+    	"pwd\t\t\t Display current directory of the server\n"
+    	"lpwd\t\t\t Display current directory of the client\n"
+    	"dir\t\t\t List files of current directory from the server\n"
+    	"ldir\t\t\t List files of current directory from the client\n"
+    	"cd <directory_pathname>  Change directory of the server\n"
+    	"lcd <directory_pathname> Change directory of the client\n"
+    	"get <filename>\t\t Download file from the server to client\n"
+    	"put <filename>\t\t Upload file from client to server\n"
 	"quit\t\t\t Terminate session\n"
 	"help\t\t\t Display help information\n");
 }
