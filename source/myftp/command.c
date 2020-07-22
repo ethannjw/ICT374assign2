@@ -2,30 +2,30 @@
  *  Author:		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
  *  Purpose:		Contains the core functions for the client operation.
  *  todo: 		Need to handle if user types in cd, put,get, lcd without second argument causing a segmentation fault
-*/
+ */
 
 #include "command.h"		/* head file all command function */
 
 int tokenise (char line[], char *token[])
 {
-    char *tk;
-    int i=0;
-    tk = strtok(line, tokenSep);
-    token[i] = tk;
+    	char *tk;
+    	int i=0;
+    	tk = strtok(line, tokenSep);
+    	token[i] = tk;
 
-    while (tk != NULL)
-    {
-        i++;
-        if (i >= MAX_TOKEN)
-        {
-            i = -1;
-            break;
-        }
+    	while (tk != NULL)
+    	{
+        	i++;
+        	if (i >= MAX_TOKEN)
+        	{
+            		i = -1;
+            		break;
+        	}
 
-        tk = strtok(NULL, tokenSep);
-        token[i] = tk;
-    }
-    return i;
+        	tk = strtok(NULL, tokenSep);
+        	token[i] = tk;
+    	}
+    	return i;
 }
 
 // send OPCODE to server
@@ -595,7 +595,7 @@ void cli_get(int socket_desc, char *file_name)
 // display the help menu information
 void cli_help()
 {
-    printf(
+    	printf(
     	"Command\t\t\t Function\n"
     	"pwd\t\t\t Display current directory of the server\n"
     	"lpwd\t\t\t Display current directory of the client\n"
