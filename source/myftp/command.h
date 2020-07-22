@@ -1,4 +1,4 @@
-/*  File:			command.h for assignment 2 myftp (client side)
+/** File:			command.h for assignment 2 myftp (client side)
  *  Author:			Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
  *  Date:			25th July 2020
  *  Purpose:		Contains the core functions for the client operation.
@@ -29,7 +29,7 @@
 #define ERROR_CODE	    '1'
 
 /* define the commands from user
-    server commands */
+server commands */
 #define CMD_PWD 	"pwd"
 #define CMD_FDR		"dir"
 #define CMD_CD  	"cd"
