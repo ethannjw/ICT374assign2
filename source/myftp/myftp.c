@@ -1,4 +1,5 @@
-/** File: 		myftp.c
+/** 
+* File: 		myftp.c
 * Authors: 		Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
 * Date:		    25th July 2020
 * Purpose:		This is the client driver code for running the simple FTP
@@ -19,13 +20,13 @@
 *			    - quit - to terminate the myftp session
 */
 
-#include <stdlib.h>        /* exit(), free() */
-#include <stdio.h>         /* printf(), fprintf(), perror() */
-#include <sys/types.h>     /* pid_t, u_long, u_short */
-#include <sys/socket.h>    /* struct sockaddr, socket(), etc */
+#include <stdlib.h>         /* exit(), free() */
+#include <stdio.h>          /* printf(), fprintf(), perror() */
+#include <sys/types.h>      /* pid_t, u_long, u_short */
+#include <sys/socket.h>     /* struct sockaddr, socket(), etc */
 #include <netinet/in.h>		/* struct sockaddr_in, htons, htonl */
 #include <netdb.h>		    /* struct hostent, gethostbyname() */
-#include <string.h>        /* strlen(), strcmp() etc */
+#include <string.h>         /* strlen(), strcmp() etc */
 #include <stdio.h>		    /* stdin(), stdout() */
 #include <stdlib.h>		    /* exit() */
 #include <unistd.h>         /* read(), write() */
@@ -42,20 +43,24 @@ int main(int argc, char *argv[])
     unsigned short port;
     struct sockaddr_in ser_addr;
     struct hostent *hp;
-
-    /* get server host name and port number */
+    
+    // Source: Chapter 8 Example 6 cli6.c
+    // get server host name and port number
     if (argc == 1)
-    {  // assume server running on the local host and on default port
+    {  
+         // assume server running on the local host and on default port
          gethostname(host, sizeof(host));
          port = SERV_TCP_PORT;
     }
     else if (argc == 2)
-    { // use the given host name
-         strcpy(host, argv[1]);
-         port = SERV_TCP_PORT;
+    { 
+        // use the given host name
+        strcpy(host, argv[1]);
+        port = SERV_TCP_PORT;
     }
     else if (argc == 3)
-    { // use given host and port for server
+    { 
+        // use given host and port for server
         strcpy(host, argv[1]);
         int n = atoi(argv[2]);
         if (n >= 1024 && n < 65536)
@@ -73,8 +78,9 @@ int main(int argc, char *argv[])
         fprintf(stdout, "Usage: %s [ <server host name> [ <server listening port> ] ]\n", argv[0]);
         exit(1);
     }
-
-    /* get host address, & build a server socket address */
+    
+    // Source: Chapter 8 Example 6 cli6.c
+    // get host address, & build a server socket address
     bzero((char *) &ser_addr, sizeof(ser_addr));
     ser_addr.sin_family = AF_INET;
     ser_addr.sin_port = htons(port);
@@ -83,10 +89,11 @@ int main(int argc, char *argv[])
           fprintf(stdout, "host %s not found\n", host);
           exit(1);
     }
-    // set the addr
+    // set the server address
     ser_addr.sin_addr.s_addr = * (u_long *) hp->h_addr;
 
-    /* create TCP socket & connect socket to server address */
+    // Source: Chapter 8 Example 6 cli6.c
+    // create TCP socket & connect socket to server address
     sd = socket(PF_INET, SOCK_STREAM, 0);
     if (connect(sd, (struct sockaddr *) &ser_addr, sizeof(ser_addr)) < 0)
     {
