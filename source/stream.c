@@ -1,7 +1,8 @@
-/** File:			stream.c for assignment 2
+/** 
+ *  File:			stream.c for assignment 2
  *  Author:			Neo Kim Heok (33747085) and Ng Jing Wei (33804877)
  *  Date:			25th July 2020
- *  Purpose:		Contains the stream functions for the server and client
+ *  Purpose:			Contains the stream functions for the server and client
  *  Assumptions:
 */
 
@@ -12,7 +13,7 @@ int readn(int sd, char *buf, int nbytes)
 	int nr = 1;
 	int n = 0;
 	for (n = 0; (n < nbytes) && (nr > 0); n += nr)
-    {
+    	{
 		if ((nr = read(sd, buf+n, nbytes-n)) < 0)
 		{
 			return (nr);
@@ -26,27 +27,29 @@ int writen(int sd, char *buf, int nbytes)
 	int nw = 0;
 	int n = 0;
 	for (n = 0; n < nbytes; n += nw)
-    {
+	{
 		if ((nw = write(sd, buf+n, nbytes-n)) <= 0)
-        {
-            return (nw);
-        }
+        	{
+            		return (nw);
+        	}
 
 	}
   return n;
 }
 
+// Source: Chapter 8 stream.c
 // Writes one byte char on the socket.
 int write_opcode(int socket_desc, char code)
 {
 	// write the 1 byte code to socket
 	if (write(socket_desc, (char*)&code, 1) != 1)
 	{
-		return (-1);
+		return -1;
 	}
 	return 1;
 }
 
+// Source: Chapter 8 stream.c
 // Reads a one byte char off the socket.
 int read_opcode(int socket_desc, char* code)
 {
@@ -62,6 +65,7 @@ int read_opcode(int socket_desc, char* code)
 	return 1;
 }
 
+// Source: Chapter 8 stream.c
 // Writes the four byte int on the socket.
 int write_length(int socket_desc, int len)
 {
@@ -70,13 +74,13 @@ int write_length(int socket_desc, int len)
 
 	if (write(socket_desc,&data, 4) != 4)
 	{
-		return (-1);
+		return -1;
 	}
 
 	return 1;
 }
 
-
+// Source: Chapter 8 stream.c
 // Reads a four byte int off the socket.
 int read_length(int socket_desc, int *len)
 {
@@ -84,9 +88,10 @@ int read_length(int socket_desc, int *len)
 
 	if (read(socket_desc, &data, 4) != 4)
 	{
-		return (-1);
+		return -1;
 	}
-	/* to network byte order */
+	
+	// to network byte order
 	*len = ntohl(data);
 
 	return 1;
@@ -104,10 +109,8 @@ void rmReturnChar(char *line)
 
 }
 
+// Source: qsort man page
 int cmpstringp(const void *p1, const void *p2)
 {
-    	// cmp string pointer of pointers taken from qsort man page
-    	// used in the qsort function
     	return strcmp(* (char * const *) p1, * (char * const *) p2);
-
 }
