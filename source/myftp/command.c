@@ -560,9 +560,9 @@ void cli_get(int socket_desc, char *file_name)
 		while (file_size > 0)
 		{
 			if (block_size > file_size)
-				{
-						block_size = file_size;
-				}
+			{
+				block_size = file_size;
+			}
 
 			if ((nr = readn(socket_desc, buf, block_size)) == -1)
 			{
