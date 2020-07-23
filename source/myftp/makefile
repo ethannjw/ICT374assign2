@@ -1,7 +1,5 @@
 # Makefile for myftp client side
 
-#VPATH = ../
-
 myftp: myftp.c command.o stream.o 
 	gcc -Wall -o myftp myftp.c command.o stream.o 
 
