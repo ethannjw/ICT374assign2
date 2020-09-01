@@ -1,3 +1,5 @@
+_To future students: This project we got a 78/100 grade. If you would like a reference please feel free. The only thing lacking is that the get and put methods do not print out any success message. Hope this helps!_
+
 # ICT374assign2
 Assignment 2 Repo for ICT374 submission
 
